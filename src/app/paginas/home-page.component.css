@@ -1,0 +1,24 @@
+.padre {
+  width: 100vw;
+  height: 100vh;
+}
+
+header {
+  background: url(../../assets/login/denim.png) repeat;
+  height: 120px;
+  width: 100%;
+}
+
+.contenedor {
+  width: 100%;
+  display: flex;
+}
+.contenedor .contenido {
+  width: calc(100vw - 230px);
+  height: calc(100vh - 120px);
+}
+.contenedor aside {
+  width: 230px;
+  height: calc(100vh - 120px);
+  background: url(../../assets/login/denim.png) repeat;
+}/*# sourceMappingURL=home-page.component.css.map */

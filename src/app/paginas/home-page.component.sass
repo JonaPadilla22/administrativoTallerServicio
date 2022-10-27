@@ -1,0 +1,24 @@
+$alturaHeader: 120px
+$anchoAside: 230px
+$backgroundAsideHeader: url(../../assets/login/denim.png) repeat
+
+.padre
+    width: 100vw
+    height: 100vh
+
+header
+    background: $backgroundAsideHeader
+    height: $alturaHeader
+    width: 100%
+
+.contenedor
+    width: 100%
+    display: flex
+    .contenido
+        width: calc( 100vw - $anchoAside )
+        height: calc( 100vh - $alturaHeader )
+
+    aside
+        width: $anchoAside
+        height: calc( 100vh - $alturaHeader )
+        background: $backgroundAsideHeader
