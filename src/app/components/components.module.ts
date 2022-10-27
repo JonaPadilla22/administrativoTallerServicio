@@ -1,3 +1,4 @@
+import { TimePickerComponent } from './time-picker/time-picker.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -10,7 +11,8 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     ListaNavegacionComponent,
-    DatePickerComponentComponent
+    DatePickerComponentComponent,
+    TimePickerComponent
   ],
   imports: [
     CommonModule,
@@ -19,7 +21,8 @@ import { FormsModule } from '@angular/forms';
   ],
   exports: [
     ListaNavegacionComponent,
-    DatePickerComponentComponent
+    DatePickerComponentComponent,
+    TimePickerComponent
   ]
 })
 export class ComponentsModule { }
