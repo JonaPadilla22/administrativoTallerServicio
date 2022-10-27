@@ -1,1 +1,87 @@
 /*# sourceMappingURL=registrar-cita.component.css.map */
+.titulo {
+    color: #264653;
+    text-align: center;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.groupDatos {
+    background-color: #FCFCFC;
+}
+
+.tituloGroup {
+    color: #264653;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.datosServ, .datosCliente, .datosFH, .datosVeh {
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-bottom: 20px;
+}
+
+.datosServ {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.datosVeh {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.datosCliente {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.datosFH {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.groupDatos p {
+    color: #264653;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.groupDatos {
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+.groupDatos input {
+    margin: 5px;
+    padding-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 15px;
+}
+
+.groupDatos textarea {
+    border-radius: 15px;
+    resize: none;
+    outline: none;
+    padding: 10px;
+}
+
+option[value=""][disabled] {
+    display: none;
+}
+
+.btnCliente, .btnVeh {
+    background-color: #264653;
+    color: white;
+    padding: 5px 15px 5px 15px;
+    border-radius: 25px;
+}

@@ -6,7 +6,6 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./registrar-cita.component.css']
 })
 export class RegistrarCitaComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit(): void {
