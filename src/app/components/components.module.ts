@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ListaNavegacionComponent } from './lista-navegacion/lista-navegacion.component';
 import { DatePickerComponentComponent } from './date-picker-component/date-picker-component.component';
 import { FormsModule } from '@angular/forms';
+import { ListaNavegacionHijoComponent } from './lista-navegacion/lista-navegacion-hijo/lista-navegacion-hijo.component';
+import { AsideIdentificadorUsuarioComponent } from './aside-identificador-usuario/aside-identificador-usuario.component';
 
 
 
@@ -12,7 +14,9 @@ import { FormsModule } from '@angular/forms';
   declarations: [
     ListaNavegacionComponent,
     DatePickerComponentComponent,
-    TimePickerComponent
+    TimePickerComponent,
+    ListaNavegacionHijoComponent,
+    AsideIdentificadorUsuarioComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +26,8 @@ import { FormsModule } from '@angular/forms';
   exports: [
     ListaNavegacionComponent,
     DatePickerComponentComponent,
-    TimePickerComponent
+    TimePickerComponent,
+    AsideIdentificadorUsuarioComponent
   ]
 })
 export class ComponentsModule { }

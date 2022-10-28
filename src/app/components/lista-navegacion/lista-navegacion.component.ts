@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ListaNavegacionComponent implements OnInit {
 
-  @Input() items = [];
+  @Input() items:any;
   imprimirLista = "";
 
   constructor() { }
@@ -19,4 +19,5 @@ export class ListaNavegacionComponent implements OnInit {
   convertirAString(item: object){
     return JSON.stringify(item)
   }
+
 }

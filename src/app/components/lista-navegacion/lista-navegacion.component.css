@@ -1,0 +1,35 @@
+.accordion {
+  --bs-accordion-bg: transparent;
+  --bs-accordion-color: #fff;
+  --bs-accordion-btn-color: none;
+  --bs-accordion-btn-active-icon: none;
+  --bs-accordion-border-color: none;
+}
+
+.accordion-button {
+  font-size: 17pt;
+  font-weight: bold;
+}
+.accordion-button::after {
+  background-image: none;
+}
+.accordion-button:not(.collapsed) {
+  background: transparent;
+  color: inherit;
+}
+.accordion-button:not(.collapsed)::after {
+  background-image: none;
+}
+
+.contenedor-header-nav {
+  display: flex;
+  align-items: center;
+}
+.contenedor-header-nav i {
+  font-size: 20pt;
+  margin-right: 10px;
+}
+.contenedor-header-nav a {
+  text-decoration: none;
+  color: #fff;
+}/*# sourceMappingURL=lista-navegacion.component.css.map */
