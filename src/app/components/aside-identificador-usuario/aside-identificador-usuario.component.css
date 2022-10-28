@@ -1,0 +1,11 @@
+.contendor-usuario {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 20px 0;
+}
+.contendor-usuario h2 {
+  font-size: 16pt;
+  font-weight: 400;
+  color: #fff;
+}/*# sourceMappingURL=aside-identificador-usuario.component.css.map */

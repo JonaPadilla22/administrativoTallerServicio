@@ -1,13 +1,20 @@
 
 <div class="padre">
     <header>
-    
+        <img src="../assets/homepage/empresa.png" class="imagen-empresa" alt="">
+        <div class="contendor-usuario">
+            <div class="contenedor-imagen-usuario">
+                <img src="../assets/usuario/perfil.png" alt="">
+            </div>
+            <div class="contenedor-texto">
+                <h2>{{nombreUsuario}}</h2>
+            </div>
+        </div>
     </header>
     <div class="contenedor">
         <aside>
-            <ul>
-                <list-item [items]="listaDeNavegacion"></list-item>
-            </ul>
+            <aside-identificador-usuario></aside-identificador-usuario>
+            <list-item [items]="listaDeNavegacion"></list-item>
         </aside>
         <section class="contenido">
             <router-outlet></router-outlet>

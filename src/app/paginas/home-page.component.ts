@@ -7,29 +7,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomePageComponent implements OnInit {
   listaDeNavegacion: any;
-
+  nombreUsuario: string;
   constructor() {
+    this.nombreUsuario = "Pedro Sanchez";
     this.listaDeNavegacion = [
       {
         nombre: 'Cita',
-        icono: 'nombre icono',
+        icono: 'bx bxs-food-menu',
         link: '',
         children: [
           {
             nombre: 'Registrar Cita',
-            icono: 'nombre icono',
-            link: 'registrar',
+            link: 'citas/registrar',
           },
           {
             nombre: 'Consultar Cita',
-            icono: 'nombre icono',
-            link: 'consultar',
+            link: 'citas/consultar',
           },
         ],
       },
       {
         nombre: 'Taller',
-        icono: 'nombre icono',
+        icono: 'bx bxs-car-garage',
         children: [
           {
             nombre: 'Ingreso a Taller',
@@ -52,6 +51,21 @@ export class HomePageComponent implements OnInit {
             link: 'taller/historial-servicio',
           },
         ],
+      },
+      {
+        nombre: 'Usuarios',
+        icono: 'bx bxs-user-rectangle',
+        link: 'usuarios'
+      },
+      {
+        nombre: 'Refacciones',
+        icono: 'bx bx-package',
+        link: 'refacciones'
+      },
+      {
+        nombre: 'Mano De Obra',
+        icono: 'bx bxs-bulb',
+        link: 'manoDeObra'
       }
       
     ];

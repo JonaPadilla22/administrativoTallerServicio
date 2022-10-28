@@ -1,0 +1,27 @@
+.accordion
+    --bs-accordion-bg: transparent
+    --bs-accordion-color: #fff
+    --bs-accordion-btn-color: none
+    --bs-accordion-btn-active-icon: none
+    --bs-accordion-border-color: none
+
+.accordion-button
+    font-size: 17pt
+    font-weight: bold
+    &::after
+        background-image: none
+    &:not(.collapsed)
+        background: transparent
+        color: inherit
+    &:not(.collapsed)::after
+        background-image: none
+
+.contenedor-header-nav
+    display: flex
+    align-items: center
+    i
+        font-size: 20pt
+        margin-right: 10px
+    a
+        text-decoration: none
+        color: #fff

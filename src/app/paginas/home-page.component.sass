@@ -1,6 +1,11 @@
 $alturaHeader: 120px
-$anchoAside: 230px
+$anchoAside: 250px
 $backgroundAsideHeader: url(../../assets/login/denim.png) repeat
+
+*
+    padding: 0
+    margin: 0
+    box-sizing: border-box
 
 .padre
     width: 100vw
@@ -10,6 +15,24 @@ header
     background: $backgroundAsideHeader
     height: $alturaHeader
     width: 100%
+    display: flex
+    justify-content: space-between
+    align-items: center
+    .imagen-empresa
+        width: 150px
+        height: 85px
+        margin-left: 45px
+    .contendor-usuario
+        display: flex
+        align-items: center
+        justify-content: space-evenly
+        padding: 20px 0
+        margin-right: 20px
+        h2
+            margin-left: 10px
+            font-size: 16pt
+            font-weight: 400
+            color: #fff
 
 .contenedor
     width: 100%
