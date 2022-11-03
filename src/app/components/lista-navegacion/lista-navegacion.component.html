@@ -1,23 +1,25 @@
-<ngb-accordion [closeOthers]="true" activeIds="static-1">
-  <ngb-panel *ngFor="let item of items; index as i" id="static-{{ i + 1 }}">
-    <ng-template ngbPanelHeader>
-      <div class="contenedor-header-nav">
-        <button ngbPanelToggle class="accordion-button" *ngIf="item.children else elseButton">
-          <i class="{{ item.icono }}"></i>{{ item.nombre }}
-        </button>
-        <ng-template #elseButton class="accordion-button">
-          <a href={{item.link}}>
-            <button class="accordion-button">
-              <i class="{{ item.icono }}"></i>{{ item.nombre }}
-            </button>
-          </a>
-        </ng-template>
-      </div>
-    </ng-template>
-    <ng-template ngbPanelContent >
-      <ul>
-        <child-list [item]="item"></child-list>
-      </ul>
-    </ng-template>
-  </ngb-panel>
-</ngb-accordion>
+<nav>
+  <ngb-accordion [closeOthers]="true" activeIds="static-1">
+    <ngb-panel *ngFor="let item of items; index as i" id="static-{{ i + 1 }}">
+      <ng-template ngbPanelHeader>
+        <div class="contenedor-header-nav">
+          <button ngbPanelToggle class="accordion-button" *ngIf="item.children else elseButton">
+            <i class="{{ item.icono }}"></i>{{ item.nombre }}
+          </button>
+          <ng-template #elseButton >
+            <a routerLink={{item.link}}>
+              <button class="accordion-button">
+                <i class="{{ item.icono }}"></i>{{ item.nombre }}
+              </button>
+            </a>
+          </ng-template>
+        </div>
+      </ng-template>
+      <ng-template ngbPanelContent >
+        <ul>
+          <child-list [item]="item"></child-list>
+        </ul>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion>
+</nav>

@@ -7,6 +7,7 @@ import { DatePickerComponentComponent } from './date-picker-component/date-picke
 import { FormsModule } from '@angular/forms';
 import { ListaNavegacionHijoComponent } from './lista-navegacion/lista-navegacion-hijo/lista-navegacion-hijo.component';
 import { AsideIdentificadorUsuarioComponent } from './aside-identificador-usuario/aside-identificador-usuario.component';
+import { AppRoutingModule } from '../app-routing.module';
 
 
 
@@ -21,7 +22,8 @@ import { AsideIdentificadorUsuarioComponent } from './aside-identificador-usuari
   imports: [
     CommonModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    AppRoutingModule,
   ],
   exports: [
     ListaNavegacionComponent,

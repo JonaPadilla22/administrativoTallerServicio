@@ -18,11 +18,11 @@ export class HomePageComponent implements OnInit {
         children: [
           {
             nombre: 'Registrar Cita',
-            link: 'citas/registrar',
+            link: 'cita/registrar',
           },
           {
             nombre: 'Consultar Cita',
-            link: 'citas/consultar',
+            link: 'cita/pendientes',
           },
         ],
       },
@@ -31,24 +31,12 @@ export class HomePageComponent implements OnInit {
         icono: 'bx bxs-car-garage',
         children: [
           {
-            nombre: 'Ingreso a Taller',
-            link: 'taller/ingreso',
-          },
-          {
-            nombre: 'Asignar Citas',
-            link: 'taller/asignar-citas',
-          },
-          {
-            nombre: 'Consultar Vehículo',
-            link: 'taller/consultar-vehiculo',
-          },
-          {
-            nombre: 'Registrar Salida',
-            link: 'taller/registrar-salida',
+            nombre: 'Servicios Pendientes',
+            link: 'taller/serviciosPendientes',
           },
           {
             nombre: 'Historial Servicio',
-            link: 'taller/historial-servicio',
+            link: 'taller/historialServicio',
           },
         ],
       },
@@ -58,16 +46,10 @@ export class HomePageComponent implements OnInit {
         link: 'usuarios'
       },
       {
-        nombre: 'Refacciones',
+        nombre: 'Recursos',
         icono: 'bx bx-package',
-        link: 'refacciones'
+        link: 'recursos'
       },
-      {
-        nombre: 'Mano De Obra',
-        icono: 'bx bxs-bulb',
-        link: 'manoDeObra'
-      }
-      
     ];
   }
 
