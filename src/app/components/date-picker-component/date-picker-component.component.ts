@@ -19,17 +19,21 @@ export class DatePickerComponentComponent{
   constructor() {
     
     var date = new Date();
-    this.model = { day: date.getUTCDay()-1, month: date.getUTCMonth()+1, year: date.getUTCFullYear()};
+    var mes_max = 1; //numero de meses de rango maximo para una cita
+
+    this.model = { day: date.getDate(), month: date.getMonth()+1, year: date.getUTCFullYear()};
+    
     this.minDate = this.model;
     this.maxYear = this.model.year;
-    this.maxMonth = this.model.month+1;
+    this.maxMonth = this.model.month + mes_max;
+  
     if(this.maxMonth>12){
-      this.maxYear = this.maxYear+1;
+      this.maxYear = this.maxYear + 1;
       this.maxMonth = this.maxMonth -12;
     }
 
-    this.maxDate = { day: date.getUTCDay()-1, month: this.maxMonth, year: this.maxYear };
-    this.isDisabled = (date: NgbDate, current: {month: number}) => date.day === 13;
+    this.maxDate = { day: date.getDate(), month: this.maxMonth, year: this.maxYear };
+    this.isDisabled = (date: NgbDate, current: {month: number}) => date.day === 14;
     this.cambioFecha();
   }
 

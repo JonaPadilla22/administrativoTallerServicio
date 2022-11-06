@@ -20,15 +20,7 @@ export class VehiculoService {
   }
 
   registrarVeh(form: any){
-    this.http.post(`${this.url}/vehiculos`, form).subscribe({
-      next: (response: any) => {
-        console.log(response)
-        console.log(response.status)
-      }, 
-      error: () =>{
-        alert('ocurrió un error al hacer la petición')
-      }
-    })
+    return this.http.post(`${this.url}/vehiculos`, form, {headers: this.headers});
   }
 
   getVehiculosByCliente(id: string){

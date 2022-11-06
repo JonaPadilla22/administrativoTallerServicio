@@ -67,11 +67,11 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   open(content: any) {
-		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-			(result) => {
-				this.modelos = [];
-			}
-		);
+    if(content._declarationTContainer.localNames[0]=="modalVeh" && this.id_cliente == ""){
+      alert("DEBE SELECCIONAR UN CLIENTE PARA REGISTRAR UN VEHÍCULO");
+    }else{
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
+    }		
 	}
 
   async obtenerTiposServ(){
@@ -124,35 +124,39 @@ export class RegistrarCitaComponent implements OnInit {
       this.anhoVeh = resultado.AÑO;
       this.matriculaVeh = resultado.MATRICULA;
       this.vinVeh = resultado.VIN;
+      this.buscarCliente(resultado.ID_CLIENTE);
       this.matricula = this.matriculaVeh;
     }
   }
 
-  async buscarCliente(e: any){   
+  buscadorCliente(e: any){   
     if(e.key === 'Enter'){
-      const resultado = this.clientes.find( (cl: any) => cl.ID_USUARIO === parseInt(e.target.value));
-      if(resultado!=undefined){
-        let id = e.target.value;
-        this.id_cliente = id;
-        e.target.value = "";
-        this.nombreCliente = resultado.NOMBRE;
-        this.correoCliente = resultado.CORREO;
-        this.telefCliente = resultado.TELEFONO;
-        this.rfcCliente = resultado.RFC;
-
-        this.vehCliente = [];
-        this.vehiculos = await this.obtenerVehiculosByCliente(id);
-        for(var i = 0; i<this.vehiculos.length; i++){
-          this.vehCliente.push(this.vehiculos[i].VEHICULO);
-        }
-        this.vehiculos = this.vehCliente;        
-      }
+      this.buscarCliente(e.target.value);
+      e.target.value = "";   
     }
+  }
+
+  async buscarCliente(id: any){   
+    const resultado = this.clientes.find( (cl: any) => ((cl.ID_USUARIO === parseInt(id))));
+    if(resultado!=undefined){
+      this.id_cliente = id;
+      this.nombreCliente = resultado.NOMBRE;
+      this.correoCliente = resultado.CORREO;
+      this.telefCliente = resultado.TELEFONO;
+      this.rfcCliente = resultado.RFC;
+
+      this.vehCliente = [];
+      this.vehiculos = await this.obtenerVehiculosByCliente(id);
+      // for(var i = 0; i<this.vehiculos.length; i++){
+      //   this.vehCliente.push(this.vehiculos[i].VEHICULO);
+      // }
+      // this.vehiculos = this.vehCliente;     
+    }   
   }
 
   send(): any{
     const formData = new FormData();
-    //formData.append("FECHA", this.formarFecha());
+    
 
     var inputValue = (<HTMLInputElement>document.getElementById("cbxTipoServ")).value;
     var descValue = (<HTMLInputElement>document.getElementById("txtDescripcion")).value;
@@ -161,8 +165,22 @@ export class RegistrarCitaComponent implements OnInit {
       formData.append("DESCRIPCION", descValue);
       formData.append("MATRICULA", this.matricula);
       formData.append("CLIENTE", this.id_cliente);
-
-      this.citaService.registrarCita(formData);
+      formData.append("FECHA_CITA", this.formarFecha());
+      
+      this.citaService.registrarCita(formData).subscribe(
+        (response: any) => {   
+          const formAct = new FormData();
+          formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
+          formAct.append("ID_ESTATUS", "C");
+          formAct.append("ID_USUARIO", "1");     
+          this.citaService.registrarActualizacioServ(formAct).subscribe(
+            (response: any) => {
+              alert(response.message);
+              this.limpiar();
+            }
+          );    
+        }
+      );
     }
     else{
       alert("DATOS FALTANTES");
@@ -182,15 +200,20 @@ export class RegistrarCitaComponent implements OnInit {
       formData.append("ID_MODELO", modelo_veh);
       formData.append("ANIO", anho);
       formData.append("COLOR", color);
+      formData.append("ID_CLIENTE", this.id_cliente);
       if(vin!=""){
         formData.append("VIN", vin);
       }
 
-      this.vehService.registrarVeh(formData);
-      this.vehiculos = await this.obtenerVehiculos();
-      this.matricula = matricula;
-      this.buscarVeh(matricula);
-
+      this.vehService.registrarVeh(formData).subscribe(
+        (response: any) => {
+          alert(response.message);
+          this.vehiculos.push(response.data);   
+          this.matricula = matricula;
+          this.buscarVeh(this.matricula);
+        }
+      );
+      
       this.modalService.dismissAll();
     }else{
       alert("DATOS FALTANTES");
@@ -199,28 +222,72 @@ export class RegistrarCitaComponent implements OnInit {
     
   }
 
+  async regCliente(){
+    var tipo_persona = (<HTMLInputElement>document.getElementById("cbxTipoPersonaCliente")).value;
+    var nombre = (<HTMLInputElement>document.getElementById("txtNombreCliente")).value;
+    var rfc = (<HTMLInputElement>document.getElementById("txtRFC")).value;
+    var correo = (<HTMLInputElement>document.getElementById("txtCorreo")).value;
+    var telef = (<HTMLInputElement>document.getElementById("txtTelefono")).value;
+    var direccion = (<HTMLInputElement>document.getElementById("txtDireccion")).value;
+
+    if(nombre!="" && correo!="" && tipo_persona!=""){
+      const formData = new FormData();
+      
+      formData.append("ID_TIPO_USUARIO", "4");
+      formData.append("ID_TIPO_PERSONA", tipo_persona);
+      formData.append("NOMBRE", nombre.toUpperCase());
+      formData.append("CORREO", correo.toUpperCase());
+
+      if(rfc!=""){
+        formData.append("RFC", rfc.toUpperCase());
+      }
+      if(telef!=""){
+        formData.append("TELEFONO", telef);
+      }
+      if(direccion!=""){
+        formData.append("DIRECCION", direccion.toUpperCase());
+      }
+
+      this.clienteService.registrarCliente(formData).subscribe(
+        (response: any) => {
+          alert(response.message);
+          this.id_cliente = response.data.ID;
+          let n_cl = response.data;
+          delete n_cl.ID;
+          n_cl.ID_USUARIO = this.id_cliente;
+          this.clientes.push(n_cl);
+          this.buscarCliente(this.id_cliente);          
+        }
+      );
+
+      this.modalService.dismissAll();
+    }else{
+      alert("DATOS FALTANTES");
+    }
+  }
+
   async cambiarMarca(){
     var id_marca = (<HTMLInputElement>document.getElementById("cbxMarcaVeh")).value;
     this.modelos = await this.obtenerModelos(id_marca);
+    (<HTMLInputElement>document.getElementById("cbxModeloVeh")).disabled = false;
   }
 
   formarFecha(): string{
     let fecha: string;
-    if(this.fecha.day<10){
-      fecha = "0" + this.fecha.day + "/";   
-    }else{
-      fecha = this.fecha.day + "/";
-    }
 
-
+    fecha = this.fecha.year + "-";
     if(this.fecha.month<10){
-      fecha = fecha + "0" + this.fecha.month + "/";
+      fecha = fecha + "0" + this.fecha.month + "-";
     }
     else{
-      fecha = fecha + this.fecha.month + "/";
+      fecha = fecha + this.fecha.month + "-";
     }
 
-    fecha = fecha + this.fecha.year + " ";
+    if(this.fecha.day<10){
+      fecha = fecha + "0" + this.fecha.day + " ";   
+    }else{
+      fecha = fecha + this.fecha.day + " ";
+    }
 
     if(this.time.hour<10){
       fecha = fecha + "0" + this.time.hour + ":";
@@ -234,6 +301,8 @@ export class RegistrarCitaComponent implements OnInit {
       fecha = fecha + this.time.minute;
     }
 
+    fecha = fecha + ":00";
+
     return fecha;
   }
 
@@ -244,7 +313,7 @@ export class RegistrarCitaComponent implements OnInit {
       this.correoCliente = "";
       this.telefCliente = "";
       this.rfcCliente = "";
-  
+      this.limpiarVeh();
       this.vehiculos = await this.obtenerVehiculos();
     }  
   }
@@ -256,7 +325,17 @@ export class RegistrarCitaComponent implements OnInit {
       this.anhoVeh = "";
       this.matriculaVeh = "";
       this.matricula = "";
+      this.vinVeh = "";
     }  
+  }
+
+  limpiar(){
+    this.limpiarCliente();
+    this.id_cliente = "";
+    this.matricula = "";
+    this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
+    this.time = { hour: this.date.getHours, minute: 0}; 
+    (<HTMLInputElement>document.getElementById("txtDescripcion")).value = "";
   }
 
   receiveDate(e: any) {

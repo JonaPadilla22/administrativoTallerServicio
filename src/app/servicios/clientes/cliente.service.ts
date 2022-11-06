@@ -6,7 +6,7 @@ import { map } from 'rxjs';
   providedIn: 'root'
 })
 export class ClienteService {
-
+  //url = 'http://localhost:3000';
   url = 'https://tallerservicio-production.up.railway.app';
   headers = new HttpHeaders()
             .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY2MDYxODU0fQ.aGdISnlimZ-VV0dap8x-xEAvxp3Ssya-RIDuAqpvLqA");
@@ -18,5 +18,9 @@ export class ClienteService {
             .get(`${this.url}/usuarios/clientes`, {headers: this.headers}).pipe(
               map(res=>res)
             );
+  }
+
+  registrarCliente(form: any){
+    return this.http.post(`${this.url}/usuarios`, form, {headers: this.headers});
   }
 }

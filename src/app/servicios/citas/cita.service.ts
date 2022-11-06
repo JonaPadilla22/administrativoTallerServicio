@@ -48,20 +48,11 @@ export class CitaService {
             );
   }
 
-  async registrarCita(form: any) {
-    var id_serv: any = await this.http.post(`${this.url}/servicios`, form).subscribe({
-      next: (response: any) => {
-        console.log(response);
-        console.log(response.data[0].ID_SERVICIO);
-        id_serv = response.data[0].ID_SERVICIO;
-        return id_serv;
-      }, 
-      error: () =>{
-        console.log('ocurrió un error al hacer la petición')
-      }
-    })
+  registrarCita(form: any) {
+    return this.http.post(`${this.url}/servicios`, form);
+  }
 
-    
-    console.log("idserv: "+id_serv);
+  registrarActualizacioServ(form: any) {
+    return this.http.post(`${this.url}/servicios/actualizacion`, form);
   }
 }

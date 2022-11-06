@@ -46,7 +46,7 @@
                                         </option>
                                     </select><br>
 
-                                    <select class="cbxModeloVeh" name="" id="cbxModeloVeh">
+                                    <select class="cbxModeloVeh" name="" id="cbxModeloVeh" disabled>
                                         <option value="" disabled selected>Selecciona modelo</option>
                                         <option *ngFor="let mod of modelos" [value]="mod.ID_MODELO">
                                             {{mod.DESCRIPCION}}
@@ -100,7 +100,7 @@
                                     {{cl.NOMBRE}}
                                 </option>
                             </datalist>
-                            <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscarCliente($event)" list="listClientes">
+                            <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorCliente($event)" list="listClientes">
                         
                         </div>
 
@@ -120,16 +120,16 @@
                                             </option>
                                         </select><br>
     
-                                        <input type="text" name="" id="" placeholder="Nombre"><br>
-                                        <input type="text" name="" id="" placeholder="RFC" maxlength="13"><br>
-                                        <input type="email" name="" id="" placeholder="Correo electrónico"><br>
-                                        <input type="text" name="" id="" placeholder="Teléfono" maxlength="10"><br>
-                                        <input type="text" name="" id="" placeholder="Direccion"><br>                                        
+                                        <input type="text" name="" id="txtNombreCliente" placeholder="Nombre"><br>
+                                        <input type="text" name="" id="txtRFC" placeholder="RFC" maxlength="13"><br>
+                                        <input type="email" name="" id="txtCorreo" placeholder="Correo electrónico"><br>
+                                        <input type="text" name="" id="txtTelefono" placeholder="Teléfono" maxlength="10"><br>
+                                        <input type="text" name="" id="txtDireccion" placeholder="Direccion"><br>                                        
                                     </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">GUARDAR</button>
+                                <button type="button" class="btn btn-outline-dark" (click)="regCliente()">GUARDAR</button>
                             </div>
                         </ng-template>
 
@@ -154,7 +154,7 @@
                     </div>
                     <div class="contenedorTimePicker">
                         <p>Hora</p>
-                        <app-time-picker (cambioTime)="receiveTime($event)" (ngModelChange)="time"></app-time-picker>
+                        <app-time-picker (cambioTime)="receiveTime($event)"></app-time-picker>
                     </div>
                 </div>
                 <div class="contenedorBoton">
