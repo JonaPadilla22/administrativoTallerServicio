@@ -9,6 +9,7 @@ import { CitasPendientesComponent } from './citas/citas-pendientes/citas-pendien
 import { RegistrarCitaComponent } from './citas/registrar-cita/registrar-cita.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ComponentsModule } from '../components/components.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,9 +19,14 @@ import { ComponentsModule } from '../components/components.module';
     GestionRefaccionesComponent,
     GestionUsuariosComponent,
     CitasPendientesComponent,
-    RegistrarCitaComponent, 
+    RegistrarCitaComponent
   ],
-  imports: [CommonModule, AppRoutingModule, ComponentsModule],
+  imports: [
+    CommonModule, 
+    AppRoutingModule, 
+    ComponentsModule,
+    ReactiveFormsModule
+  ],
   exports: [
     HomePageComponent,
     ServiciosPendientesComponent,

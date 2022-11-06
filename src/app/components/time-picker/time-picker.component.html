@@ -1,6 +1,8 @@
 <ngb-timepicker
 	[(ngModel)]="time"
+	[readonlyInputs]="true"
 	[meridian]="meridian"
 	[hourStep]="hourStep"
 	[minuteStep]="minuteStep"
+	(ngModelChange)="cambioHora()"
 ></ngb-timepicker>

@@ -6,8 +6,6 @@ import { ListaNavegacionComponent } from './lista-navegacion/lista-navegacion.co
 import { DatePickerComponentComponent } from './date-picker-component/date-picker-component.component';
 import { FormsModule } from '@angular/forms';
 
-
-
 @NgModule({
   declarations: [
     ListaNavegacionComponent,
