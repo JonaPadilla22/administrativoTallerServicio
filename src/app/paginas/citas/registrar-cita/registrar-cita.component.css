@@ -169,3 +169,15 @@ option[value=""][disabled] {
     color: white;
     border-radius: 30px;
 }
+
+.contenedorDatePicker,
+.contenedorTimePicker{
+    display: flex;
+    align-items: center;
+}
+
+.contenedorDatePicker p,
+.contenedorTimePicker p{
+    margin-right: 15px;
+    margin-bottom: 0;
+}
