@@ -9,6 +9,7 @@ import { GestionUsuariosComponent } from './paginas/gestion/gestion-usuarios/ges
 import { HistorialServiciosComponent } from './paginas/historial/historial-servicios/historial-servicios.component';
 import { HomePageComponent } from './paginas/home-page.component';
 import { ServiciosPendientesComponent } from './paginas/servicios/servicios-pendientes/servicios-pendientes.component';
+import { IngresoSinCitaComponent } from './paginas/taller/ingreso-sin-cita/ingreso-sin-cita.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -50,6 +51,10 @@ const routes: Routes = [
           {
             path: 'historialServicio',
             component: HistorialServiciosComponent,
+          },
+          {
+            path: 'ingresoSinCita',
+            component: IngresoSinCitaComponent,
           },
         ],
       },

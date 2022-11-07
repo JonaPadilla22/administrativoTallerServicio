@@ -39,6 +39,10 @@ export class HomePageComponent implements OnInit {
             nombre: 'Historial Servicio',
             link: 'taller/historialServicio',
           },
+          {
+            nombre: 'Ingreso Sin Cita',
+            link: 'taller/ingresoSinCita',
+          },
         ],
       },
       {
