@@ -1,7 +1,7 @@
 $alturaHeader: 120px
 $anchoAside: 250px
 $backgroundAsideHeader: url(../../assets/login/denim.png) repeat
-
+$alturaFooter: 50px
 *
     padding: 0
     margin: 0
@@ -39,9 +39,19 @@ header
     display: flex
     .contenido
         width: calc( 100vw - $anchoAside )
-        height: calc( 100vh - $alturaHeader )
+        height: calc( 100vh - ($alturaHeader + $alturaFooter))
 
     aside
         width: $anchoAside
         height: calc( 100vh - $alturaHeader )
         background: $backgroundAsideHeader
+    
+    footer
+        width: calc( 100vw - $anchoAside )
+        display: flex
+        align-items: center
+        justify-content: center
+        width: 100%
+        height: 50px
+        color: #fff
+        background: #264653

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -8,8 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class HomePageComponent implements OnInit {
   listaDeNavegacion: any;
   nombreUsuario: string;
-  constructor() {
-    this.nombreUsuario = "Pedro Sanchez";
+  constructor(private router: Router) {
+    this.nombreUsuario = 'Pedro Sanchez';
     this.listaDeNavegacion = [
       {
         nombre: 'Cita',
@@ -43,15 +44,17 @@ export class HomePageComponent implements OnInit {
       {
         nombre: 'Usuarios',
         icono: 'bx bxs-user-rectangle',
-        link: 'usuarios'
+        link: 'usuarios',
       },
       {
         nombre: 'Recursos',
         icono: 'bx bx-package',
-        link: 'recursos'
+        link: 'recursos',
       },
     ];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!localStorage.getItem('TOKEN')) this.router.navigate(['/']);
+  }
 }

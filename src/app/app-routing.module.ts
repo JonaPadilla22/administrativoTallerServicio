@@ -1,5 +1,6 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ErrorPageComponent } from './error-page/error-page.component';
 import { LoginComponent } from './login/login.component';
 import { CitasPendientesComponent } from './paginas/citas/citas-pendientes/citas-pendientes.component';
 import { RegistrarCitaComponent } from './paginas/citas/registrar-cita/registrar-cita.component';
@@ -39,7 +40,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            redirectTo: 'ingreso',
+            redirectTo: 'serviciosPendientes',
             pathMatch: 'full',
           },
           {

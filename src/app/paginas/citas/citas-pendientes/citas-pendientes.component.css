@@ -1,0 +1,20 @@
+.contenedor {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 10px;
+}
+.contenedor h2 {
+  margin-left: 25px;
+  color: #264653;
+  font-weight: bold;
+}
+.contenedor .contenedor-tabla {
+  width: 90%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 70%;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 20px;
+}/*# sourceMappingURL=citas-pendientes.component.css.map */

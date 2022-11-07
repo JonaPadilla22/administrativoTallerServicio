@@ -9,7 +9,9 @@ import { CitasPendientesComponent } from './citas/citas-pendientes/citas-pendien
 import { RegistrarCitaComponent } from './citas/registrar-cita/registrar-cita.component';
 import { AppRoutingModule } from '../app-routing.module';
 import { ComponentsModule } from '../components/components.module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -22,11 +24,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     RegistrarCitaComponent
   ],
   imports: [
-    CommonModule, 
-    AppRoutingModule, 
+    CommonModule,
+    AppRoutingModule,
     ComponentsModule,
-    ReactiveFormsModule
+    FormsModule,
+    NgbModule,
+    ReactiveFormsModule,
   ],
+  providers: [DecimalPipe],
   exports: [
     HomePageComponent,
     ServiciosPendientesComponent,
@@ -35,7 +40,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     GestionUsuariosComponent,
     CitasPendientesComponent,
     RegistrarCitaComponent,
-    CommonModule
+    CommonModule,
   ],
 })
 export class PaginasModule {}

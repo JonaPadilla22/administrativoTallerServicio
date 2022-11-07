@@ -7,7 +7,7 @@
 >
   <div class="contenedor">
     <div class="contenedor-img"></div>
-    <form>
+    <form [formGroup]="loginForm" (ngSubmit)="validarLogin()">
       <h2>Datos de la sesión</h2>
       <div class="form-group">
         <div class="input-group mb-5">
@@ -20,6 +20,7 @@
             placeholder="Correo"
             aria-label="Username"
             aria-describedby="basic-addon1"
+            formControlName="CORREO"
           />
         </div>
         <div class="input-group mb-3">
@@ -32,6 +33,7 @@
             placeholder="Contraseña"
             aria-label="Username"
             aria-describedby="basic-addon1"
+            formControlName="CONTRA"
           />
         </div>
       </div>
