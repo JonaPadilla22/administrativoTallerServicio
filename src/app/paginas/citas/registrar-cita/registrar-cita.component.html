@@ -1,62 +1,167 @@
-<p class="titulo">REGISTRAR CITA</p>
+<div class="contenedor-registrarCita">
+    <p class="titulo">REGISTRAR CITA</p>
 
-<div class="wrapper">
-    <div class="datosServ">
-        <p class="tituloGroup">DATOS DEL SERVICIO</p>
-        <div class="groupDatos">
-            <p>Tipo de servicio</p>
-            
-            <select name="" id="">
-                <option value="" disabled selected>Selecciona el tipo de servicio</option>
-                <option value="value1">Value 1</option>
-                <option value="value2">Value 2</option>
-                <option value="value3">Value 3</option>
-            </select>
-            <br><br>
-            <p>Descripción</p>
-            <textarea name="Text1" cols="40" rows="5"></textarea>
-        </div>
-    </div>
-    <br>
-    
-    
-    <div class="datosVeh">
-        <p class="tituloGroup">DATOS DEL VEHÍCULO</p>
-        <input type="text" name="" id="" placeholder="Buscar"><button class="btnVeh">Nuevo <img src="" alt=""></button><br><br>
-    
-        <div class="groupDatos">
-            <input type="text" name="" id="" placeholder="Matrícula"><br>
-            <input type="text" name="" id="" placeholder="Modelo"><br>
-            <input type="text" name="" id="" placeholder="Año"><br>
-            <input type="text" name="" id="" placeholder="Color"><br>
-            <input type="text" name="" id="" placeholder="VIN"><br>
-        </div>
-    </div>
-    <br>
-    
-    <div class="datosCliente">
-        <p class="tituloGroup">DATOS DEL CLIENTE</p>
-        <input type="text" name="" id="" placeholder="Buscar"><button class="btnCliente">Nuevo <img src="" alt=""></button><br><br>
-    
-        <div class="groupDatos">
-            <input type="text" name="" id="" placeholder="Nombre Cliente"><br>
-            <input type="text" name="" id="" placeholder="RFC"><br>
-            <input type="text" name="" id="" placeholder="Correo electrónico"><br>
-            <input type="text" name="" id="" placeholder="Teléfono"><br>
-        </div>
-    </div>
-    <br>
-    
-    <div class="datosFH">
-        <p class="tituloGroup">FECHA Y HORA</p>
-    
-        <div class="groupDatos">
-            <p>Fecha</p>
-            <app-date-picker-component></app-date-picker-component>
-            <p>Hora</p>
-            <app-time-picker></app-time-picker>
-        </div>
+    <form [formGroup]="formRegistrarCita" (submit)="send()">
+        <div class="wrapper">   
+            <div class="datosServ">
+                <p class="tituloGroup">DATOS DEL SERVICIO</p>
+                <div class="groupDatos">
+                    <p>Tipo de servicio</p>
+                    <select class="cbxTipoServ" name="" id="cbxTipoServ">
+                        <option value="" disabled selected>Selecciona el tipo de servicio</option>
+                        <option *ngFor="let type of tiposServ" [value]="type.ID_TIPO_SERVICIO">
+                            {{type.DESCRIPCION}}
+                        </option>
+                    </select>
+                    <br><br>
+                    <p>Descripción</p>
+                    <textarea name="descripcion" id="txtDescripcion" cols="40" rows="5" formControlName="DESCRIPCION" maxlength="100"></textarea>
+                </div>
+            </div>
+            <br>
+            <div class="datosVeh">
+                <p class="tituloGroup">DATOS DEL VEHÍCULO</p>
+                <div class="contenedorBuscarBoton">
+                    <div class="input-icons">
+                        <i class='bx bx-search' ></i>
+                        <datalist id="listVeh">
+                            <option *ngFor="let veh of vehiculos" [value]="veh.MATRICULA">
+                            </option>
+                        </datalist>
+                        <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">                        
+                    </div>
 
-        <button>REGISTRAR CITA</button>
-    </div>
+                    <ng-template #modalVeh let-modal>
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modal-basic-title">REGISTRAR VEHÍCULO</h4>
+                            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="mb-3">                                     
+                                    <select class="cbxMarcaVeh" name="" id="cbxMarcaVeh" (change)="cambiarMarca()">
+                                        <option value="" disabled selected>Selecciona marca</option>
+                                        <option *ngFor="let marca of marcas" [value]="marca.ID_MARCA">
+                                            {{marca.DESCRIPCION}}
+                                        </option>
+                                    </select><br>
+
+                                    <select class="cbxModeloVeh" name="" id="cbxModeloVeh" disabled>
+                                        <option value="" disabled selected>Selecciona modelo</option>
+                                        <option *ngFor="let mod of modelos" [value]="mod.ID_MODELO">
+                                            {{mod.DESCRIPCION}}
+                                        </option>
+                                    </select><br>
+
+                                    <input type="text" name="" id="txtMatricula" placeholder="Matrícula" maxlength="7"><br>
+                                    <input type="text" name="" id="txtAnho" placeholder="Año" maxlength="4"><br>
+                                    <select class="cbxColor" name="" id="cbxColor">
+                                        <option value="" disabled selected>Selecciona color</option>
+                                        <option value="BLANCO">BLANCO</option>
+                                        <option value="NEGRO">NEGRO</option>
+                                        <option value="AZUL">AZUL</option>
+                                        <option value="ROJO">ROJO</option>
+                                        <option value="GRIS">GRIS</option>
+                                        <option value="VERDE">VERDE</option>
+                                        <option value="AMARILLO">AMARILLO</option>
+                                        <option value="MORADO">MORADO</option>
+                                        <option value="NARANJA">NARANJA</option>
+                                        <option value="ROSA">ROSA</option>
+                                    </select><br>
+                                    <input type="text" name="" id="txtVIN" placeholder="VIN" maxlength="17"><br>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-dark" (click)="regVeh()">GUARDAR</button>
+                        </div>
+                    </ng-template>
+
+                    <a href="javascript:void(0);" class="btnVeh" (click)="open(modalVeh)">Nuevo <i class='bx bxs-car'></i></a>
+                    <a href="javascript:void(0);" class="btnVeh" (click)="limpiarVeh()">Limpiar <i class='bx bxs-eraser'></i></a>
+                </div>
+                <div class="groupDatos">
+                    <input type="text" name="matricula" id="matricula" placeholder="Matrícula" [value]="matriculaVeh" disabled><br>
+                    <input type="text" name="" id="" placeholder="Modelo" [value]="modeloVeh" disabled><br>
+                    <input type="text" name="" id="" placeholder="Año" [value]="anhoVeh" disabled><br>
+                    <input type="text" name="" id="" placeholder="Color" [value]="colorVeh" disabled><br>
+                    <input type="text" name="" id="" placeholder="VIN" [value]="vinVeh" disabled><br>
+                </div>
+            </div>
+            <br>
+            <div class="datosCliente">
+                <div>
+                    <p class="tituloGroup">DATOS DEL CLIENTE</p>
+                    <div class="contenedorBuscarBoton">
+                        <div class="input-icons">
+                            <i class='bx bx-search' ></i>
+                            <datalist id="listClientes">
+                                <option *ngFor="let cl of clientes" [value]="cl.ID_USUARIO">
+                                    {{cl.NOMBRE}}
+                                </option>
+                            </datalist>
+                            <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorCliente($event)" list="listClientes">
+                        
+                        </div>
+
+
+                        <ng-template #modalCliente let-modal>
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="modal-basic-title">REGISTRAR CLIENTE</h4>
+                                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">  
+                                        <select class="cbxTipoPersonaCliente" name="" id="cbxTipoPersonaCliente">
+                                            <option value="" disabled selected>Selecciona tipo de persona</option>
+                                            <option *ngFor="let type of tiposPers" [value]="type.ID_TIPO_PERSONA">
+                                                {{type.DESCRIPCION}}
+                                            </option>
+                                        </select><br>
+    
+                                        <input type="text" name="" id="txtNombreCliente" placeholder="Nombre"><br>
+                                        <input type="text" name="" id="txtRFC" placeholder="RFC" maxlength="13"><br>
+                                        <input type="email" name="" id="txtCorreo" placeholder="Correo electrónico"><br>
+                                        <input type="text" name="" id="txtTelefono" placeholder="Teléfono" maxlength="10"><br>
+                                        <input type="text" name="" id="txtDireccion" placeholder="Direccion"><br>                                        
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-dark" (click)="regCliente()">GUARDAR</button>
+                            </div>
+                        </ng-template>
+
+                        <a href="javascript:void(0);" class="btnCliente" (click)="open(modalCliente)">Nuevo <i class='bx bxs-user-plus'></i></a>
+                        <a href="javascript:void(0);" class="btnVeh" (click)="limpiarCliente()">Limpiar <i class='bx bxs-eraser'></i></a>
+                    </div>
+                </div>
+                <div class="groupDatos">
+                    <input type="text" name="" id="" placeholder="Nombre Cliente" [value]="nombreCliente" disabled><br>
+                    <input type="text" name="" id="" placeholder="RFC" [value]="rfcCliente" disabled><br>
+                    <input type="text" name="" id="" placeholder="Correo electrónico" [value]="correoCliente" disabled><br>
+                    <input type="text" name="" id="" placeholder="Teléfono" [value]="telefCliente" disabled><br>
+                </div>
+            </div>
+            <br>
+            <div class="datosFH">
+                <p class="tituloGroup">FECHA Y HORA</p>
+                <div class="groupDatosFecha">
+                    <div class="contenedorDatePicker">
+                        <p>Fecha</p>
+                        <app-date-picker-component (cambioDate)="receiveDate($event)"></app-date-picker-component>
+                    </div>
+                    <div class="contenedorTimePicker">
+                        <p>Hora</p>
+                        <app-time-picker (cambioTime)="receiveTime($event)"></app-time-picker>
+                    </div>
+                </div>
+                <div class="contenedorBoton">
+                    <button class="btnRegistrar">REGISTRAR CITA</button>
+                </div>
+            </div>
+        
+        </div>
+    </form>
 </div>

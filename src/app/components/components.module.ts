@@ -9,8 +9,6 @@ import { ListaNavegacionHijoComponent } from './lista-navegacion/lista-navegacio
 import { AsideIdentificadorUsuarioComponent } from './aside-identificador-usuario/aside-identificador-usuario.component';
 import { AppRoutingModule } from '../app-routing.module';
 
-
-
 @NgModule({
   declarations: [
     ListaNavegacionComponent,

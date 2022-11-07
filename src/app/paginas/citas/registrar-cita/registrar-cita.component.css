@@ -1,4 +1,15 @@
 /*# sourceMappingURL=registrar-cita.component.css.map */
+.contenedor-registrarCita {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+i {
+    font-size: 22px;
+    padding-left: 5px;
+}
+
 .titulo {
     color: #264653;
     text-align: center;
@@ -6,8 +17,33 @@
     font-size: xx-large;
 }
 
-.groupDatos {
+.contenedorBuscarBoton {
+    display:flex;
+    align-items: center;
+}
+
+.cbxTipoServ, .cbxMarcaVeh, .cbxModeloVeh, .cbxTipoPersonaCliente, .cbxColor {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 15px;
+    background-color: white;
+    color: gray
+}
+
+.groupDatos, .groupDatosFecha {
     background-color: #FCFCFC;
+}
+
+.groupDatosFecha {
+    display: grid;
+}
+
+.contenedorDatePicker {
+    grid-column: 1;
+}
+
+.contenedorTimePicker {
+    grid-column: 2;
 }
 
 .tituloGroup {
@@ -49,23 +85,26 @@
     grid-row: 2;
 }
 
-.groupDatos p {
+.groupDatos p, .groupDatosFecha p {
     color: #264653;
     font-weight: bold;
     font-size: 18px;
 }
 
-.groupDatos {
+.groupDatos, .groupDatosFecha {
     padding-left: 20px;
     padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
 }
 
-.groupDatos input {
+.groupDatos input, .mb-3 input {
     margin: 5px;
     padding-left: 15px;
     padding-top: 4px;
     padding-bottom: 4px;
     border-radius: 15px;
+    width: 50%;
 }
 
 .groupDatos textarea {
@@ -82,6 +121,45 @@ option[value=""][disabled] {
 .btnCliente, .btnVeh {
     background-color: #264653;
     color: white;
-    padding: 5px 15px 5px 15px;
+    padding: 7px 25px 7px 25px;
     border-radius: 25px;
+    display: flex;
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+.btnCliente:hover, .btnVeh:hover {
+    background-color: #2646539f;
+}
+
+.input-icons i {
+    position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+    padding-left: 15px;
+}
+  
+.input-icons {
+    position: relative;
+}
+  
+.input-field {
+    width: 100%;
+    padding-left: 20%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 20px;
+    width: 260px;
+}
+
+.contenedorBoton {
+    text-align: center;
+}
+
+.btnRegistrar {
+    background-color: #264653;
+    margin: 15px;
+    padding: 20px;
+    color: white;
+    border-radius: 30px;
 }
