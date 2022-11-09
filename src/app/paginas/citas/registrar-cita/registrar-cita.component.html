@@ -1,5 +1,5 @@
  <div class="contenedor-registrarCita">
-    <p class="titulo">REGISTRAR CITA</p>
+    <h1 class="titulo">REGISTRAR CITA</h1>
 
     <form [formGroup]="formRegistrarCita" (submit)="send()">
         <div class="wrapper">   
@@ -7,7 +7,7 @@
                 <p class="tituloGroup">DATOS DEL SERVICIO</p>
                 <div class="groupDatos">
                     <p>Tipo de servicio</p>
-                    <select class="cbxTipoServ" name="" id="cbxTipoServ">
+                    <select class="cbxTipoServ" name="" id="cbxTipoServ" formControlName="ID_TIPO_SERVICIO">
                         <option value="" disabled selected>Selecciona el tipo de servicio</option>
                         <option *ngFor="let type of tiposServ" [value]="type.ID_TIPO_SERVICIO">
                             {{type.DESCRIPCION}}

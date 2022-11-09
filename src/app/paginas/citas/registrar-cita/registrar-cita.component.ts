@@ -5,7 +5,8 @@ import { lastValueFrom } from 'rxjs';
 import { CitaService } from './../../../servicios/citas/cita.service';
 import { VehiculoService } from './../../../servicios/vehiculos/vehiculo.service';
 import { ClienteService } from './../../../servicios/clientes/cliente.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 
 @Component({
   selector: 'app-registrar-cita',
@@ -44,14 +45,19 @@ export class RegistrarCitaComponent implements OnInit {
       private citaService: CitaService,
       private vehService: VehiculoService,
       private clienteService: ClienteService,
-      private modalService: NgbModal
+      private modalService: NgbModal,
+      public alertService: AlertsComponent
     ) { 
     this.formRegistrarCita = this.formBuilder.group({
-      'DESCRIPCION': ['',
+      DESCRIPCION: ['',
         [
           Validators.required
         ]
-      ]
+      ],
+      ID_TIPO_SERVICIO: '',
+      MATRICULA: '',
+      CLIENTE: '',
+      FECHA_CITA: ''
     });
 
     this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
@@ -68,7 +74,7 @@ export class RegistrarCitaComponent implements OnInit {
 
   open(content: any) {
     if(content._declarationTContainer.localNames[0]=="modalVeh" && this.id_cliente == ""){
-      alert("DEBE SELECCIONAR UN CLIENTE PARA REGISTRAR UN VEHÍCULO");
+      this.alertService.warning("DEBE SELECCIONAR UN CLIENTE PARA REGISTRAR UN VEHÍCULO");
     }else{
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
     }		
@@ -121,7 +127,7 @@ export class RegistrarCitaComponent implements OnInit {
     if(resultado!=undefined){
       this.colorVeh = resultado.COLOR;
       this.modeloVeh = resultado.MODELO.MARCA.DESCRIPCION + " " + resultado.MODELO.DESCRIPCION;
-      this.anhoVeh = resultado.AÑO;
+      this.anhoVeh = resultado.ANIO;
       this.matriculaVeh = resultado.MATRICULA;
       this.vinVeh = resultado.VIN;
       this.buscarCliente(resultado.ID_CLIENTE);
@@ -155,19 +161,15 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   send(): any{
-    const formData = new FormData();
-    
+    let descripcion = this.formRegistrarCita.value.DESCRIPCION;
+    let tipo_serv = this.formRegistrarCita.value.ID_TIPO_SERVICIO;
+    this.formRegistrarCita.value.MATRICULA = this.matricula;
+    this.formRegistrarCita.value.CLIENTE = this.id_cliente;
+    this.formRegistrarCita.value.FECHA_CITA = this.formarFecha();
 
-    var inputValue = (<HTMLInputElement>document.getElementById("cbxTipoServ")).value;
-    var descValue = (<HTMLInputElement>document.getElementById("txtDescripcion")).value;
-    if(inputValue!="" && descValue!="" && this.matricula!="" && this.id_cliente!=""){
-      formData.append("ID_TIPO_SERVICIO", inputValue);   
-      formData.append("DESCRIPCION", descValue);
-      formData.append("MATRICULA", this.matricula);
-      formData.append("CLIENTE", this.id_cliente);
-      formData.append("FECHA_CITA", this.formarFecha());
+    if(tipo_serv!="" && descripcion!="" && this.matricula!="" && this.id_cliente!=""){
       
-      this.citaService.registrarCita(formData).subscribe(
+      this.citaService.registrarCita(this.formRegistrarCita.value).subscribe(
         (response: any) => {   
           const formAct = new FormData();
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
@@ -183,7 +185,7 @@ export class RegistrarCitaComponent implements OnInit {
       );
     }
     else{
-      alert("DATOS FALTANTES");
+      this.alertService.warning("DATOS FALTANTES");
     }  
   }
 
@@ -207,7 +209,7 @@ export class RegistrarCitaComponent implements OnInit {
 
       this.vehService.registrarVeh(formData).subscribe(
         (response: any) => {
-          alert(response.message);
+          this.alertService.exito(response.message);
           this.vehiculos.push(response.data);   
           this.matricula = matricula;
           this.buscarVeh(this.matricula);
@@ -216,10 +218,9 @@ export class RegistrarCitaComponent implements OnInit {
       
       this.modalService.dismissAll();
     }else{
-      alert("DATOS FALTANTES");
+      this.alertService.warning("DATOS FALTANTES");
     }
-    
-    
+     
   }
 
   async regCliente(){
@@ -250,7 +251,7 @@ export class RegistrarCitaComponent implements OnInit {
 
       this.clienteService.registrarCliente(formData).subscribe(
         (response: any) => {
-          alert(response.message);
+          this.alertService.exito(response.message);
           this.id_cliente = response.data.ID;
           let n_cl = response.data;
           delete n_cl.ID;
@@ -262,7 +263,7 @@ export class RegistrarCitaComponent implements OnInit {
 
       this.modalService.dismissAll();
     }else{
-      alert("DATOS FALTANTES");
+      this.alertService.warning("DATOS FALTANTES");
     }
   }
 
