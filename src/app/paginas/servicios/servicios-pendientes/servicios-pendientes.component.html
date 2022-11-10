@@ -1,1 +1,117 @@
-<p>servicios-pendientes works!</p>
+<div class="contenedor-serviciosPendientes">
+    <h1 class="titulo">SERVICIOS PENDIENTES</h1>
+    <input id="table-filtering-search" class="form-control" type="text" (keyup)="search($event)"/>
+    <div class="contenedor-tarjetas">
+        <ng-template #modalServ let-modal>
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">DETALLE DE SERVICIO</h4>
+                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">                                     
+                        <div class="detalleServicio" *ngFor="let det of servicio">
+
+                            <div class="datosServicio">
+                                <b><p>MANTENIMIENTO {{det.TIPO_SERVICIO.DESCRIPCION}}</p></b>
+                                <p>{{det.DESCRIPCION}}</p>   
+                            </div>
+                            <br>
+                            <div class="datosVehiculo">
+                                <h5><b>VEHICULO:</b> {{det.VEHICULO.MODELO.MARCA.DESCRIPCION}} {{det.VEHICULO.MODELO.DESCRIPCION}} {{det.VEHICULO.COLOR}} {{det.VEHICULO.ANIO}}</h5>
+                                <b>MATRÍCULA:</b> {{det.VEHICULO.MATRICULA}} <br>
+                                <b>VIN:</b> {{det.VIN}}
+                            </div>
+                            <br>
+                            <div class="datosCliente">
+                                <b>CLIENTE:</b> {{det.CLIENTE.NOMBRE}} <br>
+                                <b>RFC:</b> {{det.CLIENTE.RFC}} <br>
+                                <b>TELÉFONO:</b> {{det.CLIENTE.TELEFONO}}
+                            </div>
+                            <br>
+                            <div class="datosTecnico">
+                                <img src="{{baseUrl}}/usuarios/{{img_tecnico}}" alt="">
+                                {{det.CLIENTE.NOMBRE}}
+                            </div>
+
+                            
+                        </div>
+                        <br>
+                        <div class="tablaDetalle">
+                            <table class="table table-striped">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">TIPO</th>
+                                    <th scope="col">DESCRIPCIÓN</th>
+                                    <th scope="col">PRECIO</th>
+                                    <th scope="col">CANTIDAD</th>
+                                    <th scope="col">TOTAL</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let prod of detalleServicio; index as i">
+                                    <td>
+                                      <ngb-highlight class="cell"
+                                        [result]="prod.TIPO_PROD"
+                                      ></ngb-highlight>
+                                    </td>
+                                    <td>
+                                      <ngb-highlight
+                                        [result]="prod.PRODUCTO.DESCRIPCION"
+                                      ></ngb-highlight>
+                                    </td>
+                                    <td>
+                                      <ngb-highlight
+                                        [result]="prod.PRECIO | currency" 
+                                      ></ngb-highlight>
+                                    </td>
+                                    <td>
+                                      <ngb-highlight
+                                        [result]="prod.CANTIDAD"
+                                      ></ngb-highlight>
+                                    </td>
+                                    <td>
+                                        <ngb-highlight
+                                          [result]="(prod.PRECIO * prod.CANTIDAD) | currency"
+                                        ></ngb-highlight>
+                                      </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                        </div>
+
+                        <div class="totalServicio">
+                          <p>Total: {{this.total | currency}}</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark" (click)="actualizarEstatus()">ACTUALIZAR ESTATUS</button>
+            </div>
+        </ng-template>
+        
+        <div class="card" *ngFor="let serv of servicios$ | slice: (page-1) * pageSize : page * pageSize">
+            <div class="contenido-card" (click)="abrirModal(serv.ID_SERVICIO); open(modalServ)" id="tarjeta">
+              <h4>{{serv.VEHICULO.MODELO.MARCA.DESCRIPCION}} {{serv.VEHICULO.MODELO.DESCRIPCION}} {{serv.VEHICULO.COLOR}} {{serv.VEHICULO.ANIO}}</h4>
+              <p>{{serv.VEHICULO.MATRICULA}}</p>
+              <p>MANTENIMIENTO {{serv.TIPO_SERVICIO.DESCRIPCION}}</p>
+              <p>CLIENTE: {{serv.CLIENTE.NOMBRE}}</p>
+              <div class="tecnico-encargado">
+                <img src="{{baseUrl}}/usuarios/{{img_tecnico}}" alt="">
+                TÉCNICO: {{serv.TECNICO_ENCARGADO.NOMBRE}}     
+              </div>
+              <a href="javascript:void(0);">
+                <div>
+                  <img src="../../../assets/servicios/{{serv.ESTATUS.ID_ESTATUS}}.png" alt="">
+                  {{serv.ESTATUS.DESCRIPCION}}
+                </div>      
+              </a>
+            </div>
+        </div>
+
+        
+    </div>
+    <ngb-pagination class="pagination" [collectionSize]="servicios.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true"></ngb-pagination>
+</div>
