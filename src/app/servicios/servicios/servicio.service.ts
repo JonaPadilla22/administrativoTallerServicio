@@ -39,4 +39,8 @@ export class ServicioService {
             );
   }
 
+  actualizarEstatus(formActServ: FormData){
+    return this.http.post(`${this.url}/servicios/actualizacion`, formActServ, {headers: this.headers});
+  }
+
 }

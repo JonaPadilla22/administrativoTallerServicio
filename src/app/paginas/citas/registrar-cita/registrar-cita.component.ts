@@ -145,6 +145,10 @@ export class RegistrarCitaComponent implements OnInit {
   async buscarCliente(id: any){   
     const resultado = this.clientes.find( (cl: any) => ((cl.ID_USUARIO === parseInt(id))));
     if(resultado!=undefined){
+      
+      this.limpiarVeh();
+      this.matricula = "";
+      console.log(this.matricula);
       this.id_cliente = id;
       this.nombreCliente = resultado.NOMBRE;
       this.correoCliente = resultado.CORREO;
