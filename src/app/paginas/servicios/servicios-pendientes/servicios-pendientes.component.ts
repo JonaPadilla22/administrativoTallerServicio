@@ -1,11 +1,11 @@
 
 import { Component, OnInit } from '@angular/core';
-import { debounceTime, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { ServicioService } from './../../../servicios/servicios/servicio.service';
 import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
-import { map, Observable, startWith } from 'rxjs';
+import { Globals } from 'src/app/globals';
 
 @Component({
   selector: 'app-servicios-pendientes',
@@ -30,14 +30,15 @@ export class ServiciosPendientesComponent implements OnInit {
   total: any = 0;
 
   page: any;
-  pageSize: any = 5;
+  pageSize: any = 6;
 
   filter: any;
 
   constructor(
     private servService: ServicioService,
     private modalService: NgbModal,
-    public alertService: AlertsComponent
+    public alertService: AlertsComponent,
+    private globals: Globals
   ) 
   { 
     this.servicios$ = this.filtrarServ("");
@@ -66,6 +67,7 @@ export class ServiciosPendientesComponent implements OnInit {
         async (reason) => {
           this.activarCards();
           this.servicios = await this.obtenerServicios();
+          this.servicios$ = this.servicios;
         },
       );
     }
@@ -102,9 +104,9 @@ export class ServiciosPendientesComponent implements OnInit {
   }
 
   actualizarEstatus(){
-    let id_tecn = "2";
 
-    if(id_tecn!=this.servicio[0].TECNICO_ENCARGADO.ID){
+
+    if(this.globals.usuario.ID!=this.servicio[0].TECNICO_ENCARGADO.ID){
       this.alertService.warning("SÓLO EL TÉCNICO ENCARGADO PUEDE ACTUALIZAR EL SERVICIO");
     }else{
       this.alertService.confirmDialog("¿DESEA ACTUALIZAR EL ESTATUS DEL SERVICIO A \""+this.sig_estatus.DESCRIPCION+ "\"?").then((result) => {
@@ -113,11 +115,12 @@ export class ServiciosPendientesComponent implements OnInit {
           const formActServ = new FormData();
           formActServ.append("ID_SERVICIO", this.servicio[0].ID_SERVICIO);
           formActServ.append("ID_ESTATUS", this.sig_estatus.ID_ESTATUS);
-          formActServ.append("ID_USUARIO", id_tecn);
+          formActServ.append("ID_USUARIO", this.globals.usuario.ID);
 
           this.servService.actualizarEstatus(formActServ).subscribe(
             (response: any) => {
               this.alertService.exito(response.message);
+              this.modalService.dismissAll();
             }
           );
         }
@@ -141,7 +144,7 @@ export class ServiciosPendientesComponent implements OnInit {
 
   search(e: any) {
     let text = e.target.value;
-    this.servicios$ = this.filtrarServ(text);
+    this.servicios$ = this.filtrarServ(text.trim());
   }
 
   filtrarServ(text: string){
@@ -149,6 +152,7 @@ export class ServiciosPendientesComponent implements OnInit {
       const term = text.toLowerCase();
       return (
         serv.VEHICULO.MATRICULA.toLowerCase().includes(term) ||
+        serv.ESTATUS.DESCRIPCION.toLowerCase().includes(term) ||
         serv.CLIENTE.NOMBRE.toLowerCase().includes(term) ||
         serv.TECNICO_ENCARGADO.NOMBRE.toLowerCase().includes(term) ||
         (serv.VEHICULO.MODELO.MARCA.DESCRIPCION.toLowerCase()+ " " +serv.VEHICULO.MODELO.DESCRIPCION.toLowerCase() + " " + serv.VEHICULO.COLOR.toLowerCase() + " " + serv.VEHICULO.ANIO.toLowerCase()).includes(term)

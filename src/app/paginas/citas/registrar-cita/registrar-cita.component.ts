@@ -19,9 +19,12 @@ export class RegistrarCitaComponent implements OnInit {
   tiposPers: any;
   marcas: any;
   modelos: any = [];
-  vehiculos: any;
+
+  vehiculos: any[] = [];
+  vehiculos$: any = [];
   clientes: any;
-  vehCliente: any = [];
+  //vehCliente: any = [];
+
   matricula: any = "";
   id_cliente: string = "";
 
@@ -70,6 +73,7 @@ export class RegistrarCitaComponent implements OnInit {
     this.clientes = await this.obtenerClientes();
     this.tiposPers = await this.obtenerTiposPers();
     this.marcas = await this.obtenerMarcas();
+    this.vehiculos$ = this.vehiculos;
   }
 
   open(content: any) {
@@ -100,14 +104,22 @@ export class RegistrarCitaComponent implements OnInit {
     return await lastValueFrom(mTemp); 
   }
 
-  async obtenerVehiculos(){
+  async obtenerVehiculos(): Promise<any>{
     let vehTemp = this.vehService.getVehiculos();
     return await lastValueFrom(vehTemp); 
   }
 
-  async obtenerVehiculosByCliente(id: string){
-    let vehTemp = this.vehService.getVehiculosByCliente(id);
-    return await lastValueFrom(vehTemp); 
+  // async obtenerVehiculosByCliente(id: string){
+  //   let vehTemp = this.vehService.getVehiculosByCliente(id);
+  //   return await lastValueFrom(vehTemp); 
+  // }
+
+  obtenerVehiculosByCliente(id: string){
+    return this.vehiculos.filter((veh: any) => {
+      return (
+        veh.ID_CLIENTE == id
+      );
+    });
   }
 
   async obtenerClientes(){
@@ -123,14 +135,16 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   buscarVeh(matricula: string){
-    const resultado = this.vehiculos.find( (veh: any) => veh.MATRICULA === matricula);
+    const resultado = this.vehiculos$.find( (veh: any) => veh.MATRICULA === matricula);
     if(resultado!=undefined){
       this.colorVeh = resultado.COLOR;
       this.modeloVeh = resultado.MODELO.MARCA.DESCRIPCION + " " + resultado.MODELO.DESCRIPCION;
       this.anhoVeh = resultado.ANIO;
       this.matriculaVeh = resultado.MATRICULA;
       this.vinVeh = resultado.VIN;
-      this.buscarCliente(resultado.ID_CLIENTE);
+      if(this.id_cliente==""){
+        this.buscarCliente(resultado.ID_CLIENTE);
+      }
       this.matricula = this.matriculaVeh;
     }
   }
@@ -148,19 +162,13 @@ export class RegistrarCitaComponent implements OnInit {
       
       this.limpiarVeh();
       this.matricula = "";
-      console.log(this.matricula);
       this.id_cliente = id;
       this.nombreCliente = resultado.NOMBRE;
       this.correoCliente = resultado.CORREO;
       this.telefCliente = resultado.TELEFONO;
       this.rfcCliente = resultado.RFC;
 
-      this.vehCliente = [];
-      this.vehiculos = await this.obtenerVehiculosByCliente(id);
-      // for(var i = 0; i<this.vehiculos.length; i++){
-      //   this.vehCliente.push(this.vehiculos[i].VEHICULO);
-      // }
-      // this.vehiculos = this.vehCliente;     
+      this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente)  
     }   
   }
 
@@ -214,7 +222,8 @@ export class RegistrarCitaComponent implements OnInit {
       this.vehService.registrarVeh(formData).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
-          this.vehiculos.push(response.data);   
+          this.vehiculos.push(response.data);  
+          this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente); 
           this.matricula = matricula;
           this.buscarVeh(this.matricula);
         }
@@ -319,7 +328,7 @@ export class RegistrarCitaComponent implements OnInit {
       this.telefCliente = "";
       this.rfcCliente = "";
       this.limpiarVeh();
-      this.vehiculos = await this.obtenerVehiculos();
+      this.vehiculos$ = this.vehiculos;
     }  
   }
 
@@ -349,6 +358,10 @@ export class RegistrarCitaComponent implements OnInit {
 
   receiveTime(e: any) {
     this.time = e;
+  }
+
+  b(e: any){
+    console.log(e);
   }
 
 }

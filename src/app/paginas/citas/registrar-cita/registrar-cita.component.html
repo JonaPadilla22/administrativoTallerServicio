@@ -24,11 +24,11 @@
                 <div class="contenedorBuscarBoton">
                     <div class="input-icons">
                         <i class='bx bx-search' ></i>
-                        <datalist id="listVeh">
-                            <option *ngFor="let veh of vehiculos" [value]="veh.MATRICULA">
+                        <datalist id="listVeh" (click)="b($event)">
+                            <option *ngFor="let veh of vehiculos$" [value]="veh.MATRICULA" (click)="b($event)">
                             </option>
                         </datalist>
-                        <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">                        
+                        <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">
                     </div>
 
                     <ng-template #modalVeh let-modal>

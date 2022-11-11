@@ -1,6 +1,12 @@
 <div class="contenedor-serviciosPendientes">
     <h1 class="titulo">SERVICIOS PENDIENTES</h1>
-    <input id="table-filtering-search" class="form-control" type="text" (keyup)="search($event)"/>
+
+    <div class="buscador">
+      <p>BUSCAR</p>     
+      <input class="inputBuscar" id="table-filtering-search" class="form-control" type="text" (keyup)="search($event)"/>
+    </div>
+    
+
     <div class="contenedor-tarjetas">
         <ng-template #modalServ let-modal>
             <div class="modal-header">
@@ -31,7 +37,7 @@
                             <br>
                             <div class="datosTecnico">
                                 <img src="{{baseUrl}}/usuarios/{{img_tecnico}}" alt="">
-                                {{det.CLIENTE.NOMBRE}}
+                                {{det.TECNICO_ENCARGADO.NOMBRE}}
                             </div>
 
                             
@@ -95,7 +101,7 @@
         <div class="card" *ngFor="let serv of servicios$ | slice: (page-1) * pageSize : page * pageSize">
             <div class="contenido-card" (click)="abrirModal(serv.ID_SERVICIO); open(modalServ)" id="tarjeta">
               <h4>{{serv.VEHICULO.MODELO.MARCA.DESCRIPCION}} {{serv.VEHICULO.MODELO.DESCRIPCION}} {{serv.VEHICULO.COLOR}} {{serv.VEHICULO.ANIO}}</h4>
-              <p>{{serv.VEHICULO.MATRICULA}}</p>
+              {{serv.VEHICULO.MATRICULA}}
               <p>MANTENIMIENTO {{serv.TIPO_SERVICIO.DESCRIPCION}}</p>
               <p>CLIENTE: {{serv.CLIENTE.NOMBRE}}</p>
               <div class="tecnico-encargado">

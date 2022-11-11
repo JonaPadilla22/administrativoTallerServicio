@@ -5,7 +5,8 @@ import { lastValueFrom } from 'rxjs';
 import { CitaService } from './../../../servicios/citas/cita.service';
 import { VehiculoService } from './../../../servicios/vehiculos/vehiculo.service';
 import { ClienteService } from './../../../servicios/clientes/cliente.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Globals } from '../../../globals';
 
 @Component({
   selector: 'app-ingreso-sin-cita',
@@ -18,9 +19,11 @@ export class IngresoSinCitaComponent implements OnInit {
   tiposPers: any;
   marcas: any;
   modelos: any = [];
-  vehiculos: any;
+
+  vehiculos: any[] = [];
+  vehiculos$: any = [];
   clientes: any;
-  vehCliente: any = [];
+
   matricula: any = "";
   id_cliente: string = "";
 
@@ -45,7 +48,8 @@ export class IngresoSinCitaComponent implements OnInit {
       private vehService: VehiculoService,
       private clienteService: ClienteService,
       private modalService: NgbModal,
-      public alertService: AlertsComponent
+      public alertService: AlertsComponent,
+      public globals: Globals
     ) { 
       this.formIngresoTaller = this.formBuilder.group({
         DESCRIPCION: ['',
@@ -57,6 +61,7 @@ export class IngresoSinCitaComponent implements OnInit {
         MATRICULA: '',
         CLIENTE: '',
         TIEMPO_ESTIMADO: '',
+        TECNICO_ENCARGADO: '',
         ID_ESTATUS: ''
       });
 
@@ -70,6 +75,7 @@ export class IngresoSinCitaComponent implements OnInit {
     this.clientes = await this.obtenerClientes();
     this.tiposPers = await this.obtenerTiposPers();
     this.marcas = await this.obtenerMarcas();
+    this.vehiculos$ = this.vehiculos;
   }
 
   open(content: any) {
@@ -100,14 +106,17 @@ export class IngresoSinCitaComponent implements OnInit {
     return await lastValueFrom(mTemp); 
   }
 
-  async obtenerVehiculos(){
+  async obtenerVehiculos(): Promise<any>{
     let vehTemp = this.vehService.getVehiculos();
     return await lastValueFrom(vehTemp); 
   }
 
-  async obtenerVehiculosByCliente(id: string){
-    let vehTemp = this.vehService.getVehiculosByCliente(id);
-    return await lastValueFrom(vehTemp); 
+  obtenerVehiculosByCliente(id: string){
+    return this.vehiculos.filter((veh: any) => {
+      return (
+        veh.ID_CLIENTE == id
+      );
+    });
   }
 
   async obtenerClientes(){
@@ -130,7 +139,9 @@ export class IngresoSinCitaComponent implements OnInit {
       this.anhoVeh = resultado.ANIO;
       this.matriculaVeh = resultado.MATRICULA;
       this.vinVeh = resultado.VIN;
-      this.buscarCliente(resultado.ID_CLIENTE);
+      if(this.id_cliente==""){
+        this.buscarCliente(resultado.ID_CLIENTE);
+      }
       this.matricula = this.matriculaVeh;
     }
   }
@@ -145,18 +156,16 @@ export class IngresoSinCitaComponent implements OnInit {
   async buscarCliente(id: any){   
     const resultado = this.clientes.find( (cl: any) => ((cl.ID_USUARIO === parseInt(id))));
     if(resultado!=undefined){
+
+      this.limpiarVeh();
+      this.matricula = "";
       this.id_cliente = id;
       this.nombreCliente = resultado.NOMBRE;
       this.correoCliente = resultado.CORREO;
       this.telefCliente = resultado.TELEFONO;
       this.rfcCliente = resultado.RFC;
 
-      this.vehCliente = [];
-      this.vehiculos = await this.obtenerVehiculosByCliente(id);
-      // for(var i = 0; i<this.vehiculos.length; i++){
-      //   this.vehCliente.push(this.vehiculos[i].VEHICULO);
-      // }
-      // this.vehiculos = this.vehCliente;     
+      this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente);
     }   
   }
 
@@ -166,8 +175,14 @@ export class IngresoSinCitaComponent implements OnInit {
     let tipo_serv = this.formIngresoTaller.value.ID_TIPO_SERVICIO;
     this.formIngresoTaller.value.MATRICULA = this.matricula;
     this.formIngresoTaller.value.CLIENTE = this.id_cliente;
-    this.formIngresoTaller.value.ID_ESTATUS = "I";
-    let tiempo_estim;
+    this.formIngresoTaller.value.TECNICO_ENCARGADO = this.globals.usuario.ID;
+    if((<HTMLInputElement>document.getElementById("flexCheckDefault")).checked){
+      this.formIngresoTaller.value.ID_ESTATUS = "E";
+    }else{
+      this.formIngresoTaller.value.ID_ESTATUS = "I";
+    }
+
+    let tiempo_estim = "";
     if(this.formIngresoTaller.value.TIEMPO_ESTIMADO!=""){
       tiempo_estim = this.formIngresoTaller.value.TIEMPO_ESTIMADO + (<HTMLInputElement>document.getElementById("cbxTiempoEstimado")).value;
       this.formIngresoTaller.value.TIEMPO_ESTIMADO += (<HTMLInputElement>document.getElementById("cbxTiempoEstimado")).value;
@@ -179,7 +194,11 @@ export class IngresoSinCitaComponent implements OnInit {
         (response: any) => {   
           const formAct = new FormData();
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
-          formAct.append("ID_ESTATUS", "I");
+          if((<HTMLInputElement>document.getElementById("flexCheckDefault")).checked){
+            formAct.append("ID_ESTATUS", "E");
+          }else{
+            formAct.append("ID_ESTATUS", "I");
+          }    
           formAct.append("ID_USUARIO", "1");     
           this.citaService.registrarActualizacioServ(formAct).subscribe(
             (response: any) => {
@@ -216,7 +235,8 @@ export class IngresoSinCitaComponent implements OnInit {
       this.vehService.registrarVeh(formData).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
-          this.vehiculos.push(response.data);   
+          this.vehiculos.push(response.data);  
+          this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente);  
           this.matricula = matricula;
           this.buscarVeh(this.matricula);
         }
@@ -322,7 +342,7 @@ export class IngresoSinCitaComponent implements OnInit {
       this.telefCliente = "";
       this.rfcCliente = "";
       this.limpiarVeh();
-      this.vehiculos = await this.obtenerVehiculos();
+      this.vehiculos$ = this.vehiculos;
     }  
   }
 
@@ -345,6 +365,7 @@ export class IngresoSinCitaComponent implements OnInit {
     this.time = { hour: this.date.getHours, minute: 0}; 
     (<HTMLInputElement>document.getElementById("txtDescripcion")).value = "";
     (<HTMLInputElement>document.getElementById("txtTiempoEstimado")).value = "";
+    (<HTMLInputElement>document.getElementById("flexCheckDefault")).checked = false;
   }
 
   receiveDate(e: any) {

@@ -1,16 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from  '@angular/common/http';
 import { map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
-  //url = 'http://localhost:3000';
-  url = 'https://tallerservicio-production.up.railway.app';
+  url = environment.baseUrlAPI;
   headers = new HttpHeaders()
-            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY2MDYxODU0fQ.aGdISnlimZ-VV0dap8x-xEAvxp3Ssya-RIDuAqpvLqA");
+            .set("Authorization", "Bearer "+localStorage.getItem("TOKEN"));
   constructor(private http: HttpClient) { }
+
+  getUsuarioToken(){
+    return this
+            .http
+            .get(`${this.url}/usuarios/token`, {headers: this.headers}).pipe(
+              map(res=>res)
+            );
+  }
 
   getClientes(){
     return this
