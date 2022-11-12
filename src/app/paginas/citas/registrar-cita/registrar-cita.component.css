@@ -178,6 +178,11 @@ option[value=""][disabled] {
     color: #264653;
 }
 
+.errorMessage {
+    color: red;
+    font-style: italic;
+}
+
 .contenedorDatePicker,
 .contenedorTimePicker{
     display: flex;

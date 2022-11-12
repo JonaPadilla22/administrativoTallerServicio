@@ -7,6 +7,7 @@ import { VehiculoService } from './../../../servicios/vehiculos/vehiculo.service
 import { ClienteService } from './../../../servicios/clientes/cliente.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
+import { Globals } from 'src/app/globals';
 
 @Component({
   selector: 'app-registrar-cita',
@@ -15,6 +16,7 @@ import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 })
 export class RegistrarCitaComponent implements OnInit {
   public formRegistrarCita: FormGroup;
+  public formRegistrarVehiculo: FormGroup;
   tiposServ: any;
   tiposPers: any;
   marcas: any;
@@ -49,7 +51,8 @@ export class RegistrarCitaComponent implements OnInit {
       private vehService: VehiculoService,
       private clienteService: ClienteService,
       private modalService: NgbModal,
-      public alertService: AlertsComponent
+      public alertService: AlertsComponent,
+      private globals: Globals
     ) { 
     this.formRegistrarCita = this.formBuilder.group({
       DESCRIPCION: ['',
@@ -61,6 +64,25 @@ export class RegistrarCitaComponent implements OnInit {
       MATRICULA: '',
       CLIENTE: '',
       FECHA_CITA: ''
+    });
+
+    this.formRegistrarVehiculo = this.formBuilder.group({
+      ID_CLIENTE: '',
+      ID_MODELO: ['',
+      [Validators.required] 
+      ],  
+      MATRICULA: ['',
+        [Validators.required, Validators.maxLength(7), Validators.minLength(7)]
+      ],
+      ANIO: ['',
+        [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.min(1990), Validators.max(this.date.getFullYear()+1)]
+      ],
+      COLOR: ['',
+        [Validators.required] 
+      ],
+      VIN: ['',
+        [Validators.minLength(17), Validators.maxLength(17)]
+      ],
     });
 
     this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
@@ -108,11 +130,6 @@ export class RegistrarCitaComponent implements OnInit {
     let vehTemp = this.vehService.getVehiculos();
     return await lastValueFrom(vehTemp); 
   }
-
-  // async obtenerVehiculosByCliente(id: string){
-  //   let vehTemp = this.vehService.getVehiculosByCliente(id);
-  //   return await lastValueFrom(vehTemp); 
-  // }
 
   obtenerVehiculosByCliente(id: string){
     return this.vehiculos.filter((veh: any) => {
@@ -186,7 +203,7 @@ export class RegistrarCitaComponent implements OnInit {
           const formAct = new FormData();
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
           formAct.append("ID_ESTATUS", "C");
-          formAct.append("ID_USUARIO", "1");     
+          formAct.append("ID_USUARIO", this.globals.usuario.ID);     
           this.citaService.registrarActualizacioServ(formAct).subscribe(
             (response: any) => {
               alert(response.message);
@@ -202,30 +219,31 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   async regVeh(){
-    var modelo_veh = (<HTMLInputElement>document.getElementById("cbxModeloVeh")).value;
-    var matricula = (<HTMLInputElement>document.getElementById("txtMatricula")).value;
-    var anho = (<HTMLInputElement>document.getElementById("txtAnho")).value;
-    var color = (<HTMLInputElement>document.getElementById("cbxColor")).value;
-    var vin = (<HTMLInputElement>document.getElementById("txtVIN")).value;
-  
-    if(matricula!="" && modelo_veh!="" && anho!="" && color!=""){
-      const formData = new FormData();
-      formData.append("MATRICULA", matricula);
-      formData.append("ID_MODELO", modelo_veh);
-      formData.append("ANIO", anho);
-      formData.append("COLOR", color);
-      formData.append("ID_CLIENTE", this.id_cliente);
-      if(vin!=""){
-        formData.append("VIN", vin);
-      }
+    var modelo_veh = this.formRegistrarVehiculo.value.ID_MODELO;
+    var matricula = this.formRegistrarVehiculo.value.MATRICULA;
+    var anho = this.formRegistrarVehiculo.value.ANIO;
+    var color = this.formRegistrarVehiculo.value.COLOR;
+    var vin = this.formRegistrarVehiculo.value.VIN;
 
-      this.vehService.registrarVeh(formData).subscribe(
+    if(matricula!="" && modelo_veh!="" && anho!="" && color!=""){
+
+      this.formRegistrarVehiculo.value.MATRICULA = this.formRegistrarVehiculo.value.MATRICULA.toUpperCase();
+
+      if(vin!=""){
+        this.formRegistrarVehiculo.value.VIN = this.formRegistrarVehiculo.value.VIN.toUpperCase();
+      }else{
+        this.formRegistrarVehiculo.value.VIN = null;
+      }
+      
+      this.formRegistrarVehiculo.value.ID_CLIENTE = this.id_cliente;
+      this.vehService.registrarVeh(this.formRegistrarVehiculo.value).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
           this.vehiculos.push(response.data);  
           this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente); 
-          this.matricula = matricula;
+          this.matricula = this.formRegistrarVehiculo.value.MATRICULA;
           this.buscarVeh(this.matricula);
+          this.formRegistrarVehiculo.reset({ID_MODELO: [null], COLOR: [null]});
         }
       );
       
@@ -352,16 +370,29 @@ export class RegistrarCitaComponent implements OnInit {
     (<HTMLInputElement>document.getElementById("txtDescripcion")).value = "";
   }
 
+  validAnio(e: any){
+    if ((e.keyCode < '48' || e.keyCode > '57') && e.keyCode != '8') {
+      e.preventDefault();    
+    }
+    if(e.target.value.length==4){
+      e.preventDefault();
+    }
+  }
+
+  validAlphanum(e: any){
+    if (!(e.keyCode > 47 && e.keyCode < 58) &&
+        !(e.keyCode > 64 && e.keyCode < 91) && 
+        !(e.keyCode > 96 && e.keyCode < 123)){
+      e.preventDefault();    
+    }
+  }
+
   receiveDate(e: any) {
     this.fecha = e;
   }
 
   receiveTime(e: any) {
     this.time = e;
-  }
-
-  b(e: any){
-    console.log(e);
   }
 
 }

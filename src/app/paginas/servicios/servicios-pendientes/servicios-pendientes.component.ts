@@ -105,8 +105,7 @@ export class ServiciosPendientesComponent implements OnInit {
 
   actualizarEstatus(){
 
-
-    if(this.globals.usuario.ID!=this.servicio[0].TECNICO_ENCARGADO.ID){
+    if(this.globals.usuario.ID!=this.servicio[0].TECNICO_ENCARGADO.ID && this.globals.usuario.TIPO_USUARIO.ID == 3){
       this.alertService.warning("SÓLO EL TÉCNICO ENCARGADO PUEDE ACTUALIZAR EL SERVICIO");
     }else{
       this.alertService.confirmDialog("¿DESEA ACTUALIZAR EL ESTATUS DEL SERVICIO A \""+this.sig_estatus.DESCRIPCION+ "\"?").then((result) => {

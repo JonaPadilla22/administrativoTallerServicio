@@ -32,49 +32,58 @@
                     </div>
 
                     <ng-template #modalVeh let-modal>
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="modal-basic-title">REGISTRAR VEHÍCULO</h4>
-                            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="mb-3">                                     
-                                    <select class="cbxMarcaVeh" name="" id="cbxMarcaVeh" (change)="cambiarMarca()">
-                                        <option value="" disabled selected>Selecciona marca</option>
-                                        <option *ngFor="let marca of marcas" [value]="marca.ID_MARCA">
-                                            {{marca.DESCRIPCION}}
-                                        </option>
-                                    </select><br>
+                        <form (ngSubmit)="regVeh()" [formGroup]="formRegistrarVehiculo" action="">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="modal-basic-title">REGISTRAR VEHÍCULO</h4>
+                                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                            </div>
+                            <div class="modal-body">
+                                    <div class="mb-3">                                       
+                                        <select class="cbxMarcaVeh" name="" id="cbxMarcaVeh" (change)="cambiarMarca()">
+                                            <option value="" disabled selected>Selecciona marca</option>
+                                            <option *ngFor="let marca of marcas" [value]="marca.ID_MARCA">
+                                                {{marca.DESCRIPCION}}
+                                            </option>
+                                        </select><br>
+    
+                                        <select [disabled]="true" formControlName="ID_MODELO" class="cbxModeloVeh" name="" id="cbxModeloVeh">
+                                            <option value="" disabled selected>Selecciona modelo</option>
+                                            <option *ngFor="let mod of modelos" [value]="mod.ID_MODELO">
+                                                {{mod.DESCRIPCION}}
+                                            </option>
+                                        </select><br>
+    
+                                        <input type="text" formControlName="MATRICULA" name="" id="txtMatricula" placeholder="Matrícula" maxlength="7" (keypress)="validAlphanum($event)">
+                                        <label class="errorMessage" *ngIf="this.formRegistrarVehiculo.get('MATRICULA')!.invalid">Matrícula inválida</label>
+                                        <br>
 
-                                    <select class="cbxModeloVeh" name="" id="cbxModeloVeh" disabled>
-                                        <option value="" disabled selected>Selecciona modelo</option>
-                                        <option *ngFor="let mod of modelos" [value]="mod.ID_MODELO">
-                                            {{mod.DESCRIPCION}}
-                                        </option>
-                                    </select><br>
+                                        <input type="number" [max]="this.date.getFullYear()+1" min="1990" [ngModel]="this.date.getFullYear()" formControlName="ANIO" name="" id="txtAnho" placeholder="Año" (keypress)="validAnio($event)">
+                                        <label class="errorMessage" *ngIf="this.formRegistrarVehiculo.get('ANIO')!.invalid">Año inválido</label>
+                                        <br>
 
-                                    <input type="text" name="" id="txtMatricula" placeholder="Matrícula" maxlength="7"><br>
-                                    <input type="text" name="" id="txtAnho" placeholder="Año" maxlength="4"><br>
-                                    <select class="cbxColor" name="" id="cbxColor">
-                                        <option value="" disabled selected>Selecciona color</option>
-                                        <option value="BLANCO">BLANCO</option>
-                                        <option value="NEGRO">NEGRO</option>
-                                        <option value="AZUL">AZUL</option>
-                                        <option value="ROJO">ROJO</option>
-                                        <option value="GRIS">GRIS</option>
-                                        <option value="VERDE">VERDE</option>
-                                        <option value="AMARILLO">AMARILLO</option>
-                                        <option value="MORADO">MORADO</option>
-                                        <option value="NARANJA">NARANJA</option>
-                                        <option value="ROSA">ROSA</option>
-                                    </select><br>
-                                    <input type="text" name="" id="txtVIN" placeholder="VIN" maxlength="17"><br>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-dark" (click)="regVeh()">GUARDAR</button>
-                        </div>
+                                        <select class="cbxColor" formControlName="COLOR" name="" id="cbxColor">
+                                            <option value="" disabled selected>Selecciona color</option>
+                                            <option value="BLANCO">BLANCO</option>
+                                            <option value="NEGRO">NEGRO</option>
+                                            <option value="AZUL">AZUL</option>
+                                            <option value="ROJO">ROJO</option>
+                                            <option value="GRIS">GRIS</option>
+                                            <option value="VERDE">VERDE</option>
+                                            <option value="AMARILLO">AMARILLO</option>
+                                            <option value="MORADO">MORADO</option>
+                                            <option value="NARANJA">NARANJA</option>
+                                            <option value="ROSA">ROSA</option>
+                                        </select><br>
+           
+                                        <input type="text" formControlName="VIN" name="" id="txtVIN" placeholder="VIN" maxlength="17" (keypress)="validAlphanum($event)">
+                                        <label class="errorMessage" *ngIf="this.formRegistrarVehiculo.get('VIN')!.invalid">VIN inválido</label>
+                                        <br>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-outline-dark" [disabled]="formRegistrarVehiculo.invalid">GUARDAR</button>
+                            </div>
+                        </form>                   
                     </ng-template>
 
                     <a href="javascript:void(0);" class="btnVeh" (click)="open(modalVeh)">Nuevo <i class='bx bxs-car'></i></a>

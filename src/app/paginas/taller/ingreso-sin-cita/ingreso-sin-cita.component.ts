@@ -15,6 +15,7 @@ import { Globals } from '../../../globals';
 })
 export class IngresoSinCitaComponent implements OnInit {
   public formIngresoTaller: FormGroup;
+  public formRegistrarVehiculo: FormGroup;
   tiposServ: any;
   tiposPers: any;
   marcas: any;
@@ -51,19 +52,38 @@ export class IngresoSinCitaComponent implements OnInit {
       public alertService: AlertsComponent,
       public globals: Globals
     ) { 
-      this.formIngresoTaller = this.formBuilder.group({
-        DESCRIPCION: ['',
-          [
-            Validators.required
-          ]
-        ],
-        ID_TIPO_SERVICIO: '',
-        MATRICULA: '',
-        CLIENTE: '',
-        TIEMPO_ESTIMADO: '',
-        TECNICO_ENCARGADO: '',
-        ID_ESTATUS: ''
-      });
+    this.formIngresoTaller = this.formBuilder.group({
+      DESCRIPCION: ['',
+        [
+          Validators.required
+        ]
+      ],
+      ID_TIPO_SERVICIO: '',
+      MATRICULA: '',
+      CLIENTE: '',
+      TIEMPO_ESTIMADO: '',
+      TECNICO_ENCARGADO: '',
+      ID_ESTATUS: ''
+    });
+
+    this.formRegistrarVehiculo = this.formBuilder.group({
+      ID_CLIENTE: '',
+      ID_MODELO: ['',
+      [Validators.required] 
+      ],  
+      MATRICULA: ['',
+        [Validators.required, Validators.maxLength(7), Validators.minLength(7)]
+      ],
+      ANIO: ['',
+        [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.min(1990), Validators.max(this.date.getFullYear()+1)]
+      ],
+      COLOR: ['',
+        [Validators.required] 
+      ],
+      VIN: ['',
+        [Validators.minLength(17), Validators.maxLength(17)]
+      ],
+    });
 
     this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
     this.time = { hour: this.date.getHours, minute: 0};   
@@ -215,30 +235,31 @@ export class IngresoSinCitaComponent implements OnInit {
   }
 
   async regVeh(){
-    var modelo_veh = (<HTMLInputElement>document.getElementById("cbxModeloVeh")).value;
-    var matricula = (<HTMLInputElement>document.getElementById("txtMatricula")).value;
-    var anho = (<HTMLInputElement>document.getElementById("txtAnho")).value;
-    var color = (<HTMLInputElement>document.getElementById("cbxColor")).value;
-    var vin = (<HTMLInputElement>document.getElementById("txtVIN")).value;
-  
-    if(matricula!="" && modelo_veh!="" && anho!="" && color!=""){
-      const formData = new FormData();
-      formData.append("MATRICULA", matricula);
-      formData.append("ID_MODELO", modelo_veh);
-      formData.append("ANIO", anho);
-      formData.append("COLOR", color);
-      formData.append("ID_CLIENTE", this.id_cliente);
-      if(vin!=""){
-        formData.append("VIN", vin);
-      }
+    var modelo_veh = this.formRegistrarVehiculo.value.ID_MODELO;
+    var matricula = this.formRegistrarVehiculo.value.MATRICULA;
+    var anho = this.formRegistrarVehiculo.value.ANIO;
+    var color = this.formRegistrarVehiculo.value.COLOR;
+    var vin = this.formRegistrarVehiculo.value.VIN;
 
-      this.vehService.registrarVeh(formData).subscribe(
+    if(matricula!="" && modelo_veh!="" && anho!="" && color!=""){
+
+      this.formRegistrarVehiculo.value.MATRICULA = this.formRegistrarVehiculo.value.MATRICULA.toUpperCase();
+
+      if(vin!=""){
+        this.formRegistrarVehiculo.value.VIN = this.formRegistrarVehiculo.value.VIN.toUpperCase();
+      }else{
+        this.formRegistrarVehiculo.value.VIN = null;
+      }
+      
+      this.formRegistrarVehiculo.value.ID_CLIENTE = this.id_cliente;
+      this.vehService.registrarVeh(this.formRegistrarVehiculo.value).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
           this.vehiculos.push(response.data);  
-          this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente);  
-          this.matricula = matricula;
+          this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente); 
+          this.matricula = this.formRegistrarVehiculo.value.MATRICULA;
           this.buscarVeh(this.matricula);
+          this.formRegistrarVehiculo.reset({ID_MODELO: [null], COLOR: [null]});
         }
       );
       
@@ -246,8 +267,7 @@ export class IngresoSinCitaComponent implements OnInit {
     }else{
       this.alertService.warning("DATOS FALTANTES");
     }
-    
-    
+     
   }
 
   async regCliente(){
@@ -366,6 +386,23 @@ export class IngresoSinCitaComponent implements OnInit {
     (<HTMLInputElement>document.getElementById("txtDescripcion")).value = "";
     (<HTMLInputElement>document.getElementById("txtTiempoEstimado")).value = "";
     (<HTMLInputElement>document.getElementById("flexCheckDefault")).checked = false;
+  }
+
+  validAnio(e: any){
+    if ((e.keyCode < '48' || e.keyCode > '57') && e.keyCode != '8') {
+      e.preventDefault();    
+    }
+    if(e.target.value.length==4){
+      e.preventDefault();
+    }
+  }
+
+  validAlphanum(e: any){
+    if (!(e.keyCode > 47 && e.keyCode < 58) &&
+        !(e.keyCode > 64 && e.keyCode < 91) && 
+        !(e.keyCode > 96 && e.keyCode < 123)){
+      e.preventDefault();    
+    }
   }
 
   receiveDate(e: any) {
