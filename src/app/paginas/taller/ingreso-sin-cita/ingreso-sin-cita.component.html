@@ -39,14 +39,14 @@
                             </div>
                             <div class="modal-body">
                                     <div class="mb-3">                                       
-                                        <select class="cbxMarcaVeh" name="" id="cbxMarcaVeh" (change)="cambiarMarca()">
+                                        <select class="cbxMarcaVeh" formControlName="ID_MARCA" name="" id="cbxMarcaVeh" (change)="cambiarMarca()">
                                             <option value="" disabled selected>Selecciona marca</option>
                                             <option *ngFor="let marca of marcas" [value]="marca.ID_MARCA">
                                                 {{marca.DESCRIPCION}}
                                             </option>
                                         </select><br>
     
-                                        <select [disabled]="true" formControlName="ID_MODELO" class="cbxModeloVeh" name="" id="cbxModeloVeh">
+                                        <select formControlName="ID_MODELO" class="cbxModeloVeh" name="" id="cbxModeloVeh">
                                             <option value="" disabled selected>Selecciona modelo</option>
                                             <option *ngFor="let mod of modelos" [value]="mod.ID_MODELO">
                                                 {{mod.DESCRIPCION}}
@@ -57,7 +57,7 @@
                                         <label class="errorMessage" *ngIf="this.formRegistrarVehiculo.get('MATRICULA')!.invalid">Matrícula inválida</label>
                                         <br>
 
-                                        <input type="number" [max]="this.date.getFullYear()+1" min="1990" [ngModel]="this.date.getFullYear()" formControlName="ANIO" name="" id="txtAnho" placeholder="Año" (keypress)="validAnio($event)">
+                                        <input type="number" [max]="this.date.getFullYear()+1" min="1990" [defaultValue]="this.date.getFullYear()" formControlName="ANIO" name="" id="txtAnho" placeholder="Año" (keypress)="validAnio($event)">
                                         <label class="errorMessage" *ngIf="this.formRegistrarVehiculo.get('ANIO')!.invalid">Año inválido</label>
                                         <br>
 
@@ -81,6 +81,7 @@
                                     </div>
                             </div>
                             <div class="modal-footer">
+                                <button type="button" (click)="limpiarFormVehiculo()" class="btn btn-outline-dark">LIMPIAR</button>
                                 <button type="submit" class="btn btn-outline-dark" [disabled]="formRegistrarVehiculo.invalid">GUARDAR</button>
                             </div>
                         </form>                   
@@ -115,31 +116,42 @@
 
 
                         <ng-template #modalCliente let-modal>
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="modal-basic-title">REGISTRAR CLIENTE</h4>
-                                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
+                            <form (ngSubmit)="regCliente()" [formGroup]="formRegistrarCliente" action="">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="modal-basic-title">REGISTRAR CLIENTE</h4>
+                                    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+                                </div>
+                                <div class="modal-body">
                                     <div class="mb-3">  
-                                        <select class="cbxTipoPersonaCliente" name="" id="cbxTipoPersonaCliente">
+                                        <select class="cbxTipoPersonaCliente" formControlName="ID_TIPO_PERSONA" name="" id="cbxTipoPersonaCliente">
                                             <option value="" disabled selected>Selecciona tipo de persona</option>
                                             <option *ngFor="let type of tiposPers" [value]="type.ID_TIPO_PERSONA">
                                                 {{type.DESCRIPCION}}
                                             </option>
                                         </select><br>
     
-                                        <input type="text" name="" id="txtNombreCliente" placeholder="Nombre"><br>
-                                        <input type="text" name="" id="txtRFC" placeholder="RFC" maxlength="13"><br>
-                                        <input type="email" name="" id="txtCorreo" placeholder="Correo electrónico"><br>
-                                        <input type="text" name="" id="txtTelefono" placeholder="Teléfono" maxlength="10"><br>
-                                        <input type="text" name="" id="txtDireccion" placeholder="Direccion"><br>                                        
+                                        <input type="text" name="" formControlName="NOMBRE" id="txtNombreCliente" placeholder="Nombre" (keypress)="validAlpha($event)"><br>
+
+                                        <input type="text" name="" formControlName="RFC" id="txtRFC" placeholder="RFC" maxlength="13" (keypress)="validAlphanum($event)">
+                                        <label class="errorMessage" *ngIf="this.formRegistrarCliente.get('RFC')!.invalid">RFC inválido</label>
+                                        <br>
+
+                                        <input type="email" name="" formControlName="CORREO" id="txtCorreo" placeholder="Correo electrónico">
+                                        <label class="errorMessage" *ngIf="this.formRegistrarCliente.get('CORREO')!.invalid">Correo inválido</label>
+                                        <br>
+
+                                        <input type="text" name="" formControlName="TELEFONO" id="txtTelefono" placeholder="Teléfono" maxlength="10" (keypress)="validNum($event)">
+                                        <label class="errorMessage" *ngIf="this.formRegistrarCliente.get('TELEFONO')!.invalid">Teléfono inválido</label>
+                                        <br>
+
+                                        <input type="text" name="" formControlName="DIRECCION" id="txtDireccion" placeholder="Direccion"><br>                                        
                                     </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-dark" (click)="regCliente()">GUARDAR</button>
-                            </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-dark" (click)="limpiarFormCliente()">LIMPIAR</button>
+                                    <button type="submit" class="btn btn-outline-dark" [disabled]="formRegistrarCliente.invalid">GUARDAR</button>
+                                </div>
+                            </form>                     
                         </ng-template>
 
                         <a href="javascript:void(0);" class="btnCliente" (click)="open(modalCliente)">Nuevo <i class='bx bxs-user-plus'></i></a>

@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
 import { ServicioService } from './../../../servicios/servicios/servicio.service';
+import { NotificacionService } from 'src/app/servicios/notificaciones/notificacion.service';
 import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
@@ -36,6 +37,7 @@ export class ServiciosPendientesComponent implements OnInit {
 
   constructor(
     private servService: ServicioService,
+    private notifService: NotificacionService,
     private modalService: NgbModal,
     public alertService: AlertsComponent,
     private globals: Globals
@@ -67,7 +69,11 @@ export class ServiciosPendientesComponent implements OnInit {
         async (reason) => {
           this.activarCards();
           this.servicios = await this.obtenerServicios();
-          this.servicios$ = this.servicios;
+          if((<HTMLInputElement>document.getElementById("table-filtering-search")).value != ""){
+            this.servicios$ = this.filtrarServ((<HTMLInputElement>document.getElementById("table-filtering-search")).value.trim());
+          }else{
+            this.servicios$ = this.servicios;
+          }        
         },
       );
     }
@@ -117,10 +123,35 @@ export class ServiciosPendientesComponent implements OnInit {
           formActServ.append("ID_USUARIO", this.globals.usuario.ID);
 
           this.servService.actualizarEstatus(formActServ).subscribe(
-            (response: any) => {
-              this.alertService.exito(response.message);
-              this.modalService.dismissAll();
+            {
+              next: (response: any) => {
+                this.alertService.exito(response.message);
+
+                var nom_cliente = this.servicio[0].CLIENTE.NOMBRE;
+                var veh = this.servicio[0].VEHICULO.MODELO.MARCA.DESCRIPCION + " " + this.servicio[0].VEHICULO.MODELO.DESCRIPCION;
+                var mat = this.servicio[0].VEHICULO.MATRICULA;
+                var title = "ACTUALIZACIÓN DE SERVICIO";
+
+                var body = "HOLA " + nom_cliente + ", SU VEHÍCULO "+ veh + " CON MATRÍCULA: " + mat;
+                if(this.sig_estatus.ID_ESTATUS=="I"){
+                  body += " ACABA DE INGRESAR A TALLER";
+                }else if(this.sig_estatus.ID_ESTATUS=="R"){
+                  body += " ACABA DE ENTRAR EN REVISIÓN";
+                }
+                else if(this.sig_estatus.ID_ESTATUS=="S"){
+                  body += " ACABA DE ENTRAR EN SALIDA";
+                }
+                else if(this.sig_estatus.ID_ESTATUS=="T"){
+                  body += " ACABA DE SALIR DE TALLER";
+                }
+                              
+                this.notifService.sendNotificationUser(this.servicio[0].CLIENTE.ID, title, body).subscribe();
+
+                this.modalService.dismissAll();
+              },
+              error: (e) => this.alertService.error(e.error)
             }
+            
           );
         }
       });

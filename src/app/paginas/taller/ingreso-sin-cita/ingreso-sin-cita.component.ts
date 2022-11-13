@@ -5,6 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { CitaService } from './../../../servicios/citas/cita.service';
 import { VehiculoService } from './../../../servicios/vehiculos/vehiculo.service';
 import { ClienteService } from './../../../servicios/clientes/cliente.service';
+import { NotificacionService } from 'src/app/servicios/notificaciones/notificacion.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Globals } from '../../../globals';
 
@@ -16,6 +17,7 @@ import { Globals } from '../../../globals';
 export class IngresoSinCitaComponent implements OnInit {
   public formIngresoTaller: FormGroup;
   public formRegistrarVehiculo: FormGroup;
+  public formRegistrarCliente: FormGroup;
   tiposServ: any;
   tiposPers: any;
   marcas: any;
@@ -48,10 +50,12 @@ export class IngresoSinCitaComponent implements OnInit {
       private citaService: CitaService,
       private vehService: VehiculoService,
       private clienteService: ClienteService,
+      private notifService: NotificacionService,
       private modalService: NgbModal,
       public alertService: AlertsComponent,
       public globals: Globals
     ) { 
+      
     this.formIngresoTaller = this.formBuilder.group({
       DESCRIPCION: ['',
         [
@@ -68,14 +72,15 @@ export class IngresoSinCitaComponent implements OnInit {
 
     this.formRegistrarVehiculo = this.formBuilder.group({
       ID_CLIENTE: '',
-      ID_MODELO: ['',
-      [Validators.required] 
-      ],  
+      ID_MARCA: '',
+      ID_MODELO: [{value: '', disabled: true},
+       [Validators.required]
+      ],
       MATRICULA: ['',
         [Validators.required, Validators.maxLength(7), Validators.minLength(7)]
       ],
-      ANIO: ['',
-        [Validators.required, Validators.minLength(4), Validators.maxLength(4), Validators.min(1990), Validators.max(this.date.getFullYear()+1)]
+      ANIO: [this.date.getFullYear(),
+        [Validators.minLength(4), Validators.maxLength(4), Validators.min(1990), Validators.max(this.date.getFullYear()+1)]
       ],
       COLOR: ['',
         [Validators.required] 
@@ -83,6 +88,26 @@ export class IngresoSinCitaComponent implements OnInit {
       VIN: ['',
         [Validators.minLength(17), Validators.maxLength(17)]
       ],
+    });
+
+    this.formRegistrarCliente = this.formBuilder.group({
+      ID_TIPO_USUARIO: '',
+      ID_TIPO_PERSONA: ['',
+        [Validators.required] 
+      ],
+      NOMBRE: ['',
+        [Validators.required] 
+      ],
+      CORREO: ['',
+        [Validators.required, Validators.email]
+      ],
+      RFC: ['',
+        [Validators.minLength(12), Validators.maxLength(13)]
+      ],
+      TELEFONO: ['',
+        [Validators.minLength(10), Validators.maxLength(10)]
+      ],
+      DIRECCION: ['']
     });
 
     this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
@@ -209,22 +234,40 @@ export class IngresoSinCitaComponent implements OnInit {
     }
 
     if(tipo_serv!="" && descripcion!="" && this.matricula!="" && this.id_cliente!="" && tiempo_estim!=""){
-      
+      var id_e = "";
       this.citaService.registrarCita(this.formIngresoTaller.value).subscribe(
         (response: any) => {   
           const formAct = new FormData();
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
           if((<HTMLInputElement>document.getElementById("flexCheckDefault")).checked){
-            formAct.append("ID_ESTATUS", "E");
+            id_e = "E";
           }else{
-            formAct.append("ID_ESTATUS", "I");
+            id_e = "I";        
           }    
-          formAct.append("ID_USUARIO", "1");     
+          formAct.append("ID_ESTATUS", id_e);
+          formAct.append("ID_USUARIO", this.globals.usuario.ID);     
           this.citaService.registrarActualizacioServ(formAct).subscribe(
-            (response: any) => {
-              this.alertService.exito(response.message);
-              this.limpiar();
+            {
+              next: (response: any) => {
+                this.alertService.exito(response.message);
+
+                var title = "ACTUALIZACIÓN DE SERVICIO";
+                if(id_e=="E"){
+                  var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE ENTRAR EN ESPERA PARA INGRESAR A TALLER";
+                }else{
+                  var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE INGRESAR A TALLER";
+                }
+                
+                this.notifService.sendNotificationUser(this.id_cliente, title, body).subscribe();
+
+                this.limpiar();
+                this.formIngresoTaller.reset({ID_TIPO_SERVICIO: [null]});
+              },
+              error: (e) => this.alertService.error(e.error)
             }
+
+
+            
           );
         }
       );
@@ -235,21 +278,18 @@ export class IngresoSinCitaComponent implements OnInit {
   }
 
   async regVeh(){
-    var modelo_veh = this.formRegistrarVehiculo.value.ID_MODELO;
-    var matricula = this.formRegistrarVehiculo.value.MATRICULA;
-    var anho = this.formRegistrarVehiculo.value.ANIO;
-    var color = this.formRegistrarVehiculo.value.COLOR;
-    var vin = this.formRegistrarVehiculo.value.VIN;
-
-    if(matricula!="" && modelo_veh!="" && anho!="" && color!=""){
+    this.formRegistrarVehiculo.get('ID_MODELO')?.enable();
+    if(this.formRegistrarVehiculo.value.MATRICULA!="" && this.formRegistrarVehiculo.value.ID_MODELO!="" && this.formRegistrarVehiculo.value.ANIO!="" && this.formRegistrarVehiculo.value.COLOR!=""){
 
       this.formRegistrarVehiculo.value.MATRICULA = this.formRegistrarVehiculo.value.MATRICULA.toUpperCase();
 
-      if(vin!=""){
+      if(this.formRegistrarVehiculo.value.VIN!=undefined){
         this.formRegistrarVehiculo.value.VIN = this.formRegistrarVehiculo.value.VIN.toUpperCase();
       }else{
         this.formRegistrarVehiculo.value.VIN = null;
       }
+
+      this.formRegistrarVehiculo.get('ID_MARCA')?.disable();
       
       this.formRegistrarVehiculo.value.ID_CLIENTE = this.id_cliente;
       this.vehService.registrarVeh(this.formRegistrarVehiculo.value).subscribe(
@@ -259,7 +299,7 @@ export class IngresoSinCitaComponent implements OnInit {
           this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente); 
           this.matricula = this.formRegistrarVehiculo.value.MATRICULA;
           this.buscarVeh(this.matricula);
-          this.formRegistrarVehiculo.reset({ID_MODELO: [null], COLOR: [null]});
+          this.limpiarFormVehiculo();
         }
       );
       
@@ -271,32 +311,29 @@ export class IngresoSinCitaComponent implements OnInit {
   }
 
   async regCliente(){
-    var tipo_persona = (<HTMLInputElement>document.getElementById("cbxTipoPersonaCliente")).value;
-    var nombre = (<HTMLInputElement>document.getElementById("txtNombreCliente")).value;
-    var rfc = (<HTMLInputElement>document.getElementById("txtRFC")).value;
-    var correo = (<HTMLInputElement>document.getElementById("txtCorreo")).value;
-    var telef = (<HTMLInputElement>document.getElementById("txtTelefono")).value;
-    var direccion = (<HTMLInputElement>document.getElementById("txtDireccion")).value;
 
-    if(nombre!="" && correo!="" && tipo_persona!=""){
-      const formData = new FormData();
-      
-      formData.append("ID_TIPO_USUARIO", "4");
-      formData.append("ID_TIPO_PERSONA", tipo_persona);
-      formData.append("NOMBRE", nombre.toUpperCase());
-      formData.append("CORREO", correo.toUpperCase());
+    this.formRegistrarCliente.value.ID_TIPO_USUARIO = "4";
 
-      if(rfc!=""){
-        formData.append("RFC", rfc.toUpperCase());
-      }
-      if(telef!=""){
-        formData.append("TELEFONO", telef);
-      }
-      if(direccion!=""){
-        formData.append("DIRECCION", direccion.toUpperCase());
+    if(this.formRegistrarCliente.value.NOMBRE!="" && this.formRegistrarCliente.value.CORREO!="" && this.formRegistrarCliente.value.ID_TIPO_PERSONA!=""){
+
+      this.formRegistrarCliente.value.NOMBRE = this.formRegistrarCliente.value.NOMBRE.toUpperCase();
+      this.formRegistrarCliente.value.CORREO = this.formRegistrarCliente.value.CORREO.toUpperCase();
+
+      if(this.formRegistrarCliente.value.RFC!=""){
+        this.formRegistrarCliente.value.RFC = this.formRegistrarCliente.value.RFC.toUpperCase();
+      }else{
+        this.formRegistrarCliente.value.RFC = null;
       }
 
-      this.clienteService.registrarCliente(formData).subscribe(
+      if(this.formRegistrarCliente.value.TELEFONO==""){
+        this.formRegistrarCliente.value.TELEFONO = null;
+      }
+
+      if(this.formRegistrarCliente.value.DIRECCION==""){
+        this.formRegistrarCliente.value.DIRECCION = null;
+      }
+
+      this.clienteService.registrarCliente(this.formRegistrarCliente.value).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
           this.id_cliente = response.data.ID;
@@ -304,7 +341,8 @@ export class IngresoSinCitaComponent implements OnInit {
           delete n_cl.ID;
           n_cl.ID_USUARIO = this.id_cliente;
           this.clientes.push(n_cl);
-          this.buscarCliente(this.id_cliente);          
+          this.buscarCliente(this.id_cliente);
+          this.limpiarFormCliente();    
         }
       );
 
@@ -354,6 +392,10 @@ export class IngresoSinCitaComponent implements OnInit {
     return fecha;
   }
 
+  limpiarFormCliente(){
+    this.formRegistrarCliente.reset({ID_TIPO_PERSONA: [null]});
+  }
+
   async limpiarCliente(){
     if(this.id_cliente!=""){
       this.id_cliente = "";
@@ -364,6 +406,11 @@ export class IngresoSinCitaComponent implements OnInit {
       this.limpiarVeh();
       this.vehiculos$ = this.vehiculos;
     }  
+  }
+
+  limpiarFormVehiculo(){
+    this.formRegistrarVehiculo.get('ID_MARCA')?.enable();
+    this.formRegistrarVehiculo.reset({ID_MARCA: [null], ID_MODELO: {value: [null], disabled: true}, COLOR: [null], ANIO: this.date.getFullYear()});
   }
 
   limpiarVeh(){
@@ -402,6 +449,14 @@ export class IngresoSinCitaComponent implements OnInit {
         !(e.keyCode > 64 && e.keyCode < 91) && 
         !(e.keyCode > 96 && e.keyCode < 123)){
       e.preventDefault();    
+    }
+  }
+
+  validAlpha(e: any){
+    if (!(e.keyCode == 32 ||
+      (e.keyCode >= 65 && e.keyCode <= 90) ||
+      (e.keyCode >= 97 && e.keyCode <= 122))){
+      e.preventDefault();
     }
   }
 
