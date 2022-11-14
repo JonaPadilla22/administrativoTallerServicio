@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Globals } from './globals';
+
 import { ClienteService } from './servicios/clientes/cliente.service';
 import { lastValueFrom } from 'rxjs';
 import {
   NgxQrcodeElementTypes,
   NgxQrcodeErrorCorrectionLevels
 } from "@techiediaries/ngx-qrcode";
+
+import { Globals } from './globals';
 
 @Component({
   selector: 'app-root',

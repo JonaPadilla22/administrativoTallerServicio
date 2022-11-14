@@ -10,19 +10,14 @@ import { AlertsComponent } from '../components/alerts/alerts.component';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  // loginForm = new FormGroup({
-  //   CORREO: new FormControl(''),
-  //   CONTRA: new FormControl(''),
-  // });
-
   loginForm: any;
-  
+
   response: string = '';
 
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder, 
     public globals: Globals,
     private alerts: AlertsComponent
   ) {
@@ -41,28 +36,29 @@ export class LoginComponent implements OnInit {
     let contra = this.loginForm.value.CONTRA;
 
     if (correo == '' || contra == '') {
-      this.alerts.warning("Porfavor asegurese de introducir todos los campos requeridos");
+      this.alerts.warning(
+        'Porfavor asegurese de introducir todos los campos requeridos'
+      );
       return;
     }
 
-    this.loginService
-      .validateLogin(this.loginForm.value)
-      .subscribe(
-      {
-        next: (v: any) => {
-              if(v.USUARIO.TIPO_USUARIO.ID==4){
-                this.alerts.error("PERMISOS INVÁLIDOS");
-              }else{
-                this.alerts.exito("BIENVENIDO "+v.USUARIO.NOMBRE);
-                localStorage.setItem('TOKEN', v.TOKEN);
-                this.globals.usuario = v.USUARIO.ID;
-                this.router.navigate(['/cita']);
-              }     
-            },
-        error: (e) => this.alerts.error(e.error)
-      }
-
-    );
+    this.loginService.validateLogin(this.loginForm.value).subscribe({
+      next: (v: any) => {
+        // if(v.USUARIO.TIPO_USUARIO.ID==4){
+        //   this.alerts.error("PERMISOS INVÁLIDOS");
+        // }else{
+        //   this.alerts.exito("BIENVENIDO "+v.USUARIO.NOMBRE);
+        //   localStorage.setItem('TOKEN', v.TOKEN);
+        //   this.globals.usuario = v.USUARIO.ID;
+        //   this.router.navigate(['/cita']);
+        // }
+        this.alerts.exito('BIENVENIDO ' + v.USUARIO.NOMBRE);
+        localStorage.setItem('TOKEN', v.TOKEN);
+        this.globals.usuario = v.USUARIO.ID;
+        this.router.navigate(['/cita']);
+        this.router.navigate(['/cita']);
+      },
+      error: (e) => this.alerts.error(e.error),
+    });
   }
 }
-

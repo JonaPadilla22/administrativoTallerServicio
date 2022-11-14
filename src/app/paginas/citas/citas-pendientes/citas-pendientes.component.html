@@ -2,79 +2,202 @@
   <h2>CITAS PENDIENTES</h2>
   <div class="contenedor-tabla">
     <form>
-        <div class="mb-3 row">
-            <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Full text search:</label>
-            <div class="col-xs-3 col-sm-auto">
-                <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter" />
-            </div>
+      <div class="mb-3 row">
+        <label
+          for="table-filtering-search"
+          class="col-xs-3 col-sm-auto col-form-label"
+          >Full text search:</label
+        >
+        <div class="col-xs-3 col-sm-auto">
+          <input
+            id="table-filtering-search"
+            class="form-control"
+            type="text"
+            [formControl]="filter"
+          />
         </div>
+      </div>
     </form>
     <table class="table table-striped">
       <thead>
         <tr>
-          <th scope="col">#</th>
           <th scope="col">Matrícula</th>
           <th scope="col">Cliente</th>
           <th scope="col">Fecha</th>
           <th scope="col">Técnico</th>
+          <th scope="col" class="acciones-tabla">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let country of countries$ | async; index as i">
-          <th scope="row">{{ i + 1 }}</th>
+        <tr
+          *ngFor="
+            let cita of citasMostrar
+              | slice: (page - 1) * pageSize:page * pageSize;
+            index as i
+          "
+        >
           <td>
-            <img
-              [src]="
-                'https://upload.wikimedia.org/wikipedia/commons/' + country.flag
+            <ngb-highlight
+              [result]="cita.VEHICULO.MATRICULA || 'No asignado'"
+            ></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight [result]="cita.CLIENTE.NOMBRE"></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight
+              [result]="cita.FECHA_CITA | date: 'dd/MM/yy - hh:mm a'"
+            ></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight
+              [result]="
+                cita.TECNICO_ENCARGADO
+                  ? cita.TECNICO_ENCARGADO.NOMBRE
+                  : 'NO ASIGNADO'
               "
-              class="me-2"
-              style="width: 20px"
-            />
-            <ngb-highlight
-              [result]="country.name"
             ></ngb-highlight>
           </td>
-          <td>
-            <ngb-highlight
-              [result]="country.area | number"
-              [term]="filter.value"
-            ></ngb-highlight>
-          </td>
-          <td>
-            <ngb-highlight
-              [result]="country.population | number"
-              [term]="filter.value"
-            ></ngb-highlight>
-          </td>
-          <td>
-            <img
-              [src]="
-                'https://upload.wikimedia.org/wikipedia/commons/' + country.flag
-              "
-              class="me-2"
-              style="width: 20px"
-            />
-            <ngb-highlight
-              [result]="country.name"
-            ></ngb-highlight>
+          <td class="acciones-tabla">
+            <a
+              (click)="handleAccionClick($event, cita); open(modalCita)"
+              class="btn-editar"
+            >
+              <i *ngIf="!cita.TECNICO_ENCARGADO" class="bx bxs-user-check"></i>
+              <i *ngIf="cita.TECNICO_ENCARGADO" class="bx bxs-car-garage"></i>
+            </a>
           </td>
         </tr>
       </tbody>
     </table>
-    <div class="d-flex justify-content-between p-2">
-        <ngb-pagination
-            [collectionSize]="collectionSize"
-            [(page)]="page"
-            [pageSize]="pageSize"
-            (pageChange)="refreshCountries()"
-        >
-        </ngb-pagination>
-    
-        <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
-            <option [ngValue]="2">2 items per page</option>
-            <option [ngValue]="4">4 items per page</option>
-            <option [ngValue]="6">6 items per page</option>
-        </select>
-    </div>
   </div>
+  <div class="paginacion-tabla">
+    <ngb-pagination
+      class="pagination"
+      [collectionSize]="collectionSize"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [boundaryLinks]="true"
+    ></ngb-pagination>
+  </div>
+  <ng-template #modalCita let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{
+          citaSeleccionada.TECNICO_ENCARGADO
+            ? "INGRESAR AL TALLER"
+            : "ASIGNAR TÉCNICO"
+        }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <!-- En caso de que no tenga asignado un técnico -->
+      <article
+        class="cartas-tecnicos"
+        *ngIf="!citaSeleccionada.TECNICO_ENCARGADO"
+      >
+        <div class="">
+          <label for="table-filtering-tecnicos">Buscar Tecnico: </label>
+          <input
+            id="table-filtering-tecnicos"
+            class="form-control"
+            type="text"
+            [formControl]="filterTecnicos"
+          />
+        </div>
+        <div
+          class="card"
+          *ngFor="
+            let tecnico of mostrarTecnicos
+              | slice: (pageTechnicial - 1) * pageSizeTechnicial:pageTechnicial * pageSizeTechnicial;
+            index as i
+          "
+        >
+          <div class="imagen-tecnico">
+            <img
+              src="{{ baseUrl }}/usuarios/{{ tecnico.IMG ?? 'default.png' }}"
+              alt=""
+            />
+          </div>
+          <div class="datos-tecnico">
+            <p>Nombre: {{ tecnico.NOMBRE }}</p>
+            <p>Teléfono: {{ tecnico.TELEFONO }}</p>
+            <p>Correo: {{ tecnico.CORREO }}</p>
+          </div>
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            (click)="handleClickTecnico($event, tecnico)"
+          >
+            ASIGNAR
+          </button>
+        </div>
+        <ngb-pagination
+          class="pagination"
+          [collectionSize]="collectionSizeTechnicial"
+          [(page)]="pageTechnicial"
+          [pageSize]="pageSizeTechnicial"
+          [boundaryLinks]="true"
+        ></ngb-pagination>
+      </article>
+      <!-- En caso de que se vaya a ingresar al taller -->
+      <article
+        class="ingreso-taller"
+        *ngIf="citaSeleccionada.TECNICO_ENCARGADO"
+      >
+        <div class="datos-generales">
+          <div class="datos-vehiculo">
+            <p>
+              <span>Vehículo:</span>
+              {{ citaSeleccionada.VEHICULO.MODELO.MARCA.DESCRIPCION }}
+              {{ citaSeleccionada.VEHICULO.MODELO.DESCRIPCION }}
+              {{ citaSeleccionada.VEHICULO.COLOR }}
+              {{ citaSeleccionada.VEHICULO.ANIO }}
+            </p>
+            <p>
+              <span>Matrícula:</span> {{ citaSeleccionada.VEHICULO.MATRICULA }}
+            </p>
+            <p *ngIf="citaSeleccionada.VEHICULO.VIN">
+              <span>VIM:</span> {{ citaSeleccionada.VEHICULO }}
+            </p>
+          </div>
+          <div class="datos-cliente">
+            <p><span>Cliente:</span> {{ citaSeleccionada.CLIENTE.NOMBRE }}</p>
+            <p>
+              <span>Telefono:</span> {{ citaSeleccionada.CLIENTE.TELEFONO }}
+            </p>
+          </div>
+        </div>
+        <div class="descripcion-problema">
+          <p>{{ citaSeleccionada.DESCRIPCION }}</p>
+        </div>
+        <div class="tecnico-encargado">
+          <h5>Técnico encargado:</h5>
+          <img
+            src="{{ baseUrl }}/usuarios/{{
+              citaSeleccionada.TECNICO_ENCARGADO.IMG ?? 'default.png'
+            }}"
+            alt=""
+          />
+          {{ citaSeleccionada.TECNICO_ENCARGADO.NOMBRE }}
+        </div>
+      </article>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        *ngIf="citaSeleccionada.TECNICO_ENCARGADO"
+        (click)="handleClickIngreso()"
+      >
+        REGISTRAR INGRESO
+      </button>
+    </div>
+  </ng-template>
 </div>

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from  '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClienteService {
   url = environment.baseUrlAPI;
@@ -28,7 +28,33 @@ export class ClienteService {
             );
   }
 
-  registrarCliente(form: any){
-    return this.http.post(`${this.url}/usuarios`, form, {headers: this.headers});
+  registrarUsuario(form: any) {
+    return this.http.post(`${this.url}/usuarios`, form, {
+      headers: this.headers,
+    });
+  }
+
+  getUsuarios() {
+    return this.http
+      .get(`${this.url}/usuarios`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+  updateUser(data:any,id:any){
+    return this.http.put(`${this.url}/usuarios/${id}`, data, {
+      headers: this.headers,
+    });
+  }
+
+  getTiposPersona() {
+    return this.http
+      .get(`${this.url}/tipoPersona`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+  getTiposUsuario() {
+    return this.http
+      .get(`${this.url}/tipoUsuario`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 }

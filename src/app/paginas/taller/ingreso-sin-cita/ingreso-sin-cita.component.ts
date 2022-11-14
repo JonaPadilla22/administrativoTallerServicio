@@ -333,7 +333,7 @@ export class IngresoSinCitaComponent implements OnInit {
         this.formRegistrarCliente.value.DIRECCION = null;
       }
 
-      this.clienteService.registrarCliente(this.formRegistrarCliente.value).subscribe(
+      this.clienteService.registrarUsuario(this.formRegistrarCliente.value).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
           this.id_cliente = response.data.ID;

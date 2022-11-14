@@ -10,7 +10,11 @@ import { Globals } from '../globals';
 export class HomePageComponent implements OnInit {
   listaDeNavegacion: any;
   nombreUsuario: string;
-  constructor(private router: Router, public globals: Globals, private alerts: AlertsComponent) {
+  constructor(
+    private router: Router,
+    public globals: Globals,
+    private alerts: AlertsComponent
+  ) {
     this.nombreUsuario = this.globals.usuario.NOMBRE;
     this.listaDeNavegacion = [
       {
@@ -30,7 +34,7 @@ export class HomePageComponent implements OnInit {
       },
       {
         nombre: 'Taller',
-        icono: 'bx bxs-car-garage',
+        icono: 'bx bxs-car-mechanic',
         children: [
           {
             nombre: 'Servicios Pendientes',
@@ -64,7 +68,7 @@ export class HomePageComponent implements OnInit {
   }
 
   cerrarSesion() {
-    this.alerts.confirmDialog("¿DESEA CERRAR SESIÓN?").then((result) => {
+    this.alerts.confirmDialog('¿DESEA CERRAR SESIÓN?').then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem('TOKEN');
         this.router.navigate(['/']);

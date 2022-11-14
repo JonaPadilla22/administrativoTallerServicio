@@ -9,10 +9,79 @@
         font-weight: bold
     .contenedor-tabla
         width: 90%
-        overflow-y: scroll
-        overflow-x: hidden
+        overflow: hidden
         height: 70%
         margin: 0 auto
         margin-top: 40px
-        padding: 20px
+        margin-bottom: 0
+        .table
+            min-width: 1000px
+            .acciones-tabla
+                text-align: center
+            a
+                text-decoration: none
+                color: #1c1a97
+                font-size: 15pt
+                &:hover
+                    cursor: pointer
+    .paginacion-tabla
+        width: 80%
+        margin: 0 auto
+        display: flex
+        justify-content: flex-end
+.cartas-tecnicos
+    width: 70%
+    margin: 0 auto
+    .card
+        margin: 20px
+        background: #bbbbbb8a
+        padding: 10px
+        display: flex
+        flex-direction: row
+        align-items: center
+        transition: all 0.3s
+        .imagen-tecnico
+            width: 25%
+            margin-right: 15px
+            img
+                width: 100%
+        .datos-tecnico
+            width: 65%
+            p
+                margin-bottom: 0
+        &:hover
+            cursor: pointer
+            background: #bbbbbb46
+.ingreso-taller
+    background: rgb(38,70,83,.70)
+    display: flex
+    color: #fff
+    padding: 10px
+    flex-wrap: wrap
+    .datos-generales, .descripcion-problema
+        width: 50%
+        p
+            margin-bottom: 0
+            span
+                font-weight: bold
+    .datos-generales
+        .datos-cliente
+            margin-top: 10px
+    .descripcion-problema
+        display: flex
+        align-items: center
+        justify-content: center
+    .tecnico-encargado
+        width: 100%
+        margin-top: 10px
+        background: rgb(38,70,83,.79)
+        padding: 10px
+        border-radius: 10px
+        img
+            width: 50px
+            margin-right: 15px
 
+@media screen and (max-width: 1400px)
+    .contenedor
+        .contenedor-tabla
+            overflow-x: scroll

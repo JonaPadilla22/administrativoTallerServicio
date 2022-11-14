@@ -11,10 +11,102 @@
 }
 .contenedor .contenedor-tabla {
   width: 90%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
   height: 70%;
   margin: 0 auto;
   margin-top: 40px;
-  padding: 20px;
+  margin-bottom: 0;
+}
+.contenedor .contenedor-tabla .table {
+  min-width: 1000px;
+}
+.contenedor .contenedor-tabla .table .acciones-tabla {
+  text-align: center;
+}
+.contenedor .contenedor-tabla .table a {
+  text-decoration: none;
+  color: #1c1a97;
+  font-size: 15pt;
+}
+.contenedor .contenedor-tabla .table a:hover {
+  cursor: pointer;
+}
+.contenedor .paginacion-tabla {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cartas-tecnicos {
+  width: 70%;
+  margin: 0 auto;
+}
+.cartas-tecnicos .card {
+  margin: 20px;
+  background: rgba(187, 187, 187, 0.5411764706);
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: all 0.3s;
+}
+.cartas-tecnicos .card .imagen-tecnico {
+  width: 25%;
+  margin-right: 15px;
+}
+.cartas-tecnicos .card .imagen-tecnico img {
+  width: 100%;
+}
+.cartas-tecnicos .card .datos-tecnico {
+  width: 65%;
+}
+.cartas-tecnicos .card .datos-tecnico p {
+  margin-bottom: 0;
+}
+.cartas-tecnicos .card:hover {
+  cursor: pointer;
+  background: rgba(187, 187, 187, 0.2745098039);
+}
+
+.ingreso-taller {
+  background: rgba(38, 70, 83, 0.7);
+  display: flex;
+  color: #fff;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+.ingreso-taller .datos-generales, .ingreso-taller .descripcion-problema {
+  width: 50%;
+}
+.ingreso-taller .datos-generales p, .ingreso-taller .descripcion-problema p {
+  margin-bottom: 0;
+}
+.ingreso-taller .datos-generales p span, .ingreso-taller .descripcion-problema p span {
+  font-weight: bold;
+}
+.ingreso-taller .datos-generales .datos-cliente {
+  margin-top: 10px;
+}
+.ingreso-taller .descripcion-problema {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ingreso-taller .tecnico-encargado {
+  width: 100%;
+  margin-top: 10px;
+  background: rgba(38, 70, 83, 0.79);
+  padding: 10px;
+  border-radius: 10px;
+}
+.ingreso-taller .tecnico-encargado img {
+  width: 50px;
+  margin-right: 15px;
+}
+
+@media screen and (max-width: 1400px) {
+  .contenedor .contenedor-tabla {
+    overflow-x: scroll;
+  }
 }/*# sourceMappingURL=citas-pendientes.component.css.map */

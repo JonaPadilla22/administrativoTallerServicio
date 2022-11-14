@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-
-export class Globals{
-  usuario: any = "";
+export class Globals {
+  usuario: any = '';
 }
