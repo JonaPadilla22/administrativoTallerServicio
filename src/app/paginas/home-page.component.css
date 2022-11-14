@@ -59,3 +59,11 @@ header .contendor-usuario h2 {
   color: #fff;
   background: #264653;
 }/*# sourceMappingURL=home-page.component.css.map */
+
+.cerrarSesion {
+  color: #264653;
+  background-color: white;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 10px;
+}

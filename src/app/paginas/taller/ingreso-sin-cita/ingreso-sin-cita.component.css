@@ -1,0 +1,218 @@
+/*# sourceMappingURL=registrar-cita.component.css.map */
+.contenedor-ingresoTaller {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-x: scroll;
+    padding: 10px;
+}
+
+.contenedor-ingresoTaller form {
+    height: 100%;
+}
+
+i {
+    font-size: 22px;
+    padding-left: 5px;
+}
+
+.titulo {
+    color: #264653;
+    text-align: center;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.contenedorBuscarBoton {
+    display:flex;
+    align-items: center;
+}
+
+.cbxTipoServ, .cbxMarcaVeh, .cbxModeloVeh, .cbxTipoPersonaCliente, .cbxColor, .cbxTiempoEstimado {
+    padding: 8px;
+    margin: 5px;
+    border-radius: 15px;
+    background-color: white;
+    color: gray
+}
+
+.groupDatos, .groupDatosFecha {
+    background-color: #FCFCFC;
+}
+
+.groupDatosFecha {
+    display: grid;
+}
+
+.contenedorDatePicker {
+    grid-column: 1;
+}
+
+.contenedorTimePicker {
+    grid-column: 2;
+}
+
+.tituloGroup {
+    color: #264653;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.datosServ {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.datosVeh {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.datosCliente {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.datosFH {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.groupDatos p, .groupDatosFecha p {
+    color: #264653;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.groupDatos {
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 20px;
+}
+
+.groupDatosFecha{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.groupDatos input, .mb-3 input {
+    margin: 5px;
+    padding-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 15px;
+    width: 50%;
+}
+
+.groupTiempoEstimado input {
+    margin: 5px;
+    padding-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 15px;
+    width: 30%;
+}
+
+
+.groupDatos textarea {
+    border-radius: 15px;
+    resize: none;
+    outline: none;
+    padding: 10px;
+}
+
+option[value=""][disabled] {
+    display: none;
+}
+
+.btnCliente, .btnVeh {
+    background-color: #264653;
+    color: white;
+    padding: 7px 25px 7px 25px;
+    border-radius: 25px;
+    display: flex;
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+.btnCliente:hover, .btnVeh:hover {
+    background-color: #2646539f;
+}
+
+.input-icons i {
+    position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+    padding-left: 15px;
+}
+  
+.input-icons {
+    position: relative;
+}
+  
+.input-field {
+    width: 100%;
+    padding-left: 20%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 20px;
+    width: 260px;
+}
+
+.contenedorBoton {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.form-check-input:checked {
+    background-color: #264653;
+}
+
+.btnRegistrar {
+    background-color: #264653;
+    margin: 15px;
+    width: 30%;
+    padding: 20px;
+    color: white;
+    border-radius: 30px;
+    border: none;
+}
+
+.btnRegistrar:hover {
+    border: 1px solid #264653;
+    background-color: white;
+    color: #264653;
+}
+
+.errorMessage {
+    color: red;
+    font-style: italic;
+}
+
+.contenedorDatePicker,
+.contenedorTimePicker{
+    display: flex;
+    align-items: center;
+}
+
+.contenedorDatePicker p,
+.contenedorTimePicker p{
+    margin-right: 15px;
+    margin-bottom: 0;
+}
+
+.btn-outline-dark {
+    --bs-btn-bg: #264653;
+    --bs-btn-color: #fff;
+    --bs-btn-border-color: #264653;
+    --bs-btn-hover-color: #264653;
+    --bs-btn-hover-bg: #fff;
+}

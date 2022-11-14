@@ -165,9 +165,22 @@ option[value=""][disabled] {
 .btnRegistrar {
     background-color: #264653;
     margin: 15px;
+    width: 30%;
     padding: 20px;
     color: white;
     border-radius: 30px;
+    border: none;
+}
+
+.btnRegistrar:hover {
+    border: 1px solid #264653;
+    background-color: white;
+    color: #264653;
+}
+
+.errorMessage {
+    color: red;
+    font-style: italic;
 }
 
 .contenedorDatePicker,
@@ -180,4 +193,12 @@ option[value=""][disabled] {
 .contenedorTimePicker p{
     margin-right: 15px;
     margin-bottom: 0;
+}
+
+.btn-outline-dark {
+    --bs-btn-bg: #264653;
+    --bs-btn-color: #fff;
+    --bs-btn-border-color: #264653;
+    --bs-btn-hover-color: #264653;
+    --bs-btn-hover-bg: #fff;
 }

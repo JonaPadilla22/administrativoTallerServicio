@@ -1,6 +1,7 @@
+import { AlertsComponent } from './../components/alerts/alerts.component';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { Globals } from '../globals';
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
@@ -9,8 +10,12 @@ import { Router } from '@angular/router';
 export class HomePageComponent implements OnInit {
   listaDeNavegacion: any;
   nombreUsuario: string;
-  constructor(private router: Router) {
-    this.nombreUsuario = 'Pedro Sanchez';
+  constructor(
+    private router: Router,
+    public globals: Globals,
+    private alerts: AlertsComponent
+  ) {
+    this.nombreUsuario = this.globals.usuario.NOMBRE;
     this.listaDeNavegacion = [
       {
         nombre: 'Cita',
@@ -29,7 +34,7 @@ export class HomePageComponent implements OnInit {
       },
       {
         nombre: 'Taller',
-        icono: 'bx bxs-car-garage',
+        icono: 'bx bxs-car-mechanic',
         children: [
           {
             nombre: 'Servicios Pendientes',
@@ -60,5 +65,14 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     if (!localStorage.getItem('TOKEN')) this.router.navigate(['/']);
+  }
+
+  cerrarSesion() {
+    this.alerts.confirmDialog('¿DESEA CERRAR SESIÓN?').then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('TOKEN');
+        this.router.navigate(['/']);
+      }
+    });
   }
 }

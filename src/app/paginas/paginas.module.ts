@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalPipe } from '@angular/common';
 import { IngresoSinCitaComponent } from './taller/ingreso-sin-cita/ingreso-sin-cita.component';
+import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/form-usuario.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { IngresoSinCitaComponent } from './taller/ingreso-sin-cita/ingreso-sin-c
     GestionUsuariosComponent,
     CitasPendientesComponent,
     RegistrarCitaComponent,
-    IngresoSinCitaComponent
+    IngresoSinCitaComponent,
+    FormUsuarioComponent
   ],
   imports: [
     CommonModule,

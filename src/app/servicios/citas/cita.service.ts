@@ -1,58 +1,50 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from  '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CitaService {
   url: string;
-  headers = new HttpHeaders()
-            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY2MDYxODU0fQ.aGdISnlimZ-VV0dap8x-xEAvxp3Ssya-RIDuAqpvLqA");
+  token: string | null = localStorage.getItem('TOKEN');
+  headers = new HttpHeaders().set('Authorization', `Bearer ${this.token}`);
   
-  constructor(private http: HttpClient) { 
-    this.url = environment.baseUrlAPI; 
+  constructor(private http: HttpClient) {
+    this.url = environment.baseUrlAPI;
   }
 
-  getCitas(){
-    return this
-            .http
-            .get(`${this.url}/tipoServicio`, {headers: this.headers}).pipe(
-              map(res=>res)
-            );
+  getCitasPendientes() {
+    return this.http
+      .get(`${this.url}/servicios/estatus/C`, {
+        headers: this.headers,
+      })
+      .pipe(map((res) => res));
   }
 
-  getTiposServicios(){
-    return this
-            .http
-            .get(`${this.url}/tipoServicio`, {headers: this.headers}).pipe(
-              map(res=>res)
-            );
+  getTiposServicios() {
+    return this.http
+      .get(`${this.url}/tipoServicio`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
-  getTiposPersona(){
-    return this
-            .http
-            .get(`${this.url}/tipoPersona`, {headers: this.headers}).pipe(
-              map(res=>res)
-            );
+  getTiposPersona() {
+    return this.http
+      .get(`${this.url}/tipoPersona`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
-  getMarcas(){
-    return this
-            .http
-            .get(`${this.url}/marca`, {headers: this.headers}).pipe(
-              map(res=>res)
-            );
+  getMarcas() {
+    return this.http
+      .get(`${this.url}/marca`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
-  getModelos(id: string){
-    return this
-            .http
-            .get(`${this.url}/modeloVehiculo/marca/${id}`, {headers: this.headers}).pipe(
-              map(res=>res)
-            );
+  getModelos(id: string) {
+    return this.http
+      .get(`${this.url}/modeloVehiculo/marca/${id}`, { headers: this.headers })
+      .pipe(map((res) => res));
   }
 
   registrarCita(form: any) {
@@ -61,5 +53,9 @@ export class CitaService {
 
   registrarActualizacioServ(form: any) {
     return this.http.post(`${this.url}/servicios/actualizacion`, form);
+  }
+
+  actualizarCita(data: any,id_cita: number) {
+    return this.http.put(`${this.url}/servicios/${id_cita}`, data);
   }
 }
