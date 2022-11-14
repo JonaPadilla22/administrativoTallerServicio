@@ -172,6 +172,10 @@ option[value=""][disabled] {
     margin-bottom: 15px;
 }
 
+.form-check-input:checked {
+    background-color: #264653;
+}
+
 .btnRegistrar {
     background-color: #264653;
     margin: 15px;
@@ -188,6 +192,10 @@ option[value=""][disabled] {
     color: #264653;
 }
 
+.errorMessage {
+    color: red;
+    font-style: italic;
+}
 
 .contenedorDatePicker,
 .contenedorTimePicker{

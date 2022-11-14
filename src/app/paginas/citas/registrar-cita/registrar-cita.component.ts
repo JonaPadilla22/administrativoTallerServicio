@@ -5,8 +5,10 @@ import { lastValueFrom } from 'rxjs';
 import { CitaService } from './../../../servicios/citas/cita.service';
 import { VehiculoService } from './../../../servicios/vehiculos/vehiculo.service';
 import { ClienteService } from './../../../servicios/clientes/cliente.service';
+import { NotificacionService } from 'src/app/servicios/notificaciones/notificacion.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
+import { Globals } from 'src/app/globals';
 
 @Component({
   selector: 'app-registrar-cita',
@@ -15,13 +17,17 @@ import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 })
 export class RegistrarCitaComponent implements OnInit {
   public formRegistrarCita: FormGroup;
+  public formRegistrarVehiculo: FormGroup;
+  public formRegistrarCliente: FormGroup;
   tiposServ: any;
   tiposPers: any;
   marcas: any;
   modelos: any = [];
-  vehiculos: any;
+
+  vehiculos: any[] = [];
+  vehiculos$: any = [];
   clientes: any;
-  vehCliente: any = [];
+
   matricula: any = "";
   id_cliente: string = "";
 
@@ -45,24 +51,67 @@ export class RegistrarCitaComponent implements OnInit {
       private citaService: CitaService,
       private vehService: VehiculoService,
       private clienteService: ClienteService,
+      private notifService: NotificacionService,
       private modalService: NgbModal,
-      public alertService: AlertsComponent
-    ) { 
-    this.formRegistrarCita = this.formBuilder.group({
-      DESCRIPCION: ['',
-        [
-          Validators.required
-        ]
-      ],
-      ID_TIPO_SERVICIO: '',
-      MATRICULA: '',
-      CLIENTE: '',
-      FECHA_CITA: ''
-    });
+      public alertService: AlertsComponent,
+      private globals: Globals
+    ) 
+    { 
+      this.formRegistrarCita = this.formBuilder.group({
+        DESCRIPCION: ['',
+          [
+            Validators.required
+          ]
+        ],
+        ID_TIPO_SERVICIO: '',
+        MATRICULA: '',
+        CLIENTE: '',
+        FECHA_CITA: ''
+      });
 
-    this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
-    this.time = { hour: this.date.getHours, minute: 0};   
-  }
+      this.formRegistrarVehiculo = this.formBuilder.group({
+        ID_CLIENTE: '',
+        ID_MARCA: '',
+        ID_MODELO: [{value: '', disabled: true},
+         [Validators.required]
+        ],
+        MATRICULA: ['',
+          [Validators.required, Validators.maxLength(7), Validators.minLength(7)]
+        ],
+        ANIO: [this.date.getFullYear(),
+          [Validators.minLength(4), Validators.maxLength(4), Validators.min(1990), Validators.max(this.date.getFullYear()+1)]
+        ],
+        COLOR: ['',
+          [Validators.required] 
+        ],
+        VIN: ['',
+          [Validators.minLength(17), Validators.maxLength(17)]
+        ],
+      });
+
+      this.formRegistrarCliente = this.formBuilder.group({
+        ID_TIPO_USUARIO: '',
+        ID_TIPO_PERSONA: ['',
+          [Validators.required] 
+        ],
+        NOMBRE: ['',
+          [Validators.required] 
+        ],
+        CORREO: ['',
+          [Validators.required, Validators.email]
+        ],
+        RFC: ['',
+          [Validators.minLength(12), Validators.maxLength(13)]
+        ],
+        TELEFONO: ['',
+          [Validators.minLength(10), Validators.maxLength(10)]
+        ],
+        DIRECCION: ['']
+      });
+
+      this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
+      this.time = { hour: this.date.getHours, minute: 0};
+    }
 
   async ngOnInit() {
     this.tiposServ = await this.obtenerTiposServ();
@@ -70,6 +119,7 @@ export class RegistrarCitaComponent implements OnInit {
     this.clientes = await this.obtenerClientes();
     this.tiposPers = await this.obtenerTiposPers();
     this.marcas = await this.obtenerMarcas();
+    this.vehiculos$ = this.vehiculos;
   }
 
   open(content: any) {
@@ -100,14 +150,17 @@ export class RegistrarCitaComponent implements OnInit {
     return await lastValueFrom(mTemp); 
   }
 
-  async obtenerVehiculos(){
+  async obtenerVehiculos(): Promise<any>{
     let vehTemp = this.vehService.getVehiculos();
     return await lastValueFrom(vehTemp); 
   }
 
-  async obtenerVehiculosByCliente(id: string){
-    let vehTemp = this.vehService.getVehiculosByCliente(id);
-    return await lastValueFrom(vehTemp); 
+  obtenerVehiculosByCliente(id: string){
+    return this.vehiculos.filter((veh: any) => {
+      return (
+        veh.ID_CLIENTE == id
+      );
+    });
   }
 
   async obtenerClientes(){
@@ -123,14 +176,16 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   buscarVeh(matricula: string){
-    const resultado = this.vehiculos.find( (veh: any) => veh.MATRICULA === matricula);
+    const resultado = this.vehiculos$.find( (veh: any) => veh.MATRICULA === matricula);
     if(resultado!=undefined){
       this.colorVeh = resultado.COLOR;
       this.modeloVeh = resultado.MODELO.MARCA.DESCRIPCION + " " + resultado.MODELO.DESCRIPCION;
       this.anhoVeh = resultado.ANIO;
       this.matriculaVeh = resultado.MATRICULA;
       this.vinVeh = resultado.VIN;
-      this.buscarCliente(resultado.ID_CLIENTE);
+      if(this.id_cliente==""){
+        this.buscarCliente(resultado.ID_CLIENTE);
+      }
       this.matricula = this.matriculaVeh;
     }
   }
@@ -148,19 +203,13 @@ export class RegistrarCitaComponent implements OnInit {
       
       this.limpiarVeh();
       this.matricula = "";
-      console.log(this.matricula);
       this.id_cliente = id;
       this.nombreCliente = resultado.NOMBRE;
       this.correoCliente = resultado.CORREO;
       this.telefCliente = resultado.TELEFONO;
       this.rfcCliente = resultado.RFC;
 
-      this.vehCliente = [];
-      this.vehiculos = await this.obtenerVehiculosByCliente(id);
-      // for(var i = 0; i<this.vehiculos.length; i++){
-      //   this.vehCliente.push(this.vehiculos[i].VEHICULO);
-      // }
-      // this.vehiculos = this.vehCliente;     
+      this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente)  
     }   
   }
 
@@ -178,12 +227,21 @@ export class RegistrarCitaComponent implements OnInit {
           const formAct = new FormData();
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
           formAct.append("ID_ESTATUS", "C");
-          formAct.append("ID_USUARIO", "1");     
+          formAct.append("ID_USUARIO", this.globals.usuario.ID);     
           this.citaService.registrarActualizacioServ(formAct).subscribe(
-            (response: any) => {
-              alert(response.message);
-              this.limpiar();
-            }
+            {
+              next: (v: any) => {
+                this.alertService.exito(v.message);
+  
+                var title = "ACTUALIZACIÓN DE SERVICIO";
+                var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE REGISTRAR UNA CITA DE SERVICIO";
+                this.notifService.sendNotificationUser(this.id_cliente, title, body).subscribe();
+  
+                this.limpiar();
+                this.formRegistrarCita.reset({ID_TIPO_SERVICIO: [null]});
+              },
+              error: (e) => this.alertService.error(e.error)
+            }        
           );    
         }
       );
@@ -194,29 +252,28 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   async regVeh(){
-    var modelo_veh = (<HTMLInputElement>document.getElementById("cbxModeloVeh")).value;
-    var matricula = (<HTMLInputElement>document.getElementById("txtMatricula")).value;
-    var anho = (<HTMLInputElement>document.getElementById("txtAnho")).value;
-    var color = (<HTMLInputElement>document.getElementById("cbxColor")).value;
-    var vin = (<HTMLInputElement>document.getElementById("txtVIN")).value;
-  
-    if(matricula!="" && modelo_veh!="" && anho!="" && color!=""){
-      const formData = new FormData();
-      formData.append("MATRICULA", matricula);
-      formData.append("ID_MODELO", modelo_veh);
-      formData.append("ANIO", anho);
-      formData.append("COLOR", color);
-      formData.append("ID_CLIENTE", this.id_cliente);
-      if(vin!=""){
-        formData.append("VIN", vin);
+    this.formRegistrarVehiculo.get('ID_MODELO')?.enable();
+    if(this.formRegistrarVehiculo.value.MATRICULA!="" && this.formRegistrarVehiculo.value.ID_MODELO!="" && this.formRegistrarVehiculo.value.ANIO!="" && this.formRegistrarVehiculo.value.COLOR!=""){
+
+      this.formRegistrarVehiculo.value.MATRICULA = this.formRegistrarVehiculo.value.MATRICULA.toUpperCase();
+
+      if(this.formRegistrarVehiculo.value.VIN!=undefined){
+        this.formRegistrarVehiculo.value.VIN = this.formRegistrarVehiculo.value.VIN.toUpperCase();
+      }else{
+        this.formRegistrarVehiculo.value.VIN = null;
       }
 
-      this.vehService.registrarVeh(formData).subscribe(
+      this.formRegistrarVehiculo.get('ID_MARCA')?.disable();
+      
+      this.formRegistrarVehiculo.value.ID_CLIENTE = this.id_cliente;
+      this.vehService.registrarVeh(this.formRegistrarVehiculo.value).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
-          this.vehiculos.push(response.data);   
-          this.matricula = matricula;
+          this.vehiculos.push(response.data);  
+          this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente); 
+          this.matricula = this.formRegistrarVehiculo.value.MATRICULA;
           this.buscarVeh(this.matricula);
+          this.limpiarFormVehiculo();
         }
       );
       
@@ -228,32 +285,29 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   async regCliente(){
-    var tipo_persona = (<HTMLInputElement>document.getElementById("cbxTipoPersonaCliente")).value;
-    var nombre = (<HTMLInputElement>document.getElementById("txtNombreCliente")).value;
-    var rfc = (<HTMLInputElement>document.getElementById("txtRFC")).value;
-    var correo = (<HTMLInputElement>document.getElementById("txtCorreo")).value;
-    var telef = (<HTMLInputElement>document.getElementById("txtTelefono")).value;
-    var direccion = (<HTMLInputElement>document.getElementById("txtDireccion")).value;
 
-    if(nombre!="" && correo!="" && tipo_persona!=""){
-      const formData = new FormData();
-      
-      formData.append("ID_TIPO_USUARIO", "4");
-      formData.append("ID_TIPO_PERSONA", tipo_persona);
-      formData.append("NOMBRE", nombre.toUpperCase());
-      formData.append("CORREO", correo.toUpperCase());
+    this.formRegistrarCliente.value.ID_TIPO_USUARIO = "4";
 
-      if(rfc!=""){
-        formData.append("RFC", rfc.toUpperCase());
-      }
-      if(telef!=""){
-        formData.append("TELEFONO", telef);
-      }
-      if(direccion!=""){
-        formData.append("DIRECCION", direccion.toUpperCase());
+    if(this.formRegistrarCliente.value.NOMBRE!="" && this.formRegistrarCliente.value.CORREO!="" && this.formRegistrarCliente.value.ID_TIPO_PERSONA!=""){
+
+      this.formRegistrarCliente.value.NOMBRE = this.formRegistrarCliente.value.NOMBRE.toUpperCase();
+      this.formRegistrarCliente.value.CORREO = this.formRegistrarCliente.value.CORREO.toUpperCase();
+
+      if(this.formRegistrarCliente.value.RFC!=""){
+        this.formRegistrarCliente.value.RFC = this.formRegistrarCliente.value.RFC.toUpperCase();
+      }else{
+        this.formRegistrarCliente.value.RFC = null;
       }
 
-      this.clienteService.registrarCliente(formData).subscribe(
+      if(this.formRegistrarCliente.value.TELEFONO==""){
+        this.formRegistrarCliente.value.TELEFONO = null;
+      }
+
+      if(this.formRegistrarCliente.value.DIRECCION==""){
+        this.formRegistrarCliente.value.DIRECCION = null;
+      }
+
+      this.clienteService.registrarCliente(this.formRegistrarCliente.value).subscribe(
         (response: any) => {
           this.alertService.exito(response.message);
           this.id_cliente = response.data.ID;
@@ -261,7 +315,8 @@ export class RegistrarCitaComponent implements OnInit {
           delete n_cl.ID;
           n_cl.ID_USUARIO = this.id_cliente;
           this.clientes.push(n_cl);
-          this.buscarCliente(this.id_cliente);          
+          this.buscarCliente(this.id_cliente);
+          this.limpiarFormCliente();    
         }
       );
 
@@ -311,6 +366,10 @@ export class RegistrarCitaComponent implements OnInit {
     return fecha;
   }
 
+  limpiarFormCliente(){
+    this.formRegistrarCliente.reset({ID_TIPO_PERSONA: [null]});
+  }
+
   async limpiarCliente(){
     if(this.id_cliente!=""){
       this.id_cliente = "";
@@ -319,8 +378,13 @@ export class RegistrarCitaComponent implements OnInit {
       this.telefCliente = "";
       this.rfcCliente = "";
       this.limpiarVeh();
-      this.vehiculos = await this.obtenerVehiculos();
+      this.vehiculos$ = this.vehiculos;
     }  
+  }
+
+  limpiarFormVehiculo(){
+    this.formRegistrarVehiculo.get('ID_MARCA')?.enable();
+    this.formRegistrarVehiculo.reset({ID_MARCA: [null], ID_MODELO: {value: [null], disabled: true}, COLOR: [null], ANIO: this.date.getFullYear()});
   }
 
   limpiarVeh(){
@@ -343,6 +407,31 @@ export class RegistrarCitaComponent implements OnInit {
     (<HTMLInputElement>document.getElementById("txtDescripcion")).value = "";
   }
 
+  validAnio(e: any){
+    if ((e.keyCode < '48' || e.keyCode > '57') && e.keyCode != '8') {
+      e.preventDefault();    
+    }
+    if(e.target.value.length==4){
+      e.preventDefault();
+    }
+  }
+
+  validAlphanum(e: any){
+    if (!(e.keyCode > 47 && e.keyCode < 58) &&
+        !(e.keyCode > 64 && e.keyCode < 91) && 
+        !(e.keyCode > 96 && e.keyCode < 123)){
+      e.preventDefault();    
+    }
+  }
+
+  validAlpha(e: any){
+    if (!(e.keyCode == 32 ||
+      (e.keyCode >= 65 && e.keyCode <= 90) ||
+      (e.keyCode >= 97 && e.keyCode <= 122))){
+      e.preventDefault();
+    }
+  }
+
   receiveDate(e: any) {
     this.fecha = e;
   }
@@ -351,4 +440,9 @@ export class RegistrarCitaComponent implements OnInit {
     this.time = e;
   }
 
+  validNum(e: any){
+    if ((e.keyCode < '48' || e.keyCode > '57') && e.keyCode != '8') {
+      e.preventDefault();
+    }
+  }
 }

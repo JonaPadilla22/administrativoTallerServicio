@@ -1,3 +1,4 @@
+import { Globals } from './globals';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
@@ -28,7 +29,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     HttpClientModule
   ],
   providers: [
-
+    Globals
   ],
   bootstrap: [AppComponent]
 })

@@ -9,8 +9,7 @@ import { environment } from 'src/environments/environment';
 export class ServicioService {
   url: string;
   headers = new HttpHeaders()
-            .set("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY2MDYxODU0fQ.aGdISnlimZ-VV0dap8x-xEAvxp3Ssya-RIDuAqpvLqA");
-  
+            .set("Authorization", "Bearer "+localStorage.getItem("TOKEN"));
   constructor(private http: HttpClient) { 
     this.url = environment.baseUrlAPI; 
   }
@@ -19,6 +18,14 @@ export class ServicioService {
     return this
             .http
             .get(`${this.url}/servicios/pendientes`, {headers: this.headers}).pipe(
+              map(res=>res)
+            );
+  }
+
+  getServiciosTerminados(){
+    return this
+            .http
+            .get(`${this.url}/servicios/estatus/T`, {headers: this.headers}).pipe(
               map(res=>res)
             );
   }
@@ -35,6 +42,14 @@ export class ServicioService {
     return this
             .http
             .get(`${this.url}/servicios/detalle/${id}`, {headers: this.headers}).pipe(
+              map(res=>res)
+            );
+  } 
+
+  getActualizacionesServicios(id: string){
+    return this
+            .http
+            .get(`${this.url}/servicios/actualizacion/${id}`, {headers: this.headers}).pipe(
               map(res=>res)
             );
   }

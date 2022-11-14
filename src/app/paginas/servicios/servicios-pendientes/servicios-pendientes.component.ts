@@ -1,11 +1,12 @@
 
 import { Component, OnInit } from '@angular/core';
-import { debounceTime, lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { ServicioService } from './../../../servicios/servicios/servicio.service';
+import { NotificacionService } from 'src/app/servicios/notificaciones/notificacion.service';
 import { environment } from 'src/environments/environment';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
-import { map, Observable, startWith } from 'rxjs';
+import { Globals } from 'src/app/globals';
 
 @Component({
   selector: 'app-servicios-pendientes',
@@ -30,14 +31,16 @@ export class ServiciosPendientesComponent implements OnInit {
   total: any = 0;
 
   page: any;
-  pageSize: any = 5;
+  pageSize: any = 6;
 
   filter: any;
 
   constructor(
     private servService: ServicioService,
+    private notifService: NotificacionService,
     private modalService: NgbModal,
-    public alertService: AlertsComponent
+    public alertService: AlertsComponent,
+    private globals: Globals
   ) 
   { 
     this.servicios$ = this.filtrarServ("");
@@ -66,6 +69,11 @@ export class ServiciosPendientesComponent implements OnInit {
         async (reason) => {
           this.activarCards();
           this.servicios = await this.obtenerServicios();
+          if((<HTMLInputElement>document.getElementById("table-filtering-search")).value != ""){
+            this.servicios$ = this.filtrarServ((<HTMLInputElement>document.getElementById("table-filtering-search")).value.trim());
+          }else{
+            this.servicios$ = this.servicios;
+          }        
         },
       );
     }
@@ -102,9 +110,8 @@ export class ServiciosPendientesComponent implements OnInit {
   }
 
   actualizarEstatus(){
-    let id_tecn = "2";
 
-    if(id_tecn!=this.servicio[0].TECNICO_ENCARGADO.ID){
+    if(this.globals.usuario.ID!=this.servicio[0].TECNICO_ENCARGADO.ID && this.globals.usuario.TIPO_USUARIO.ID == 3){
       this.alertService.warning("SÓLO EL TÉCNICO ENCARGADO PUEDE ACTUALIZAR EL SERVICIO");
     }else{
       this.alertService.confirmDialog("¿DESEA ACTUALIZAR EL ESTATUS DEL SERVICIO A \""+this.sig_estatus.DESCRIPCION+ "\"?").then((result) => {
@@ -113,12 +120,38 @@ export class ServiciosPendientesComponent implements OnInit {
           const formActServ = new FormData();
           formActServ.append("ID_SERVICIO", this.servicio[0].ID_SERVICIO);
           formActServ.append("ID_ESTATUS", this.sig_estatus.ID_ESTATUS);
-          formActServ.append("ID_USUARIO", id_tecn);
+          formActServ.append("ID_USUARIO", this.globals.usuario.ID);
 
           this.servService.actualizarEstatus(formActServ).subscribe(
-            (response: any) => {
-              this.alertService.exito(response.message);
+            {
+              next: (response: any) => {
+                this.alertService.exito(response.message);
+
+                var nom_cliente = this.servicio[0].CLIENTE.NOMBRE;
+                var veh = this.servicio[0].VEHICULO.MODELO.MARCA.DESCRIPCION + " " + this.servicio[0].VEHICULO.MODELO.DESCRIPCION;
+                var mat = this.servicio[0].VEHICULO.MATRICULA;
+                var title = "ACTUALIZACIÓN DE SERVICIO";
+
+                var body = "HOLA " + nom_cliente + ", SU VEHÍCULO "+ veh + " CON MATRÍCULA: " + mat;
+                if(this.sig_estatus.ID_ESTATUS=="I"){
+                  body += " ACABA DE INGRESAR A TALLER";
+                }else if(this.sig_estatus.ID_ESTATUS=="R"){
+                  body += " ACABA DE ENTRAR EN REVISIÓN";
+                }
+                else if(this.sig_estatus.ID_ESTATUS=="S"){
+                  body += " ACABA DE ENTRAR EN SALIDA";
+                }
+                else if(this.sig_estatus.ID_ESTATUS=="T"){
+                  body += " ACABA DE SALIR DE TALLER";
+                }
+                              
+                this.notifService.sendNotificationUser(this.servicio[0].CLIENTE.ID, title, body).subscribe();
+
+                this.modalService.dismissAll();
+              },
+              error: (e) => this.alertService.error(e.error)
             }
+            
           );
         }
       });
@@ -141,7 +174,7 @@ export class ServiciosPendientesComponent implements OnInit {
 
   search(e: any) {
     let text = e.target.value;
-    this.servicios$ = this.filtrarServ(text);
+    this.servicios$ = this.filtrarServ(text.trim());
   }
 
   filtrarServ(text: string){
@@ -149,6 +182,7 @@ export class ServiciosPendientesComponent implements OnInit {
       const term = text.toLowerCase();
       return (
         serv.VEHICULO.MATRICULA.toLowerCase().includes(term) ||
+        serv.ESTATUS.DESCRIPCION.toLowerCase().includes(term) ||
         serv.CLIENTE.NOMBRE.toLowerCase().includes(term) ||
         serv.TECNICO_ENCARGADO.NOMBRE.toLowerCase().includes(term) ||
         (serv.VEHICULO.MODELO.MARCA.DESCRIPCION.toLowerCase()+ " " +serv.VEHICULO.MODELO.DESCRIPCION.toLowerCase() + " " + serv.VEHICULO.COLOR.toLowerCase() + " " + serv.VEHICULO.ANIO.toLowerCase()).includes(term)

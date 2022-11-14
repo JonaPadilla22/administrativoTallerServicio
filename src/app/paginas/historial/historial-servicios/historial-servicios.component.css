@@ -1,0 +1,222 @@
+.contenedor-serviciosPendientes {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    text-align: center;
+}
+
+.titulo {
+    color: #264653;
+    text-align: center;
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.buscador {
+    display: flex;
+    align-items: center;
+}
+
+.buscador p{
+    margin-right: 10px;
+    float: right;
+    justify-self: center;
+}
+
+#table-filtering-search {
+    width: 80%;
+}
+
+.contenedor-tarjetas {
+    width: 100%;
+    height: 83%;
+    margin:0px auto;
+    padding-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    justify-content: flex-start;
+}
+
+.title-cards{
+    width: 100%;
+    max-width: 1080px;
+    margin: auto;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: #264653;
+}
+
+.card{
+    width: 30%;
+    height: 45%;
+    margin: 5px;
+    padding-bottom: 3px;
+    border-radius: 20px;
+    overflow: hidden;
+    background:rgb(241, 240, 240);
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.2);
+    transition: all 300ms ease-out;
+    cursor: default;
+
+}
+
+.card:hover{
+    box-shadow: 4px 4px 15px rgba(0,0,0,0.4);
+    transform: translateY(-2%);
+    cursor: pointer;
+}
+
+.card .contenido-card{
+    padding: 7px;
+    text-align: center;
+    color: #264653;
+}
+
+.card .contenido-card h4{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.card .contenido-card p{
+    line-height: 1.8;
+    font-size: 17px;
+    margin-bottom: 5px;
+}
+
+.card .contenido-card a{
+    width: 45%;
+    background-color: white;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: #264653;
+    border-radius: 10px;
+    transition: all 300ms ease;
+    float: right;
+}
+
+.tecnico-encargado {
+    color: #264653;
+}
+
+.tecnico-encargado img {
+    width: 50px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.contenido-card a img {
+    width: 40px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.flex-container {
+  flex-wrap: wrap;
+}
+
+@media only screen and (min-width:320px) and (max-width:768px){
+    .container-card1{
+        flex-wrap: wrap;
+    }
+    .card1{
+        margin: 15px;
+    }
+}
+
+.pagination {
+    justify-content: center;
+}
+
+/* MODAL */
+.detalleServicio {
+    background-color:#26465384;
+    width: 100%;
+    height: 500px;
+    border-radius: 20px;
+    padding: 10px;
+    color: #ffffff;
+}
+
+.tablaDetalle {
+    background-color: rgba(77, 77, 77, 0.864);
+
+    width: 100%;
+    height: 350px;
+    border-radius: 20px;
+}
+
+.table-striped {
+    color: white;
+    text-align: center;
+}
+
+.table-striped td {
+    color: white;
+}
+
+.datosServicio, .datosCliente, .datosVehiculo {
+    padding: 10px;
+}
+
+.datosServicio {
+    background-color: #264653c0;
+    font-size: 24px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.datosTecnico {
+    background-color: #264653c0;
+    padding: 10px;
+    width: 50%;
+    margin: 5px;
+    border-radius: 20px;
+}
+
+.datosTecnico img {
+    width: 50px;
+    margin-right: 10px;
+}
+
+.totalServicio {
+    padding: 5px;
+    text-align: right;
+    font-size: 25px;
+}
+
+.actualizacionesServicio {
+    color: #264653;
+    
+}
+
+.actualizacionesServicio h4 {
+    font-weight: bold;
+    text-align: center;
+}
+
+.act-servicio {
+    padding: 10px;
+    color: white;
+    background-color: #26465384;
+    margin-bottom: 5px;
+    border-radius: 20px;
+}
+
+.act-servicio img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 40px;
+}
+
+.btn-outline-dark {
+    --bs-btn-bg: #264653;
+    --bs-btn-color: #fff;
+    --bs-btn-border-color: #264653;
+    --bs-btn-hover-color: #264653;
+    --bs-btn-hover-bg: #fff;
+}
