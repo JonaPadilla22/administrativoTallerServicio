@@ -1,0 +1,76 @@
+.contenedor {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 10px;
+}
+.contenedor h2 {
+  margin-left: 25px;
+  color: #264653;
+  font-weight: bold;
+}
+.contenedor .contenedor-tabla {
+  width: 90%;
+  overflow: hidden;
+  height: 70%;
+  margin: 0 auto;
+  margin-top: 40px;
+  margin-bottom: 0;
+}
+.contenedor .contenedor-tabla .contenedor-acciones {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.contenedor .contenedor-tabla .contenedor-acciones div {
+  width: 40%;
+  display: flex;
+}
+.contenedor .contenedor-tabla .contenedor-acciones div .form-control {
+  width: 60%;
+  margin-left: 10px;
+}
+.contenedor .contenedor-tabla .contenedor-acciones button {
+  width: 20%;
+  padding: 10px 15px;
+  background: #264653;
+  color: #fff;
+  font-size: 18pt;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.contenedor .contenedor-tabla .contenedor-acciones button i {
+  font-size: 22pt;
+}
+.contenedor .contenedor-tabla table tbody .btn-estatus {
+  padding: 0 10px;
+  color: #fff;
+  border: none;
+  width: 100px;
+}
+.contenedor .contenedor-tabla table tbody .btn-estatus.activo {
+  background: red;
+}
+.contenedor .contenedor-tabla table tbody .btn-estatus.inactivo {
+  background: green;
+}
+.contenedor .contenedor-tabla table tbody i {
+  font-size: 15pt;
+  margin-left: 10px;
+}
+.contenedor .contenedor-tabla table tbody a:hover {
+  cursor: pointer;
+}
+.contenedor .contenedor-tabla table tbody .contendor-acciones-tabla {
+  display: flex;
+  align-items: center;
+}
+.contenedor .paginacion-tabla {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+}/*# sourceMappingURL=gestion-refacciones.component.css.map */

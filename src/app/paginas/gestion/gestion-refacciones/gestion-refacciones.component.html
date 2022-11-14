@@ -1,1 +1,169 @@
-<p>gestion-refacciones works!</p>
+<div class="contenedor">
+  <h2>REFACCIONES</h2>
+  <div class="contenedor-tabla">
+    <form>
+      <div class="mb-3 row">
+        <div class="contenedor-acciones">
+          <div>
+            <label
+              for="table-filtering-search"
+              class="col-xs-3 col-sm-auto col-form-label"
+              >Buscar Refaccion:</label
+            >
+            <input
+              id="table-filtering-search"
+              class="form-control"
+              type="text"
+              [formControl]="filter"
+            />
+          </div>
+          <button (click)="open(modalUsuarioRegistrar)">
+            <i class='bx bxs-plus-circle'></i>Registrar
+          </button>
+        </div>
+      </div>
+    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Tipo</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Precio</th>
+          <th scope="col">Existencia</th>
+          <th scope="col" class="acciones-tabla">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let refaction of refactionToShow
+              | slice: (page - 1) * pageSize:page * pageSize;
+            index as i
+          "
+        >
+          <td>
+            <ngb-highlight
+              [result]="refaction.TIPO_REFACCION.DESCRIPCION|| 'No asignado'"
+            ></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight
+              [result]="refaction.DESCRIPCION || 'No asignado'"
+            ></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight
+              [result]="refaction.PRECIO || 'No asignado'"
+            ></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight
+              [result]="refaction.STOCK || 'No asignado'"
+            ></ngb-highlight>
+          </td>
+          <td>
+            <div class="contendor-acciones-tabla">
+              <button
+                class="btn-estatus {{ getStylesRefaction(refaction.ESTATUS) }}"
+                (click)="updateStatusRefaction(refaction)"
+              >
+                {{ refaction.ESTATUS == "A" ? "Desactivar" : "Activar" }}
+              </button>
+              <a
+                (click)="
+                  handleEditRefaction($event, refaction);
+                  open(modalUsuarioRegistrar)
+                "
+              >
+                <i class="bx bxs-edit"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="paginacion-tabla">
+    <ngb-pagination
+      class="pagination"
+      [collectionSize]="collectionSize"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [boundaryLinks]="true"
+    ></ngb-pagination>
+  </div>
+  <ng-template #modalUsuarioRegistrar let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ !refactionSelected ? "Registrar Usuario" : "Modificar Usuario" }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="refactionForm">
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripcion:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="descripcion"
+            formControlName="DESCRIPCION"
+            required
+            value="{{ refactionSelected ? refactionSelected.DESCRIPCION : '' }}"
+          />
+        </div>
+        <div class="mb-3">
+            <label for="tipo-refaccion" class="form-label">Tipo Refaccion:</label>
+            <select
+              id="tipo-refaccion"
+              class="form-select"
+              formControlName="ID_TIPO_REFACCION"
+              required
+            >
+              <option
+                *ngFor="let refactionType of refationTypeList; index as i"
+                value="{{ refactionType.ID_TIPO_REFACCION }}"
+              >
+                {{ refactionType.DESCRIPCION }}
+              </option>
+            </select>
+          </div>
+        <div class="mb-3">
+          <label for="precio" class="form-label">Precio:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="precio"
+            aria-describedby="emailHelp"
+            formControlName="PRECIO"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="stock" class="form-label">Existencia:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="stock"
+            formControlName="STOCK"
+            required
+          />
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-outline-dark"
+        (click)="handleSubmit()"
+      >
+        {{ !refactionSelected ? "Guardar" : "Guardar Cambios" }}
+      </button>
+    </div>
+  </ng-template>
+</div>

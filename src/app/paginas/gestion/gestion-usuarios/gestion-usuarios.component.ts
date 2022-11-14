@@ -51,17 +51,15 @@ export class GestionUsuariosComponent implements OnInit {
     this.userList = await this.obtenerUsuarios();
     this.userToShow = this.userList;
     this.collectionSize = this.userList.length;
-    console.log(this.userList);
     this.tipoUsuarioList = await this.obtenerTipoUsuario();
     this.tipoPersonaList = await this.obtenerTipoPersona();
   }
 
   filtrarUsers(text: string) {
-    return this.userList.filter((cita: any) => {
+    return this.userList.filter((user: any) => {
       const term = text.toLowerCase();
       return (
-        cita.VEHICULO.MATRICULA.toLowerCase().includes(term) ||
-        cita.CLIENTE.NOMBRE.toLowerCase().includes(term)
+        user.NOMBRE.toLowerCase().includes(term)
       );
     });
   }
