@@ -2,10 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { ClienteService } from './servicios/clientes/cliente.service';
 import { lastValueFrom } from 'rxjs';
-import {
-  NgxQrcodeElementTypes,
-  NgxQrcodeErrorCorrectionLevels
-} from "@techiediaries/ngx-qrcode";
 
 import { Globals } from './globals';
 
@@ -23,10 +19,12 @@ export class AppComponent {
   }
 
   async ngOnInit(){
-    if(localStorage.getItem("TOKEN")!=null){
-      this.globals.usuario = await this.obtenerUsuario();
-      this.globals.usuario = this.globals.usuario[0];
-    }  
+    // if(localStorage.getItem("TOKEN")!=null){
+    //   this.globals.usuario = await this.obtenerUsuario();
+    //   this.globals.usuario = this.globals.usuario[0];
+    //   localStorage.setItem("NOMBRE", this.globals.usuario.NOMBRE); 
+    //   localStorage.setItem("IMAGEN", this.globals.usuario.IMG); 
+    // }  
   }
 
   async obtenerUsuario(){

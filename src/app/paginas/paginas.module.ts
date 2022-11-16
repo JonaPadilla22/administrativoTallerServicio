@@ -14,7 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalPipe } from '@angular/common';
 import { IngresoSinCitaComponent } from './taller/ingreso-sin-cita/ingreso-sin-cita.component';
 import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/form-usuario.component';
-
+import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -34,6 +34,7 @@ import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/fo
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
+    NgxQRCodeModule
   ],
   providers: [DecimalPipe],
   exports: [

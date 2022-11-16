@@ -44,6 +44,20 @@ export class ClienteService {
     });
   }
 
+  updatePassword(id: any, oldPass: string, newPass: string) {
+    return this.http.put(`${this.url}/usuarios/${id}/pass/${oldPass}`, {CONTRA: newPass}, {
+      headers: this.headers,
+    });
+  }
+
+  updateImageUser(id: any, img: any) {
+    console.log(img);
+    return this.http.post(`${this.url}/usuarios/actualizarImagen/${id}`, img, {
+      headers: this.headers,
+    });
+  }
+
+
   getTiposPersona() {
     return this.http
       .get(`${this.url}/tipoPersona`, { headers: this.headers })
