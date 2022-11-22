@@ -22,14 +22,17 @@
             <div class="datosVeh">
                 <p class="tituloGroup">DATOS DEL VEHÍCULO</p>
                 <div class="contenedorBuscarBoton">
-                    <div class="input-icons">
-                        <i class='bx bx-search' ></i>
-                        <datalist id="listVeh">
-                            <option *ngFor="let veh of vehiculos$" [value]="veh.MATRICULA">
-                            </option>
-                        </datalist>
-                        <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">
-                    </div>
+                    <form action="">
+                        <div class="input-icons">
+                            <i class='bx bx-search' ></i>
+                            <datalist id="listVeh">
+                                <option *ngFor="let veh of vehiculos$" [value]="veh.MATRICULA">
+                                </option>
+                            </datalist>
+                            <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">
+                        </div>
+                    </form>
+                    
 
                     <ng-template #modalVeh let-modal>
                         <form (ngSubmit)="regVeh()" [formGroup]="formRegistrarVehiculo" action="">
@@ -103,16 +106,19 @@
                 <div>
                     <p class="tituloGroup">DATOS DEL CLIENTE</p>
                     <div class="contenedorBuscarBoton">
-                        <div class="input-icons">
-                            <i class='bx bx-search' ></i>
-                            <datalist id="listClientes">
-                                <option *ngFor="let cl of clientes" [value]="cl.ID_USUARIO">
-                                    {{cl.NOMBRE}}
-                                </option>
-                            </datalist>
-                            <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorCliente($event)" list="listClientes">
+                        <form action="">
+                            <div class="input-icons">
+                                <i class='bx bx-search' ></i>
+                                <datalist id="listClientes">
+                                    <option *ngFor="let cl of clientes" [value]="cl.ID_USUARIO">
+                                        {{cl.NOMBRE}}
+                                    </option>
+                                </datalist>
+                                <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorCliente($event)" list="listClientes">                 
+                            </div>
+                        </form>
+
                         
-                        </div>
 
                         <ng-template #modalCliente let-modal>
                             <form (ngSubmit)="regCliente()" [formGroup]="formRegistrarCliente" action="">
@@ -182,6 +188,29 @@
                 </div>
             </div>
         
+
+            
+            <div #htmlData id="htmlData" class="htmlData" hidden>
+                <h2>HOJA DE CITA</h2>
+
+                <h4>DATOS DEL VEHÍCULO</h4>
+                <p>MATRÍCULA: {{matricula}}</p>
+                <p>MODELO: {{modeloVeh}}</p>
+                <p>AÑO: {{anhoVeh}}</p>
+                <p>COLOR: {{colorVeh}}</p>
+                <p>VIN: {{vinVeh}}</p>
+                <br>
+                <h4>DATOS DEL CLIENTE</h4>
+                <p>NOMBRE: {{nombreCliente}}</p>
+                <p>RFC: {{rfcCliente}}</p>
+                <p>CORREO: {{correoCliente}}</p>
+                <p>TELÉFONO: {{telefCliente}}</p>
+                <br>
+                <h4>DATOS DE LA CITA</h4>
+                <p>FECHA: {{formarFecha()}}</p>
+                <ngx-qrcode [elementType]="tipoElemento" [value]="'53'" [width]="400"> </ngx-qrcode>
+            </div>
+              
         </div>
     </form>
 </div>

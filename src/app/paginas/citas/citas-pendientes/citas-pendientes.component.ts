@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { CitaService } from 'src/app/servicios/citas/cita.service';
+import { NotificacionService } from 'src/app/servicios/notificaciones/notificacion.service';
 import { lastValueFrom } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ClienteService } from 'src/app/servicios/clientes/cliente.service';
@@ -46,6 +47,7 @@ export class CitasPendientesComponent implements OnInit {
     private alertService: AlertsComponent,
     private userService: ClienteService,
     private servService: ServicioService,
+    private notifService: NotificacionService,
     private globals: Globals
   ) {
     this.arrayCitas = [];
@@ -172,19 +174,21 @@ export class CitasPendientesComponent implements OnInit {
 
   handleClickIngreso() {
     const formIngreso = new FormData();
-    alert("xd");
     formIngreso.append('ID_SERVICIO', this.citaSeleccionada.ID_SERVICIO);
     
-    this.sig_estatus = this.getSigEstatus(this.citaSeleccionada.ID_ESTATUS);
-
-    console.log(this.citaSeleccionada)
-    formIngreso.append('ID_ESTATUS', this.sig_estatus.ID_ESTATUS);
+    //this.sig_estatus = this.getSigEstatus(this.citaSeleccionada.ID_ESTATUS);
+    formIngreso.append('ID_ESTATUS', "I");
     formIngreso.append('ID_USUARIO', this.globals.usuario.ID);
     
     this.servService.actualizarEstatus(formIngreso).subscribe(
       {
         next: (response: any) => {
           this.alertService.exito(response.message);
+
+          var title = "ACTUALIZACIÓN DE SERVICIO";
+          var body = "HOLA " + this.citaSeleccionada.CLIENTE.NOMBRE + ", SU VEHÍCULO " + this.citaSeleccionada.VEHICULO.MODELO.MARCA.DESCRIPCION + " " + this.citaSeleccionada.VEHICULO.MODELO.DESCRIPCION + " CON MATRÍCULA: " + this.citaSeleccionada.VEHICULO.MATRICULA + " ACABA DE INGRESAR A TALLER";
+          this.notifService.sendNotificationUser(this.citaSeleccionada.CLIENTE.ID, title, body).subscribe();
+
           this.actualizarTabla();
           setTimeout(() => {
             this.modalCitas.dismissAll();

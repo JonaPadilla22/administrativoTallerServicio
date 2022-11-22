@@ -4,14 +4,27 @@
         <img src="../assets/homepage/empresa.png" class="imagen-empresa" alt="">
         <div class="contendor-usuario">
             <div class="contenedor-imagen-usuario">
-                <img src="../assets/usuario/perfil.png" alt="">
+                <img class="imagenUsuario" id="imagenUsuario" src="{{urlImagen}}" alt="">
             </div>
             <div class="contenedor-texto">
-                <h2>{{nombreUsuario}}</h2>
+                <h3>{{nombreUsuario}}</h3>
             </div>
-            <div class="cerrarSesion" id="cerrarSesion" (click)="cerrarSesion()">
-                <p>CERRAR SESIÓN</p>
+            <div ngbDropdown class="d-inline-block">
+                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle></button>
+                <div class="dropDown" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <div class="cambiarImg" id="cambiarImg" (click)="cambiarImg()">
+                        <p>CAMBIAR IMAGEN DE USUARIO</p>
+                    </div>
+                    <div class="cambiarPassword" id="cambiarPassword" (click)="modalCambiarPass()">
+                        <p>CAMBIAR CONTRASEÑA</p>
+                    </div>
+                    <div class="cerrarSesion" id="cerrarSesion" (click)="cerrarSesion()">
+                        <p>CERRAR SESIÓN</p>
+                    </div>
+                </div>
             </div>
+            
+
         </div>
     </header>
     <div class="contenedor">

@@ -14,8 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalPipe } from '@angular/common';
 import { IngresoSinCitaComponent } from './taller/ingreso-sin-cita/ingreso-sin-cita.component';
 import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/form-usuario.component';
-import { GestionManoDeObraComponent } from './gestion/gestion-mano-de-obra/gestion-mano-de-obra.component';
-
+import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -26,8 +25,7 @@ import { GestionManoDeObraComponent } from './gestion/gestion-mano-de-obra/gesti
     CitasPendientesComponent,
     RegistrarCitaComponent,
     IngresoSinCitaComponent,
-    FormUsuarioComponent,
-    GestionManoDeObraComponent
+    FormUsuarioComponent
   ],
   imports: [
     CommonModule,
@@ -36,6 +34,7 @@ import { GestionManoDeObraComponent } from './gestion/gestion-mano-de-obra/gesti
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
+    NgxQRCodeModule
   ],
   providers: [DecimalPipe],
   exports: [

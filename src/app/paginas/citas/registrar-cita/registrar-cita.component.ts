@@ -9,6 +9,12 @@ import { NotificacionService } from 'src/app/servicios/notificaciones/notificaci
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 import { Globals } from 'src/app/globals';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import {
+  NgxQrcodeElementTypes,
+  NgxQrcodeErrorCorrectionLevels
+} from "@techiediaries/ngx-qrcode";
 
 @Component({
   selector: 'app-registrar-cita',
@@ -45,6 +51,9 @@ export class RegistrarCitaComponent implements OnInit {
   date = new Date();
   fecha: any;
   time: any;
+
+  tipoElemento = NgxQrcodeElementTypes.IMG;
+  valor: string = "";
 
   constructor(
       private formBuilder: FormBuilder, 
@@ -114,12 +123,22 @@ export class RegistrarCitaComponent implements OnInit {
     }
 
   async ngOnInit() {
+    // this.globals.usuario = await this.obtenerUsuario();
+    // this.globals.usuario = this.globals.usuario[0];
+    // localStorage.setItem("NOMBRE", this.globals.usuario.NOMBRE); 
+    // localStorage.setItem("IMAGEN", this.globals.usuario.IMAGEN); 
+
     this.tiposServ = await this.obtenerTiposServ();
     this.vehiculos = await this.obtenerVehiculos();
     this.clientes = await this.obtenerClientes();
     this.tiposPers = await this.obtenerTiposPers();
     this.marcas = await this.obtenerMarcas();
     this.vehiculos$ = this.vehiculos;
+  }
+
+  async obtenerUsuario(){
+    let servicioTemp = this.clienteService.getUsuarioToken();
+    return await lastValueFrom(servicioTemp); 
   }
 
   open(content: any) {
@@ -226,6 +245,12 @@ export class RegistrarCitaComponent implements OnInit {
         (response: any) => {   
           const formAct = new FormData();
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
+
+          this.valor = response.data.ID_SERVICIO;
+          console.log(this.valor);
+          // const div = <HTMLInputElement>document.getElementById("htmlData");
+          // div.innerHTML += `<ngx-qrcode [elementType]="${this.tipoElemento}" [value]="50"> </ngx-qrcode>`
+          // console.log(div.innerHTML);
           formAct.append("ID_ESTATUS", "C");
           formAct.append("ID_USUARIO", this.globals.usuario.ID);     
           this.citaService.registrarActualizacioServ(formAct).subscribe(
@@ -236,7 +261,9 @@ export class RegistrarCitaComponent implements OnInit {
                 var title = "ACTUALIZACIÓN DE SERVICIO";
                 var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE REGISTRAR UNA CITA DE SERVICIO";
                 this.notifService.sendNotificationUser(this.id_cliente, title, body).subscribe();
-  
+                
+                this.downloadPDF(response.data.ID_SERVICIO);
+
                 this.limpiar();
                 this.formRegistrarCita.reset({ID_TIPO_SERVICIO: [null]});
               },
@@ -249,6 +276,29 @@ export class RegistrarCitaComponent implements OnInit {
     else{
       this.alertService.warning("DATOS FALTANTES");
     }  
+  }
+
+  downloadPDF(id_serv: string) {
+    let DATA: any = <HTMLInputElement>document.getElementById("htmlData");
+    DATA.hidden = false;
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const options = {
+      background: 'white',
+      scale: 3
+    };
+    html2canvas(DATA, options).then((canvas) => {
+      const img = canvas.toDataURL('image/PNG');
+      const bufferX = 15;
+      const bufferY = 15;
+      const imgProps = (doc as any).getImageProperties(img);
+      const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      doc.addImage(img, 'png', bufferX, bufferY, pdfWidth, pdfHeight, undefined, 'FAST');
+      return doc;
+    }).then((docResult) => {
+      docResult.save(id_serv+'.pdf');
+    });
+    DATA.hidden = true;
   }
 
   async regVeh(){
