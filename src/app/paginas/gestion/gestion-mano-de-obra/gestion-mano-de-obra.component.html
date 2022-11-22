@@ -1,0 +1,131 @@
+<div class="contenedor">
+    <h2>REFACCIONES</h2>
+    <div class="contenedor-tabla">
+      <form>
+        <div class="mb-3 row">
+          <div class="contenedor-acciones">
+            <div>
+              <label
+                for="table-filtering-search"
+                class="col-xs-3 col-sm-auto col-form-label"
+                >Buscar Refaccion:</label
+              >
+              <input
+                id="table-filtering-search"
+                class="form-control"
+                type="text"
+                [formControl]="filter"
+              />
+            </div>
+            <button (click)="open(workForceModal)">
+              <i class='bx bxs-plus-circle'></i>Registrar
+            </button>
+          </div>
+        </div>
+      </form>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Descripción</th>
+            <th scope="col">Precio</th>
+            <th scope="col" class="acciones-tabla">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="
+              let workforce of workforceToShow
+                | slice: (page - 1) * pageSize:page * pageSize;
+              index as i
+            "
+          >
+            <td>
+              <ngb-highlight
+                [result]="workforce.DESCRIPCION || 'No asignado'"
+              ></ngb-highlight>
+            </td>
+            <td>
+              <ngb-highlight
+                [result]="workforce.PRECIO || 'No asignado'"
+              ></ngb-highlight>
+            </td>
+            <td>
+              <div class="contendor-acciones-tabla">
+                <button
+                  class="btn-estatus {{ getStylesWorkforce(workforce.ESTATUS) }}"
+                  (click)="updateStatusWorkforce(workforce)"
+                >
+                  {{ workforce.ESTATUS == "A" ? "Desactivar" : "Activar" }}
+                </button>
+                <a
+                  (click)="
+                    handleEditWorkforce($event, workforce);
+                    open(workForceModal)
+                  "
+                >
+                  <i class="bx bxs-edit"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="paginacion-tabla">
+      <ngb-pagination
+        class="pagination"
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [boundaryLinks]="true"
+      ></ngb-pagination>
+    </div>
+    <ng-template #workForceModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ !workforceSelected ? "Registrar Usuario" : "Modificar Usuario" }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="workforceForm">
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="descripcion"
+              formControlName="DESCRIPCION"
+              required
+              value="{{ workforceSelected ? workforceSelected.DESCRIPCION : '' }}"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="precio" class="form-label">Precio:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="precio"
+              aria-describedby="emailHelp"
+              formControlName="PRECIO"
+              required
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-dark"
+          (click)="handleSubmit()"
+        >
+          {{ !workforceSelected ? "Guardar" : "Guardar Cambios" }}
+        </button>
+      </div>
+    </ng-template>
+  </div>

@@ -4,6 +4,7 @@ import { ErrorPageComponent } from './error-page/error-page.component';
 import { LoginComponent } from './login/login.component';
 import { CitasPendientesComponent } from './paginas/citas/citas-pendientes/citas-pendientes.component';
 import { RegistrarCitaComponent } from './paginas/citas/registrar-cita/registrar-cita.component';
+import { GestionManoDeObraComponent } from './paginas/gestion/gestion-mano-de-obra/gestion-mano-de-obra.component';
 import { GestionRefaccionesComponent } from './paginas/gestion/gestion-refacciones/gestion-refacciones.component';
 import { GestionUsuariosComponent } from './paginas/gestion/gestion-usuarios/gestion-usuarios.component';
 import { HistorialServiciosComponent } from './paginas/historial/historial-servicios/historial-servicios.component';
@@ -67,6 +68,11 @@ const routes: Routes = [
         path: 'recursos',
         pathMatch: 'full',
         component: GestionRefaccionesComponent,
+      },
+      {
+        path: 'manoObra',
+        pathMatch: 'full',
+        component: GestionManoDeObraComponent,
       },
     ],
   },

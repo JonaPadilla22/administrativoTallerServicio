@@ -65,7 +65,6 @@ section .contenedor form .btn-ingresar {
   font-size: 20pt;
   background: #264653;
   border-radius: 50px;
-  border: none;
   width: 60%;
   height: 50px;
   font-family: "Odor Mean Chey";
@@ -76,11 +75,4 @@ section .contenedor form .btn-ingresar {
   color: #fff;
   position: absolute;
   bottom: 90px;
-}
-
-section .contenedor form .btn-ingresar:hover{
-  background-color: white;
-  color: #264653;
-  border: 1px solid #264653;
-}
-/*# sourceMappingURL=login.component.css.map */
+}/*# sourceMappingURL=login.component.css.map */

@@ -127,7 +127,7 @@ export class GestionRefaccionesComponent implements OnInit {
     let estatusTemp = {
       ESTATUS: refaction.ESTATUS == 'A' ? 'I' : 'A',
     };
-    this.refactionService.updateRefaction(estatusTemp, refaction.ID).subscribe({
+    this.refactionService.updateWorkforce(estatusTemp, refaction.ID).subscribe({
       next: (response: any) => {
         this.actualizarTabla();
       },

@@ -44,19 +44,14 @@ export class LoginComponent implements OnInit {
 
     this.loginService.validateLogin(this.loginForm.value).subscribe({
       next: (v: any) => {
-        // if(v.USUARIO.TIPO_USUARIO.ID==4){
-        //   this.alerts.error("PERMISOS INVÁLIDOS");
-        // }else{
-        //   this.alerts.exito("BIENVENIDO "+v.USUARIO.NOMBRE);
-        //   localStorage.setItem('TOKEN', v.TOKEN);
-        //   this.globals.usuario = v.USUARIO.ID;
-        //   this.router.navigate(['/cita']);
-        // }
-        this.alerts.exito('BIENVENIDO ' + v.USUARIO.NOMBRE);
-        localStorage.setItem('TOKEN', v.TOKEN);
-        this.globals.usuario = v.USUARIO.ID;
-        this.router.navigate(['/cita']);
-        this.router.navigate(['/cita']);
+        if(v.USUARIO.TIPO_USUARIO.ID==4){
+          this.alerts.error("PERMISOS INVÁLIDOS");
+        }else{
+          this.alerts.exito("BIENVENIDO "+v.USUARIO.NOMBRE);
+          localStorage.setItem('TOKEN', v.TOKEN);
+          this.globals.usuario = v.USUARIO.ID;
+          this.router.navigate(['/cita']);
+        }
       },
       error: (e) => this.alerts.error(e.error),
     });

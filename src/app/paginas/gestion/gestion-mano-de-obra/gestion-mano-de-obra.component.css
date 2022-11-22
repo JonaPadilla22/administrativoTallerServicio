@@ -10,12 +10,15 @@
   font-weight: bold;
 }
 .contenedor .contenedor-tabla {
-  width: 90%;
+  width: 80%;
   overflow: hidden;
   height: 70%;
   margin: 0 auto;
   margin-top: 40px;
   margin-bottom: 0;
+}
+.contenedor .contenedor-tabla .acciones-tabla {
+  text-align: center;
 }
 .contenedor .contenedor-tabla .contenedor-acciones {
   width: 100%;
@@ -32,7 +35,7 @@
   margin-left: 10px;
 }
 .contenedor .contenedor-tabla .contenedor-acciones button {
-  width: 15%;
+  width: 20%;
   padding: 10px 15px;
   background: #264653;
   color: #fff;
@@ -67,10 +70,11 @@
 .contenedor .contenedor-tabla table tbody .contendor-acciones-tabla {
   display: flex;
   align-items: center;
+  justify-content: space-evenly;
 }
 .contenedor .paginacion-tabla {
   width: 80%;
   margin: 0 auto;
   display: flex;
   justify-content: flex-end;
-}/*# sourceMappingURL=gestion-refacciones.component.css.map */
+}/*# sourceMappingURL=gestion-mano-de-obra.component.css.map */

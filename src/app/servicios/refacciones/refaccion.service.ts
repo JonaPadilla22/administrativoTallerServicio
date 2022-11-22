@@ -37,4 +37,25 @@ export class RefaccionService {
       .get(`${this.url}/tipoRefaccion`, { headers: this.headers })
       .pipe(map((res) => res));
   }
+
+
+  // Workforce
+
+  getWorkforce() {
+    return this.http
+      .get(`${this.url}/manoDeObra`, { headers: this.headers })
+      .pipe(map((res) => res));
+  }
+
+  postWorkforce(form: any) {
+    return this.http.post(`${this.url}/manoDeObra`, form, {
+      headers: this.headers,
+    });
+  }
+
+  updateWorkforce(data: any, id: any) {
+    return this.http.put(`${this.url}/manoDeObra/${id}`, data, {
+      headers: this.headers,
+    });
+  }
 }

@@ -56,9 +56,14 @@ export class HomePageComponent implements OnInit {
         link: 'usuarios',
       },
       {
-        nombre: 'Recursos',
+        nombre: 'Refacciones',
         icono: 'bx bx-package',
         link: 'recursos',
+      },
+      {
+        nombre: 'Mano De Obra',
+        icono: 'bx bx-bulb',
+        link: 'manoObra',
       },
     ];
   }

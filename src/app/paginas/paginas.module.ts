@@ -14,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalPipe } from '@angular/common';
 import { IngresoSinCitaComponent } from './taller/ingreso-sin-cita/ingreso-sin-cita.component';
 import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/form-usuario.component';
+import { GestionManoDeObraComponent } from './gestion/gestion-mano-de-obra/gestion-mano-de-obra.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/fo
     CitasPendientesComponent,
     RegistrarCitaComponent,
     IngresoSinCitaComponent,
-    FormUsuarioComponent
+    FormUsuarioComponent,
+    GestionManoDeObraComponent
   ],
   imports: [
     CommonModule,
