@@ -81,10 +81,16 @@ header .contendor-usuario h3 {
 .btn-outline-primary:hover{
   --bs-btn-hover-bg: none;
 }
-.cerrarSesion, .cambiarPassword {
+
+.dropdown-item {
   color: #264653;
   background-color: white;
   cursor: pointer;
   padding: 10px;
   border-radius: 10px;
+}
+
+.dropdown-item:hover {
+  background-color: #264653;
+  color: #fff;
 }

@@ -17,7 +17,9 @@ export class ClienteService {
   getUsuarioToken() {
     return this.http
       .get(`${this.url}/usuarios/token`, { headers: this.headers })
-      .pipe(map((res) => res));
+      .pipe(map((res) => res
+        
+      ));
   }
 
   getClientes() {

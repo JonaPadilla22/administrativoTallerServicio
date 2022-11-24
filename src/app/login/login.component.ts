@@ -52,8 +52,6 @@ export class LoginComponent implements OnInit {
         }else{
           
           localStorage.setItem('TOKEN', v.TOKEN);
-
-          //this.globals.usuario = await this.obtenerUsuario();
           this.globals.usuario = v.USUARIO;
           console.log(this.globals.usuario);
           localStorage.setItem("NOMBRE", this.globals.usuario.NOMBRE); 
@@ -62,11 +60,6 @@ export class LoginComponent implements OnInit {
           this.alerts.exito("BIENVENIDO "+v.USUARIO.NOMBRE);
           this.router.navigate(['/cita']);
         }
-        // this.alerts.exito('BIENVENIDO ' + v.USUARIO.NOMBRE);
-        // localStorage.setItem('TOKEN', v.TOKEN);
-        // this.globals.usuario = v.USUARIO.ID;
-        // this.router.navigate(['/cita']);
-        // this.router.navigate(['/cita']);
       },
       error: (e) => this.alerts.error(e.error),
     });

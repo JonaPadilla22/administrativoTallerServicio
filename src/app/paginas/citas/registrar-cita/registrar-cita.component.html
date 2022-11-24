@@ -24,12 +24,7 @@
                 <div class="contenedorBuscarBoton">
                     <form action="">
                         <div class="input-icons">
-                            <i class='bx bx-search' ></i>
-                            <datalist id="listVeh">
-                                <option *ngFor="let veh of vehiculos$" [value]="veh.MATRICULA">
-                                </option>
-                            </datalist>
-                            <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">
+                            <app-buscador-vehiculos [vehiculos$]="vehiculos$" [formatterVeh]="formatterVeh"></app-buscador-vehiculos>               
                         </div>
                     </form>
                     
@@ -108,13 +103,7 @@
                     <div class="contenedorBuscarBoton">
                         <form action="">
                             <div class="input-icons">
-                                <i class='bx bx-search' ></i>
-                                <datalist id="listClientes">
-                                    <option *ngFor="let cl of clientes" [value]="cl.ID_USUARIO">
-                                        {{cl.NOMBRE}}
-                                    </option>
-                                </datalist>
-                                <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorCliente($event)" list="listClientes">                 
+                                <app-buscador-clientes [clientes]="clientes" [formatterClientes]="formatterClientes"></app-buscador-clientes>               
                             </div>
                         </form>
 
@@ -187,9 +176,7 @@
                     <button type="submit" class="btnRegistrar" [disabled]="formRegistrarCita.invalid">REGISTRAR CITA</button>
                 </div>
             </div>
-        
-
-            
+                
             <div #htmlData id="htmlData" class="htmlData" hidden>
                 <h2>HOJA DE CITA</h2>
 

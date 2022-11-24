@@ -1,3 +1,4 @@
+import { Globals } from 'src/app/globals';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomePageComponent } from './home-page.component';
@@ -5,6 +6,7 @@ import { ServiciosPendientesComponent } from './servicios/servicios-pendientes/s
 import { HistorialServiciosComponent } from './historial/historial-servicios/historial-servicios.component';
 import { GestionRefaccionesComponent } from './gestion/gestion-refacciones/gestion-refacciones.component';
 import { GestionUsuariosComponent } from './gestion/gestion-usuarios/gestion-usuarios.component';
+import { GestionManoDeObraComponent } from './gestion/gestion-mano-de-obra/gestion-mano-de-obra.component';
 import { CitasPendientesComponent } from './citas/citas-pendientes/citas-pendientes.component';
 import { RegistrarCitaComponent } from './citas/registrar-cita/registrar-cita.component';
 import { AppRoutingModule } from '../app-routing.module';
@@ -25,7 +27,8 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
     CitasPendientesComponent,
     RegistrarCitaComponent,
     IngresoSinCitaComponent,
-    FormUsuarioComponent
+    FormUsuarioComponent,
+    GestionManoDeObraComponent
   ],
   imports: [
     CommonModule,
@@ -36,13 +39,14 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
     ReactiveFormsModule,
     NgxQRCodeModule
   ],
-  providers: [DecimalPipe],
+  providers: [DecimalPipe, Globals],
   exports: [
     HomePageComponent,
     ServiciosPendientesComponent,
     HistorialServiciosComponent,
     GestionRefaccionesComponent,
     GestionUsuariosComponent,
+    GestionManoDeObraComponent,
     CitasPendientesComponent,
     RegistrarCitaComponent,
     CommonModule,

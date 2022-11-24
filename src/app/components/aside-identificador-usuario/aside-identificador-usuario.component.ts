@@ -7,11 +7,9 @@ import { Globals } from 'src/app/globals';
   styleUrls: ['./aside-identificador-usuario.component.css'],
 })
 export class AsideIdentificadorUsuarioComponent implements OnInit {
-  imagenUsuario: string;
   nombreUsuario: string;
 
   constructor(public globals: Globals) {
-    this.imagenUsuario = '../../assets/usuario/perfil.png';
     this.nombreUsuario = this.globals.usuario.NOMBRE;
   }
 

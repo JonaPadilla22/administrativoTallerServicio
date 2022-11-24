@@ -12,15 +12,9 @@
             <div ngbDropdown class="d-inline-block">
                 <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle></button>
                 <div class="dropDown" ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <div class="cambiarImg" id="cambiarImg" (click)="cambiarImg()">
-                        <p>CAMBIAR IMAGEN DE USUARIO</p>
-                    </div>
-                    <div class="cambiarPassword" id="cambiarPassword" (click)="modalCambiarPass()">
-                        <p>CAMBIAR CONTRASEÑA</p>
-                    </div>
-                    <div class="cerrarSesion" id="cerrarSesion" (click)="cerrarSesion()">
-                        <p>CERRAR SESIÓN</p>
-                    </div>
+                    <button ngbDropdownItem (click)="cambiarImg()">CAMBIAR IMAGEN DE USUARIO</button>
+                    <button ngbDropdownItem (click)="modalCambiarPass()">CAMBIAR CONTRASEÑA</button>
+                    <button ngbDropdownItem (click)="cerrarSesion()">CERRAR SESIÓN</button>
                 </div>
             </div>
             

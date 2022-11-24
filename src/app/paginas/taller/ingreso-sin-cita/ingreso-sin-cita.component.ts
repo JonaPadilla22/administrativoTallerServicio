@@ -25,7 +25,7 @@ export class IngresoSinCitaComponent implements OnInit {
 
   vehiculos: any[] = [];
   vehiculos$: any = [];
-  clientes: any;
+  clientes: any = [];
 
   matricula: any = "";
   id_cliente: string = "";
@@ -44,6 +44,11 @@ export class IngresoSinCitaComponent implements OnInit {
   date = new Date();
   fecha: any;
   time: any;
+
+  formatterVeh = (x: any) => {this.buscadorVeh(x)};
+  formatterClientes = (x: any) => {
+    this.buscadorCliente(x); 
+  };
 
   constructor(
       private formBuilder: FormBuilder, 
@@ -170,9 +175,8 @@ export class IngresoSinCitaComponent implements OnInit {
   }
 
   buscadorVeh(e: any){   
-    if(e.key === 'Enter'){
-      this.buscarVeh(e.target.value);
-      e.target.value = "";   
+    if(e.length==7){
+      this.buscarVeh(e);
     }
   }
 
@@ -185,32 +189,47 @@ export class IngresoSinCitaComponent implements OnInit {
       this.matriculaVeh = resultado.MATRICULA;
       this.vinVeh = resultado.VIN;
       if(this.id_cliente==""){
-        this.buscarCliente(resultado.ID_CLIENTE);
+        this.buscarClienteId(resultado.ID_CLIENTE);
       }
       this.matricula = this.matriculaVeh;
     }
   }
 
-  buscadorCliente(e: any){   
-    if(e.key === 'Enter'){
-      this.buscarCliente(e.target.value);
-      e.target.value = "";   
+  buscadorCliente(e: any){  
+    if(e.length!=0){
+      this.buscarCliente(e);
     }
   }
 
-  async buscarCliente(id: any){   
-    const resultado = this.clientes.find( (cl: any) => ((cl.ID_USUARIO === parseInt(id))));
+  async buscarCliente(nombre: any){   
+    const resultado = this.clientes.find( (cl: any) => ((cl.NOMBRE === nombre)));
     if(resultado!=undefined){
-
+      
       this.limpiarVeh();
       this.matricula = "";
-      this.id_cliente = id;
+      this.id_cliente = resultado.ID_USUARIO;
       this.nombreCliente = resultado.NOMBRE;
       this.correoCliente = resultado.CORREO;
       this.telefCliente = resultado.TELEFONO;
       this.rfcCliente = resultado.RFC;
 
-      this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente);
+      this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente)  
+    }   
+  }
+
+  async buscarClienteId(id: any){   
+    const resultado = this.clientes.find( (cl: any) => ((cl.ID_USUARIO === parseInt(id))));
+    if(resultado!=undefined){
+      
+      this.limpiarVeh();
+      this.matricula = "";
+      this.id_cliente = resultado.ID_USUARIO;
+      this.nombreCliente = resultado.NOMBRE;
+      this.correoCliente = resultado.CORREO;
+      this.telefCliente = resultado.TELEFONO;
+      this.rfcCliente = resultado.RFC;
+
+      this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente)  
     }   
   }
 

@@ -26,13 +26,14 @@ export class HomePageComponent implements OnInit {
     private alerts: AlertsComponent,
     public clienteService: ClienteService
   ) {
+    
     this.nombreUsuario = localStorage.getItem("NOMBRE")!;
     this.imagen = localStorage.getItem("IMAGEN")!;
 
     if(this.imagen=="null"){
       this.imagen = "default.png";
     }
-    this.urlImagen = this.url + "/usuarios/" + this.imagen + `#v=${new Date().getTime()}`;
+    this.urlImagen= this.url + "/usuarios/" + this.imagen;
 
     this.listaDeNavegacion = [
       {
@@ -89,9 +90,14 @@ export class HomePageComponent implements OnInit {
   }
 
   async ngOnInit(){
+    // TODO: Fix get user object
+     
     if (!localStorage.getItem('TOKEN')) this.router.navigate(['/']);
+    // let servicioTemp = this.clienteService.getUsuarioToken();
+    // this.globals.usuario = await lastValueFrom(servicioTemp); 
     this.globals.usuario = await this.obtenerUsuario();
-    this.globals.usuario = this.globals.usuario[0];
+    console.log(this.globals.usuario[0]);
+    // this.globals.usuario = await this.obtenerUsuario();
   }
 
   async obtenerUsuario(){
@@ -167,9 +173,10 @@ export class HomePageComponent implements OnInit {
             localStorage.setItem("IMAGEN", this.globals.usuario.ID+"."+result.value.name.split(".")[1]);
             this.imagen = localStorage.getItem("IMAGEN")!;
 
+            const url = URL.createObjectURL(result.value);
             let imagenUsuario = <HTMLInputElement>document.getElementById("imagenUsuario");
-            //imagenUsuario.src = "";
-            this.urlImagen= this.url + "/usuarios/" + this.imagen + `#v=${new Date().getTime()}`;
+            imagenUsuario.src = url;
+            //this.urlImagen= this.url + "/usuarios/" + this.imagen + "#timestamp=" + new Date().getTime();
           }
         });
       }
@@ -180,16 +187,12 @@ export class HomePageComponent implements OnInit {
     
   }
 
-  getRandomInt(max: number) {
-    return Math.floor(Math.random() * max);
-  }
-
   cambiarImg() {
     this.modalCambiarImg();
   }
 
   modalCambiarPass(){
-    console.log(this.globals.usuario);
+    console.log(this.globals.usuario[0]);
     this.alerts.modalCambiarPass(this.globals.usuario.ID);
   }
   

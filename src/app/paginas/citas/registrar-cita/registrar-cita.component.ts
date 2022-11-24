@@ -11,6 +11,7 @@ import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 import { Globals } from 'src/app/globals';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
 import {
   NgxQrcodeElementTypes,
   NgxQrcodeErrorCorrectionLevels
@@ -32,7 +33,7 @@ export class RegistrarCitaComponent implements OnInit {
 
   vehiculos: any[] = [];
   vehiculos$: any = [];
-  clientes: any;
+  clientes: any = [];
 
   matricula: any = "";
   id_cliente: string = "";
@@ -54,7 +55,11 @@ export class RegistrarCitaComponent implements OnInit {
 
   tipoElemento = NgxQrcodeElementTypes.IMG;
   valor: string = "";
-
+  
+  formatterVeh = (x: any) => {this.buscadorVeh(x)};
+  formatterClientes = (x: any) => {
+    this.buscadorCliente(x); 
+  };
   constructor(
       private formBuilder: FormBuilder, 
       private citaService: CitaService,
@@ -120,20 +125,17 @@ export class RegistrarCitaComponent implements OnInit {
 
       this.fecha = { day: this.date.getUTCDay()-1, month: this.date.getUTCMonth()+1, year: this.date.getUTCFullYear()};
       this.time = { hour: this.date.getHours, minute: 0};
+
+      
     }
 
   async ngOnInit() {
-    // this.globals.usuario = await this.obtenerUsuario();
-    // this.globals.usuario = this.globals.usuario[0];
-    // localStorage.setItem("NOMBRE", this.globals.usuario.NOMBRE); 
-    // localStorage.setItem("IMAGEN", this.globals.usuario.IMAGEN); 
-
     this.tiposServ = await this.obtenerTiposServ();
     this.vehiculos = await this.obtenerVehiculos();
     this.clientes = await this.obtenerClientes();
     this.tiposPers = await this.obtenerTiposPers();
     this.marcas = await this.obtenerMarcas();
-    this.vehiculos$ = this.vehiculos;
+    this.vehiculos$ = this.vehiculos;   
   }
 
   async obtenerUsuario(){
@@ -188,9 +190,8 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   buscadorVeh(e: any){   
-    if(e.key === 'Enter'){
-      this.buscarVeh(e.target.value);
-      e.target.value = "";   
+    if(e.length==7){
+      this.buscarVeh(e);
     }
   }
 
@@ -203,26 +204,41 @@ export class RegistrarCitaComponent implements OnInit {
       this.matriculaVeh = resultado.MATRICULA;
       this.vinVeh = resultado.VIN;
       if(this.id_cliente==""){
-        this.buscarCliente(resultado.ID_CLIENTE);
+        this.buscarClienteId(resultado.ID_CLIENTE);
       }
       this.matricula = this.matriculaVeh;
     }
   }
 
-  buscadorCliente(e: any){   
-    if(e.key === 'Enter'){
-      this.buscarCliente(e.target.value);
-      e.target.value = "";   
+  buscadorCliente(e: any){  
+    if(e.length!=0){
+      this.buscarCliente(e);
     }
   }
 
-  async buscarCliente(id: any){   
+  async buscarCliente(nombre: any){   
+    const resultado = this.clientes.find( (cl: any) => ((cl.NOMBRE === nombre)));
+    if(resultado!=undefined){
+      
+      this.limpiarVeh();
+      this.matricula = "";
+      this.id_cliente = resultado.ID_USUARIO;
+      this.nombreCliente = resultado.NOMBRE;
+      this.correoCliente = resultado.CORREO;
+      this.telefCliente = resultado.TELEFONO;
+      this.rfcCliente = resultado.RFC;
+
+      this.vehiculos$ = this.obtenerVehiculosByCliente(this.id_cliente)  
+    }   
+  }
+
+  async buscarClienteId(id: any){   
     const resultado = this.clientes.find( (cl: any) => ((cl.ID_USUARIO === parseInt(id))));
     if(resultado!=undefined){
       
       this.limpiarVeh();
       this.matricula = "";
-      this.id_cliente = id;
+      this.id_cliente = resultado.ID_USUARIO;
       this.nombreCliente = resultado.NOMBRE;
       this.correoCliente = resultado.CORREO;
       this.telefCliente = resultado.TELEFONO;

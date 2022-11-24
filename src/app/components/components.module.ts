@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { ListaNavegacionHijoComponent } from './lista-navegacion/lista-navegacion-hijo/lista-navegacion-hijo.component';
 import { AsideIdentificadorUsuarioComponent } from './aside-identificador-usuario/aside-identificador-usuario.component';
 import { AppRoutingModule } from '../app-routing.module';
+import { BuscadorVehiculosComponent } from './buscador-vehiculos/buscador-vehiculos.component';
+import { BuscadorClientesComponent } from './buscador-clientes/buscador-clientes.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { AppRoutingModule } from '../app-routing.module';
     DatePickerComponentComponent,
     TimePickerComponent,
     ListaNavegacionHijoComponent,
-    AsideIdentificadorUsuarioComponent
+    AsideIdentificadorUsuarioComponent,
+    BuscadorVehiculosComponent,
+    BuscadorClientesComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +31,9 @@ import { AppRoutingModule } from '../app-routing.module';
     ListaNavegacionComponent,
     DatePickerComponentComponent,
     TimePickerComponent,
-    AsideIdentificadorUsuarioComponent
+    AsideIdentificadorUsuarioComponent,
+    BuscadorVehiculosComponent,
+    BuscadorClientesComponent
   ]
 })
 export class ComponentsModule { }

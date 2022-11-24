@@ -23,12 +23,13 @@
                 <p class="tituloGroup">DATOS DEL VEHÍCULO</p>
                 <div class="contenedorBuscarBoton">
                     <div class="input-icons">
-                        <i class='bx bx-search' ></i>
+                        <app-buscador-vehiculos [vehiculos$]="vehiculos$" [formatterVeh]="formatterVeh"></app-buscador-vehiculos>
+                        <!-- <i class='bx bx-search' ></i>
                         <datalist id="listVeh">
                             <option *ngFor="let veh of vehiculos$" [value]="veh.MATRICULA">
                             </option>
                         </datalist>
-                        <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">                        
+                        <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorVeh($event)" list="listVeh">                         -->
                     </div>
 
                     <ng-template #modalVeh let-modal>
@@ -104,14 +105,7 @@
                     <p class="tituloGroup">DATOS DEL CLIENTE</p>
                     <div class="contenedorBuscarBoton">
                         <div class="input-icons">
-                            <i class='bx bx-search' ></i>
-                            <datalist id="listClientes">
-                                <option *ngFor="let cl of clientes" [value]="cl.ID_USUARIO">
-                                    {{cl.NOMBRE}}
-                                </option>
-                            </datalist>
-                            <input class="input-field" type="text" name="" id="" placeholder="Buscar" (keyup)="buscadorCliente($event)" list="listClientes">
-                        
+                            <app-buscador-clientes [clientes]="clientes" [formatterClientes]="formatterClientes"></app-buscador-clientes>             
                         </div>
 
 
