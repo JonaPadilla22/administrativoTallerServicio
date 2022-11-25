@@ -27,8 +27,4 @@ export class AppComponent {
     // }  
   }
 
-  async obtenerUsuario(){
-    let servicioTemp = this.clienteService.getUsuarioToken();
-    return await lastValueFrom(servicioTemp); 
-  }
 }

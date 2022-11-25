@@ -14,12 +14,10 @@ export class ClienteService {
   );
   constructor(private http: HttpClient) {}
 
-  getUsuarioToken() {
+  getUsuarioToken(token: string) {
     return this.http
-      .get(`${this.url}/usuarios/token`, { headers: this.headers })
-      .pipe(map((res) => res
-        
-      ));
+      .get(`${this.url}/usuarios/token`, { headers: {'Authorization': token} })
+      .pipe(map((res) => res));
   }
 
   getClientes() {

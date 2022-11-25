@@ -105,7 +105,6 @@ export class HistorialServiciosComponent implements OnInit {
 
     this.detalleServicio = await this.obtenerDetalleServicio(id);
     this.actualizaciones_servicio = await this.obtenerActualizacionesServicio(id);
-    console.log(this.actualizaciones_servicio);
     this.calcularTotalServicio();
   }
 

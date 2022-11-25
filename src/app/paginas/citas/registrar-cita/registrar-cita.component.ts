@@ -68,7 +68,7 @@ export class RegistrarCitaComponent implements OnInit {
       private notifService: NotificacionService,
       private modalService: NgbModal,
       public alertService: AlertsComponent,
-      private globals: Globals
+      public globals: Globals
     ) 
     { 
       this.formRegistrarCita = this.formBuilder.group({
@@ -136,11 +136,6 @@ export class RegistrarCitaComponent implements OnInit {
     this.tiposPers = await this.obtenerTiposPers();
     this.marcas = await this.obtenerMarcas();
     this.vehiculos$ = this.vehiculos;   
-  }
-
-  async obtenerUsuario(){
-    let servicioTemp = this.clienteService.getUsuarioToken();
-    return await lastValueFrom(servicioTemp); 
   }
 
   open(content: any) {
@@ -263,10 +258,6 @@ export class RegistrarCitaComponent implements OnInit {
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
 
           this.valor = response.data.ID_SERVICIO;
-          console.log(this.valor);
-          // const div = <HTMLInputElement>document.getElementById("htmlData");
-          // div.innerHTML += `<ngx-qrcode [elementType]="${this.tipoElemento}" [value]="50"> </ngx-qrcode>`
-          // console.log(div.innerHTML);
           formAct.append("ID_ESTATUS", "C");
           formAct.append("ID_USUARIO", this.globals.usuario.ID);     
           this.citaService.registrarActualizacioServ(formAct).subscribe(
@@ -295,6 +286,7 @@ export class RegistrarCitaComponent implements OnInit {
   }
 
   downloadPDF(id_serv: string) {
+    // TODO: Fix 
     let DATA: any = <HTMLInputElement>document.getElementById("htmlData");
     DATA.hidden = false;
     const doc = new jsPDF('p', 'pt', 'a4');

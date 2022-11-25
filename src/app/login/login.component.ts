@@ -49,13 +49,10 @@ export class LoginComponent implements OnInit {
       next: async (v: any) => {
         if(v.USUARIO.TIPO_USUARIO.ID==4){
           this.alerts.error("PERMISOS INVÁLIDOS");
-        }else{
-          
+        }else{     
           localStorage.setItem('TOKEN', v.TOKEN);
+
           this.globals.usuario = v.USUARIO;
-          console.log(this.globals.usuario);
-          localStorage.setItem("NOMBRE", this.globals.usuario.NOMBRE); 
-          localStorage.setItem("IMAGEN", this.globals.usuario.IMG); 
 
           this.alerts.exito("BIENVENIDO "+v.USUARIO.NOMBRE);
           this.router.navigate(['/cita']);
@@ -66,7 +63,7 @@ export class LoginComponent implements OnInit {
   }
 
   async obtenerUsuario(){
-    let servicioTemp = this.clienteService.getUsuarioToken();
+    let servicioTemp = this.clienteService.getUsuarioToken(localStorage.getItem('TOKEN')!);
     return await lastValueFrom(servicioTemp); 
   }
 

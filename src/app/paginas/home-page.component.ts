@@ -14,10 +14,10 @@ import { lastValueFrom } from 'rxjs';
 })
 export class HomePageComponent implements OnInit {
   listaDeNavegacion: any;
-  nombreUsuario: string;
-  imagen: string;
-  urlImagen: string;
-
+  nombreUsuario: string = "";
+  imagen: string = "";
+  urlImagen: string = "";
+  user: any = {};
 
   url = environment.baseUrlAPI;
   constructor(
@@ -26,15 +26,7 @@ export class HomePageComponent implements OnInit {
     private alerts: AlertsComponent,
     public clienteService: ClienteService
   ) {
-    
-    this.nombreUsuario = localStorage.getItem("NOMBRE")!;
-    this.imagen = localStorage.getItem("IMAGEN")!;
-
-    if(this.imagen=="null"){
-      this.imagen = "default.png";
-    }
-    this.urlImagen= this.url + "/usuarios/" + this.imagen;
-
+  
     this.listaDeNavegacion = [
       {
         nombre: 'Cita',
@@ -85,23 +77,26 @@ export class HomePageComponent implements OnInit {
         link: 'manoObra',
       },
     ];
-
-    
   }
 
   async ngOnInit(){
-    // TODO: Fix get user object
-     
+
     if (!localStorage.getItem('TOKEN')) this.router.navigate(['/']);
-    // let servicioTemp = this.clienteService.getUsuarioToken();
-    // this.globals.usuario = await lastValueFrom(servicioTemp); 
-    this.globals.usuario = await this.obtenerUsuario();
-    console.log(this.globals.usuario[0]);
-    // this.globals.usuario = await this.obtenerUsuario();
+    this.user = await this.obtenerUsuario();
+    this.globals.usuario = this.user[0];
+
+    this.imagen = this.user[0].IMG;
+    this.nombreUsuario = this.user[0].NOMBRE;
+
+    if(this.imagen=="null"){
+      this.imagen = "default.png";
+    }
+    this.urlImagen= this.url + "/usuarios/" + this.imagen;
+
   }
 
   async obtenerUsuario(){
-    let servicioTemp = this.clienteService.getUsuarioToken();
+    let servicioTemp = this.clienteService.getUsuarioToken(localStorage.getItem('TOKEN')!);
     return await lastValueFrom(servicioTemp); 
   }
 
@@ -109,8 +104,7 @@ export class HomePageComponent implements OnInit {
     this.alerts.confirmDialog('¿DESEA CERRAR SESIÓN?').then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem('TOKEN');
-        localStorage.removeItem('IMAGEN');
-        localStorage.removeItem('NOMBRE');
+        localStorage.removeItem('USUARIO');
         this.router.navigate(['/']);
       }
     });
@@ -169,8 +163,8 @@ export class HomePageComponent implements OnInit {
             //ACTUALIZAR IMAGEN Y TOKEN
             const img = new FormData();
             img.append("file", result.value);
-            this.clienteService.updateImageUser(this.globals.usuario.ID, img).subscribe();
-            localStorage.setItem("IMAGEN", this.globals.usuario.ID+"."+result.value.name.split(".")[1]);
+            this.clienteService.updateImageUser(this.user[0].ID, img).subscribe();
+            localStorage.setItem("IMAGEN", this.user[0].ID+"."+result.value.name.split(".")[1]);
             this.imagen = localStorage.getItem("IMAGEN")!;
 
             const url = URL.createObjectURL(result.value);
@@ -192,8 +186,7 @@ export class HomePageComponent implements OnInit {
   }
 
   modalCambiarPass(){
-    console.log(this.globals.usuario[0]);
-    this.alerts.modalCambiarPass(this.globals.usuario.ID);
+    this.alerts.modalCambiarPass(this.user[0].ID);
   }
   
 }
