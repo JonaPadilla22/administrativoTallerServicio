@@ -145,7 +145,7 @@ export class ServiciosPendientesComponent implements OnInit {
                   body += " ACABA DE SALIR DE TALLER";
                 }
                               
-                this.notifService.sendNotificationUser(this.servicio[0].CLIENTE.ID, title, body).subscribe();
+                this.notifService.sendNotificationUser(this.servicio[0].CLIENTE.ID, title, body, this.servicio[0].ID_SERVICIO).subscribe();
 
                 this.modalService.dismissAll();
               },

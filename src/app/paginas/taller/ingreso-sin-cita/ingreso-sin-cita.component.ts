@@ -264,7 +264,8 @@ export class IngresoSinCitaComponent implements OnInit {
             id_e = "I";        
           }    
           formAct.append("ID_ESTATUS", id_e);
-          formAct.append("ID_USUARIO", this.globals.usuario.ID);     
+          formAct.append("ID_USUARIO", this.globals.usuario.ID);  
+          let id_cita = response.data.ID_SERVICIO;   
           this.citaService.registrarActualizacioServ(formAct).subscribe(
             {
               next: (response: any) => {
@@ -277,7 +278,7 @@ export class IngresoSinCitaComponent implements OnInit {
                   var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE INGRESAR A TALLER";
                 }
                 
-                this.notifService.sendNotificationUser(this.id_cliente, title, body).subscribe();
+                this.notifService.sendNotificationUser(this.id_cliente, title, body, id_cita).subscribe();
 
                 this.limpiar();
                 this.formIngresoTaller.reset({ID_TIPO_SERVICIO: [null]});

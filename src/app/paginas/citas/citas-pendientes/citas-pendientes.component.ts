@@ -187,7 +187,7 @@ export class CitasPendientesComponent implements OnInit {
 
           var title = "ACTUALIZACIÓN DE SERVICIO";
           var body = "HOLA " + this.citaSeleccionada.CLIENTE.NOMBRE + ", SU VEHÍCULO " + this.citaSeleccionada.VEHICULO.MODELO.MARCA.DESCRIPCION + " " + this.citaSeleccionada.VEHICULO.MODELO.DESCRIPCION + " CON MATRÍCULA: " + this.citaSeleccionada.VEHICULO.MATRICULA + " ACABA DE INGRESAR A TALLER";
-          this.notifService.sendNotificationUser(this.citaSeleccionada.CLIENTE.ID, title, body).subscribe();
+          this.notifService.sendNotificationUser(this.citaSeleccionada.CLIENTE.ID, title, body, this.citaSeleccionada.ID_SERVICIO).subscribe();
 
           this.actualizarTabla();
           setTimeout(() => {

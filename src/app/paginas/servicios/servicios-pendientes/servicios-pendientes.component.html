@@ -40,7 +40,7 @@
                             </div>
                             <br>
                             <div class="datosTecnico">
-                                <img src="{{baseUrl}}/usuarios/{{img_tecnico}}" alt="">
+                                <img src="{{baseUrl}}/usuarios/{{det.TECNICO_ENCARGADO.IMG ?? 'default.png'}}" alt="">
                                 {{det.TECNICO_ENCARGADO.NOMBRE}}
                             </div>
 
@@ -109,7 +109,7 @@
               <p>MANTENIMIENTO {{serv.TIPO_SERVICIO.DESCRIPCION}}</p>
               <p>CLIENTE: {{serv.CLIENTE.NOMBRE}}</p>
               <div class="tecnico-encargado">
-                <img src="{{baseUrl}}/usuarios/{{img_tecnico}}" alt="">
+                <img src="{{baseUrl}}/usuarios/{{serv.TECNICO_ENCARGADO.IMG ?? 'default.png'}}" alt="">
                 TÉCNICO: {{serv.TECNICO_ENCARGADO.NOMBRE}}     
               </div>
               <a href="javascript:void(0);">

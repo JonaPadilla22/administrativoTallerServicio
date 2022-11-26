@@ -56,9 +56,9 @@ export class AlertsComponent{
       title: 'Cambiar Contraseña',
       html:
         `
-          <label>Contraseña Actual</label><input id="swal-OldPass" class="swal2-input">
-          <label>Nueva Contraseña</label><input id="swal-NewPass" class="swal2-input">
-          <label>Confirmar Contraseña</label><input id="swal-ConfPass" class="swal2-input">
+          <label>Contraseña Actual</label><input type="password" id="swal-OldPass" class="swal2-input">
+          <label>Nueva Contraseña</label><input type="password" id="swal-NewPass" class="swal2-input">
+          <label>Confirmar Contraseña</label><input type="password" id="swal-ConfPass" class="swal2-input">
         `,
       focusConfirm: false,
       confirmButtonText:
