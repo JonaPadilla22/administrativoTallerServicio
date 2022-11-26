@@ -33,7 +33,7 @@ export class CitasPendientesComponent implements OnInit {
   citasMostrar: any[] = [];
 
   citaSeleccionada: any;
-  
+
   modal_activo = false;
 
   tecnicos: any[] = [];
@@ -71,15 +71,26 @@ export class CitasPendientesComponent implements OnInit {
   }
 
   async obtenerCitasPendientes(): Promise<any> {
-    let citaTemp = this.citaService.getCitasPendientes();
-    return await lastValueFrom(citaTemp);
+    let citaTemp:any = await lastValueFrom(this.citaService.getCitasPendientes());
+    citaTemp = Object.values(citaTemp);
+    console.log(this.globals.usuario)
+    if (this.globals.usuario.TIPO_USUARIO.ID == 3) {
+      citaTemp = citaTemp.filter(
+        (cita :any) => cita.TECNICO_ENCARGADO != null
+      );
+      citaTemp = citaTemp.filter(
+        (cita :any) => cita.TECNICO_ENCARGADO.ID == this.globals.usuario.ID
+      );
+    }
+
+    return citaTemp;
   }
 
   async obtenerTecnicos(): Promise<any> {
-    let usersTemp = await lastValueFrom(this.userService.getUsuarios());
+    let usersTemp:any  = await lastValueFrom(this.userService.getUsuarios());
     let users = Object.values(usersTemp);
 
-    return users.filter((user) => user.TIPO_USUARIO.ID == 3);
+    return users.filter((user:any ) => user.TIPO_USUARIO.ID == 3);
   }
 
   filtrarServ(text: string) {
@@ -175,27 +186,41 @@ export class CitasPendientesComponent implements OnInit {
   handleClickIngreso() {
     const formIngreso = new FormData();
     formIngreso.append('ID_SERVICIO', this.citaSeleccionada.ID_SERVICIO);
-    
+
     //this.sig_estatus = this.getSigEstatus(this.citaSeleccionada.ID_ESTATUS);
-    formIngreso.append('ID_ESTATUS', "I");
+    formIngreso.append('ID_ESTATUS', 'I');
     formIngreso.append('ID_USUARIO', this.globals.usuario.ID);
-    
-    this.servService.actualizarEstatus(formIngreso).subscribe(
-      {
-        next: (response: any) => {
-          this.alertService.exito(response.message);
 
-          var title = "ACTUALIZACIÓN DE SERVICIO";
-          var body = "HOLA " + this.citaSeleccionada.CLIENTE.NOMBRE + ", SU VEHÍCULO " + this.citaSeleccionada.VEHICULO.MODELO.MARCA.DESCRIPCION + " " + this.citaSeleccionada.VEHICULO.MODELO.DESCRIPCION + " CON MATRÍCULA: " + this.citaSeleccionada.VEHICULO.MATRICULA + " ACABA DE INGRESAR A TALLER";
-          this.notifService.sendNotificationUser(this.citaSeleccionada.CLIENTE.ID, title, body, this.citaSeleccionada.ID_SERVICIO).subscribe();
+    this.servService.actualizarEstatus(formIngreso).subscribe({
+      next: (response: any) => {
+        this.alertService.exito(response.message);
 
-          this.actualizarTabla();
-          setTimeout(() => {
-            this.modalCitas.dismissAll();
-          }, 1000);
-        },
-        error: (e) => this.alertService.error(e.error)
-      }
-    )
+        var title = 'ACTUALIZACIÓN DE SERVICIO';
+        var body =
+          'HOLA ' +
+          this.citaSeleccionada.CLIENTE.NOMBRE +
+          ', SU VEHÍCULO ' +
+          this.citaSeleccionada.VEHICULO.MODELO.MARCA.DESCRIPCION +
+          ' ' +
+          this.citaSeleccionada.VEHICULO.MODELO.DESCRIPCION +
+          ' CON MATRÍCULA: ' +
+          this.citaSeleccionada.VEHICULO.MATRICULA +
+          ' ACABA DE INGRESAR A TALLER';
+        this.notifService
+          .sendNotificationUser(
+            this.citaSeleccionada.CLIENTE.ID,
+            title,
+            body,
+            this.citaSeleccionada.ID_SERVICIO
+          )
+          .subscribe();
+
+        this.actualizarTabla();
+        setTimeout(() => {
+          this.modalCitas.dismissAll();
+        }, 1000);
+      },
+      error: (e) => this.alertService.error(e.error),
+    });
   }
 }

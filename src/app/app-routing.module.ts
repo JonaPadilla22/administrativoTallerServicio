@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { AccesoTecnicoGuard } from './guards/acceso-tecnico.guard';
 import { LoginComponent } from './login/login.component';
 import { CitasPendientesComponent } from './paginas/citas/citas-pendientes/citas-pendientes.component';
 import { RegistrarCitaComponent } from './paginas/citas/registrar-cita/registrar-cita.component';
@@ -63,16 +64,19 @@ const routes: Routes = [
         path: 'usuarios',
         pathMatch: 'full',
         component: GestionUsuariosComponent,
+        canActivate: [AccesoTecnicoGuard],
       },
       {
         path: 'recursos',
         pathMatch: 'full',
         component: GestionRefaccionesComponent,
+        canActivate: [AccesoTecnicoGuard],
       },
       {
         path: 'manoObra',
         pathMatch: 'full',
         component: GestionManoDeObraComponent,
+        canActivate: [AccesoTecnicoGuard],
       },
     ],
   },
