@@ -16,7 +16,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DecimalPipe } from '@angular/common';
 import { IngresoSinCitaComponent } from './taller/ingreso-sin-cita/ingreso-sin-cita.component';
 import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/form-usuario.component';
-import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
+import { QRCodeModule } from 'angularx-qrcode';
+
 @NgModule({
   declarations: [
     HomePageComponent,
@@ -37,7 +38,7 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
-    NgxQRCodeModule
+    QRCodeModule
   ],
   providers: [DecimalPipe, Globals],
   exports: [
@@ -49,7 +50,7 @@ import { NgxQRCodeModule } from "@techiediaries/ngx-qrcode";
     GestionManoDeObraComponent,
     CitasPendientesComponent,
     RegistrarCitaComponent,
-    CommonModule,
+    CommonModule
   ],
 })
 export class PaginasModule {}

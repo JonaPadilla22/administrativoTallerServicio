@@ -88,7 +88,7 @@ export class HomePageComponent implements OnInit {
     this.imagen = this.user[0].IMG;
     this.nombreUsuario = this.user[0].NOMBRE;
 
-    if(this.imagen=="null"){
+    if(this.imagen==null){
       this.imagen = "default.png";
     }
     this.urlImagen= this.url + "/usuarios/" + this.imagen;

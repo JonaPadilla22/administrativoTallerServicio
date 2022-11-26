@@ -12,11 +12,6 @@ import { Globals } from 'src/app/globals';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-import {
-  NgxQrcodeElementTypes,
-  NgxQrcodeErrorCorrectionLevels
-} from "@techiediaries/ngx-qrcode";
-
 @Component({
   selector: 'app-registrar-cita',
   templateUrl: './registrar-cita.component.html',
@@ -53,7 +48,8 @@ export class RegistrarCitaComponent implements OnInit {
   fecha: any;
   time: any;
 
-  tipoElemento = NgxQrcodeElementTypes.IMG;
+  id_cita: string = "";
+  // tipoElemento = NgxQrcodeElementTypes.IMG;
   valor: string = "";
   
   formatterVeh = (x: any) => {this.buscadorVeh(x)};
@@ -259,7 +255,10 @@ export class RegistrarCitaComponent implements OnInit {
 
           this.valor = response.data.ID_SERVICIO;
           formAct.append("ID_ESTATUS", "C");
-          formAct.append("ID_USUARIO", this.globals.usuario.ID);     
+          formAct.append("ID_USUARIO", this.globals.usuario.ID);   
+          
+          this.id_cita = response.data.ID_SERVICIO.toString();
+
           this.citaService.registrarActualizacioServ(formAct).subscribe(
             {
               next: (v: any) => {
@@ -277,6 +276,7 @@ export class RegistrarCitaComponent implements OnInit {
               error: (e) => this.alertService.error(e.error)
             }        
           );    
+          
         }
       );
     }
@@ -289,6 +289,10 @@ export class RegistrarCitaComponent implements OnInit {
     // TODO: Fix 
     let DATA: any = <HTMLInputElement>document.getElementById("htmlData");
     DATA.hidden = false;
+
+    let QR: any = <HTMLInputElement>document.getElementById("qr");
+    QR.qrdata = id_serv;
+
     const doc = new jsPDF('p', 'pt', 'a4');
     const options = {
       background: 'white',
