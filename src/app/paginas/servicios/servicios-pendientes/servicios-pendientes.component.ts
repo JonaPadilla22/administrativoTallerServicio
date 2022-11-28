@@ -48,6 +48,9 @@ export class ServiciosPendientesComponent implements OnInit {
 
   async ngOnInit() {
     this.servicios = await this.obtenerServicios();
+    if(this.servicios.length==0){
+      this.alertService.warning("NO HAY SERVICIOS PENDIENTES");
+    }
     this.estatus = await this.obtenerEstatus();
     this.page = 1;
     this.servicios$ = this.filtrarServ("");

@@ -145,7 +145,6 @@ export class HomePageComponent implements OnInit {
       const reader = new FileReader()
       reader.readAsDataURL(result.value)
       reader.onload = async (e: any) => {
-        console.log(result.value.name)
         await confirm.fire({
           title: '¿Desea actualizar su imagen de usuario a esta?',
           html: 
@@ -160,17 +159,23 @@ export class HomePageComponent implements OnInit {
           if(!res.isConfirmed){
             this.modalCambiarImg();
           }else{
-            //ACTUALIZAR IMAGEN Y TOKEN
+            //ACTUALIZAR IMAGEN
             const img = new FormData();
+                  
             img.append("file", result.value);
-            this.clienteService.updateImageUser(this.user[0].ID, img).subscribe();
-            localStorage.setItem("IMAGEN", this.user[0].ID+"."+result.value.name.split(".")[1]);
-            this.imagen = localStorage.getItem("IMAGEN")!;
-
-            const url = URL.createObjectURL(result.value);
-            let imagenUsuario = <HTMLInputElement>document.getElementById("imagenUsuario");
-            imagenUsuario.src = url;
-            //this.urlImagen= this.url + "/usuarios/" + this.imagen + "#timestamp=" + new Date().getTime();
+            this.clienteService.updateImageUser(this.globals.usuario.ID, img).subscribe(
+              {
+                next: (response: any) => {
+                  const url = URL.createObjectURL(result.value);
+                  let imagenUsuario = <HTMLInputElement>document.getElementById("imagenUsuario");
+                  imagenUsuario.src = url;
+                  this.alerts.exito("IMAGEN ACTUALIZADA")
+                },
+                error: (e) => {
+                  this.alerts.error("CONTRASEÑA ACTUAL INCORRECTA")
+                }
+              }
+            );
           }
         });
       }

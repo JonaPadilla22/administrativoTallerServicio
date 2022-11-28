@@ -61,6 +61,9 @@ export class CitasPendientesComponent implements OnInit {
 
   async ngOnInit() {
     this.arrayCitas = await this.obtenerCitasPendientes();
+    if(this.arrayCitas.length==0){
+      this.alertService.warning("NO HAY CITAS PENDIENTES");
+    }
     this.collectionSize = this.arrayCitas.length;
     this.estatus = await this.obtenerEstatus();
     this.citasMostrar = this.arrayCitas;
