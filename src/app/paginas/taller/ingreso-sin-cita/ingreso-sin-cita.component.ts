@@ -255,41 +255,49 @@ export class IngresoSinCitaComponent implements OnInit {
     if(tipo_serv!="" && descripcion!="" && this.matricula!="" && this.id_cliente!="" && tiempo_estim!=""){
       var id_e = "";
       this.citaService.registrarCita(this.formIngresoTaller.value).subscribe(
-        (response: any) => {   
-          const formAct = new FormData();
-          formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
-          if((<HTMLInputElement>document.getElementById("flexCheckDefault")).checked){
-            id_e = "E";
-          }else{
-            id_e = "I";        
-          }    
-          formAct.append("ID_ESTATUS", id_e);
-          formAct.append("ID_USUARIO", this.globals.usuario.ID);  
-          let id_cita = response.data.ID_SERVICIO;   
-          this.citaService.registrarActualizacioServ(formAct).subscribe(
-            {
-              next: (response: any) => {
-                this.alertService.exito(response.message);
-
-                var title = "ACTUALIZACIÓN DE SERVICIO";
-                if(id_e=="E"){
-                  var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE ENTRAR EN ESPERA PARA INGRESAR A TALLER";
-                }else{
-                  var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE INGRESAR A TALLER";
-                }
-                
-                this.notifService.sendNotificationUser(this.id_cliente, title, body, id_cita).subscribe();
-
-                this.limpiar();
-                this.formIngresoTaller.reset({ID_TIPO_SERVICIO: [null]});
-              },
-              error: (e) => this.alertService.error(e.error)
+        {
+          next: (response: any) => {   
+            if(response.data){
+              const formAct = new FormData();
+              formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
+              if((<HTMLInputElement>document.getElementById("flexCheckDefault")).checked){
+                id_e = "E";
+              }else{
+                id_e = "I";        
+              }    
+              formAct.append("ID_ESTATUS", id_e);
+              formAct.append("ID_USUARIO", this.globals.usuario.ID);  
+              let id_cita = response.data.ID_SERVICIO;   
+              this.citaService.registrarActualizacioServ(formAct).subscribe(
+                {
+                  next: (response: any) => {
+                    this.alertService.exito(response.message);
+    
+                    var title = "ACTUALIZACIÓN DE SERVICIO";
+                    if(id_e=="E"){
+                      var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE ENTRAR EN ESPERA PARA INGRESAR A TALLER";
+                    }else{
+                      var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE INGRESAR A TALLER";
+                    }
+                    
+                    this.notifService.sendNotificationUser(this.id_cliente, title, body, id_cita).subscribe();
+    
+                    this.limpiar();
+                    this.formIngresoTaller.reset({ID_TIPO_SERVICIO: [null]});
+                  },
+                  error: (e) => this.alertService.error(e.error)
+                }            
+              );
+            }else{
+              this.alertService.warning(response.message)
             }
-
-
             
-          );
+          },
+          error: (e: any) => this.alertService.error(e.message)
+
         }
+
+        
       );
     }
     else{
