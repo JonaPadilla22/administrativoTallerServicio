@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ClienteService } from 'src/app/servicios/clientes/cliente.service';
 import { lastValueFrom } from 'rxjs';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Globals } from 'src/app/globals';
 
 @Component({
   selector: 'app-gestion-usuarios',
@@ -32,18 +33,19 @@ export class GestionUsuariosComponent implements OnInit {
     private userService: ClienteService,
     private alertService: AlertsComponent,
     private modalUser: NgbModal,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public globals: Globals
   ) {
     this.filter.valueChanges.subscribe((data) => {
       this.userToShow = this.filtrarUsers(data);
     });
 
     this.userForm = this.formBuilder.group({
-      ID_TIPO_PERSONA: null,
-      ID_TIPO_USUARIO: null,
-      NOMBRE: '',
-      TELEFONO: '',
-      CORREO: '',
+      ID_TIPO_PERSONA: [null, [Validators.required]],
+      ID_TIPO_USUARIO: [null, [Validators.required]],
+      NOMBRE: ['', [Validators.required]],
+      TELEFONO:  ['', [Validators.minLength(10), Validators.maxLength(10)]],
+      CORREO: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -91,30 +93,34 @@ export class GestionUsuariosComponent implements OnInit {
   }
 
   actualizarEstatusUsr(user: any) {
-    let estatusTemp = {
-      ESTATUS: user.ESTATUS == 'A' ? 'I' : 'A',
-    };
-    this.userService.updateUser(estatusTemp, user.ID).subscribe({
-      next: (response: any) => {
-        this.actualizarTabla();
-      },
-      error: (e) => this.alertService.error(e.error),
-    });
+    if(user.ID == this.globals.usuario.ID || user.TIPO_USUARIO.ID == 1 || user.TIPO_USUARIO.ID == 2){
+      console.log(user)
+      this.alertService.warning("ACCIÓN NO PERMITIDA")
+    }else{
+      let estatusTemp = {
+        ESTATUS: user.ESTATUS == 'A' ? 'I' : 'A',
+      };
+      this.userService.updateUser(estatusTemp, user.ID).subscribe({
+        next: (response: any) => {
+          this.actualizarTabla();
+        },
+        error: (e) => this.alertService.error(e.error),
+      });
+    }
+    
   }
 
   handleEditUser(ev: any, user: any) {
     ev.preventDefault();
     this.usuarioSeleccionado = user;
 
-    let temp = {
-      ID_TIPO_PERSONA: user.TIPO_PERSONA.ID,
-      ID_TIPO_USUARIO: user.TIPO_USUARIO.ID,
-      NOMBRE: user.NOMBRE,
-      TELEFONO: user.TELEFONO,
-      CORREO: user.CORREO,
-    };
-
-    this.userForm = this.formBuilder.group(temp);
+    this.userForm = this.formBuilder.group({
+      ID_TIPO_PERSONA: [user.TIPO_PERSONA.ID, [Validators.required]],
+      ID_TIPO_USUARIO: [user.TIPO_USUARIO.ID, [Validators.required]],
+      NOMBRE: [user.NOMBRE, [Validators.required]],
+      TELEFONO:  [user.TELEFONO, [Validators.minLength(10), Validators.maxLength(10)]],
+      CORREO: [user.CORREO, [Validators.required, Validators.email]],
+    });
   }
 
   delay(n: any) {
@@ -143,43 +149,62 @@ export class GestionUsuariosComponent implements OnInit {
             this.activarCards();
             this.actualizarTabla();
             this.usuarioSeleccionado = null;
+            
             this.userForm = this.formBuilder.group({
-              ID_TIPO_PERSONA: null,
-              ID_TIPO_USUARIO: null,
-              NOMBRE: '',
-              TELEFONO: '',
-              CORREO: '',
+              ID_TIPO_PERSONA: [null, [Validators.required]],
+              ID_TIPO_USUARIO: [null, [Validators.required]],
+              NOMBRE: ['', [Validators.required]],
+              TELEFONO:  ['', [Validators.minLength(10), Validators.maxLength(10)]],
+              CORREO: ['', [Validators.required, Validators.email]],
             });
           }
         );
     }
   }
 
-  handleSubmit() {
-    if (this.usuarioSeleccionado) {
-      this.userService
-        .updateUser(this.userForm.value, this.usuarioSeleccionado.ID)
-        .subscribe({
-          next: (response: any) => {
-            this.alertService.exito(response.message);
-
-            setTimeout(() => {
-              this.modalUser.dismissAll();
-            });
-          },
-          error: (e) => this.alertService.error(e.error),
-        });
-      return;
+  validAlpha(e: any){
+    if (!(e.keyCode == 32 ||
+      (e.keyCode >= 65 && e.keyCode <= 90) ||
+      (e.keyCode >= 97 && e.keyCode <= 122))){
+      e.preventDefault();
     }
-    this.userService.registrarUsuario(this.userForm.value).subscribe({
-      next: (response: any) => {
-        this.alertService.exito(response.message);
+  }
+  
+  validNum(e: any){
+    if ((e.keyCode < '48' || e.keyCode > '57') && e.keyCode != '8') {
+      e.preventDefault();
+    }
+  }
 
-        setTimeout(() => {
-          this.modalUser.dismissAll();
-        });
-      },
-      error: (e) => this.alertService.error(e.error),
-    });
+  handleSubmit() {
+
+    if(this.userForm.valid){
+      if (this.usuarioSeleccionado) {
+        this.userService
+          .updateUser(this.userForm.value, this.usuarioSeleccionado.ID)
+          .subscribe({
+            next: (response: any) => {
+              this.alertService.exito(response.message);
+  
+              setTimeout(() => {
+                this.modalUser.dismissAll();
+              });
+            },
+            error: (e) => this.alertService.error(e.error),
+          });
+        return;
+      }
+      
+      this.userService.registrarUsuario(this.userForm.value).subscribe({
+        next: (response: any) => {
+          this.alertService.exito(response.message);
+  
+          setTimeout(() => {
+            this.modalUser.dismissAll();
+          });
+        },
+        error: (e) => this.alertService.error(e.error),
+      });
+    }  
   }
 }

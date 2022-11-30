@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators} from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 import { RefaccionService } from 'src/app/servicios/refacciones/refaccion.service';
@@ -37,8 +37,8 @@ export class GestionManoDeObraComponent implements OnInit {
     });
 
     this.workforceForm = this.formBuilder.group({
-      DESCRIPCION: '',
-      PRECIO: null,
+      DESCRIPCION: ['', [Validators.required]],
+      PRECIO: ['0', [Validators.required]],
     });
   }
 
@@ -94,8 +94,8 @@ export class GestionManoDeObraComponent implements OnInit {
             this.actualizarTabla();
             this.workforceSelected = null;
             this.workforceForm = this.formBuilder.group({
-              DESCRIPCION: '',
-              PRECIO: null,
+              DESCRIPCION: ['', [Validators.required]],
+              PRECIO: ['0', [Validators.required]],
             });
           }
         );
@@ -125,13 +125,11 @@ export class GestionManoDeObraComponent implements OnInit {
   handleEditWorkforce(ev:any, workforce:any){
     ev.preventDefault();
     this.workforceSelected = workforce;
-
-    let temp = {
-      DESCRIPCION: workforce.DESCRIPCION,
-      PRECIO: workforce.PRECIO,
-    };
-
-    this.workforceForm = this.formBuilder.group(temp);
+    
+    this.workforceForm = this.formBuilder.group({
+      DESCRIPCION: [workforce.DESCRIPCION, [Validators.required]],
+      PRECIO: [workforce.PRECIO, [Validators.required]],
+    });
   }
 
 

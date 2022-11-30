@@ -74,3 +74,8 @@
   display: flex;
   justify-content: flex-end;
 }/*# sourceMappingURL=gestion-usuarios.component.css.map */
+
+.errorMessage {
+  color: red;
+  font-style: italic;
+}

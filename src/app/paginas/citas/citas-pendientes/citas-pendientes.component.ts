@@ -43,7 +43,7 @@ export class CitasPendientesComponent implements OnInit {
 
   filtros = [
     {
-      title: 'Por entrar',
+      title: 'Por ingresar',
     },
     {
       title: 'Por asignar',

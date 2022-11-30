@@ -78,3 +78,7 @@
   display: flex;
   justify-content: flex-end;
 }/*# sourceMappingURL=gestion-mano-de-obra.component.css.map */
+.errorMessage {
+  color: red;
+  font-style: italic;
+}

@@ -108,7 +108,9 @@
             formControlName="NOMBRE"
             required
             value="{{usuarioSeleccionado ? usuarioSeleccionado.NOMBRE : ''}}"
+            (keypress)="validAlpha($event)"
           />
+          <label class="errorMessage" *ngIf="this.userForm.get('NOMBRE')!.invalid">Nombre requerido</label>
         </div>
         <div class="mb-3">
           <label for="email" class="form-label">Correo</label>
@@ -120,6 +122,7 @@
             formControlName="CORREO"
             required
           />
+          <label class="errorMessage" *ngIf="this.userForm.get('CORREO')!.invalid">Correo requerido</label>
         </div>
         <div class="mb-3">
           <label for="telefono" class="form-label">Telefono</label>
@@ -129,8 +132,9 @@
             id="telefono"
             maxlength="10"
             formControlName="TELEFONO"
-            required
+            (keypress)="validNum($event)"
           />
+          <label class="errorMessage" *ngIf="this.userForm.get('TELEFONO')!.invalid">Teléfono inválido</label>
         </div>
         <div class="mb-3">
           <label for="tipo-persona" class="form-label">Tipo Persona</label>
@@ -147,6 +151,7 @@
               {{ tipoPersona.DESCRIPCION }}
             </option>
           </select>
+          <label class="errorMessage" *ngIf="this.userForm.get('ID_TIPO_PERSONA')!.invalid">Tipo persona requerido</label>
         </div>
         <div class="mb-3">
           <label for="tipo-usuario" class="form-label">Tipo Usuario</label>
@@ -163,11 +168,12 @@
               {{ tipoUsuario.DESCRIPCION }}
             </option>
           </select>
+          <label class="errorMessage" *ngIf="this.userForm.get('ID_TIPO_USUARIO')!.invalid">Tipo usuario requerido</label>
         </div>
       </form>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="handleSubmit()">
+      <button type="button" class="btn btn-outline-dark" (click)="handleSubmit()" [disabled]="userForm.invalid">
         {{ !usuarioSeleccionado ? "Guardar" : "Guardar Cambios" }}
       </button>
     </div>

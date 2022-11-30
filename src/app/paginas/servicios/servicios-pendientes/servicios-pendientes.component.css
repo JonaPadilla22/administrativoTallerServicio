@@ -137,7 +137,7 @@
 .detalleServicio {
     background-color:#26465384;
     width: 100%;
-    height: 500px;
+    height: 550px;
     border-radius: 20px;
     padding: 10px;
     color: #ffffff;
@@ -181,6 +181,12 @@
 .datosTecnico img {
     width: 50px;
     margin-right: 10px;
+}
+
+.totalServicio {
+    float: right;
+    font-size: 25px;
+    margin-top: 10px;
 }
 
 .btn-outline-dark {

@@ -83,7 +83,7 @@
     <ng-template #workForceModal let-modal>
       <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">
-          {{ !workforceSelected ? "Registrar Usuario" : "Modificar Usuario" }}
+          {{ !workforceSelected ? "Registrar Mano de Obra" : "Modificar Mano de Obra" }}
         </h4>
         <button
           type="button"
@@ -102,8 +102,10 @@
               id="descripcion"
               formControlName="DESCRIPCION"
               required
-              value="{{ workforceSelected ? workforceSelected.DESCRIPCION : '' }}"
+              value="{{ workforceSelected ? workforceSelected.DESCRIPCION : '' }}"             
             />
+          <label class="errorMessage" *ngIf="this.workforceForm.get('DESCRIPCION')!.invalid">Descripción inválida</label>
+
           </div>
           <div class="mb-3">
             <label for="precio" class="form-label">Precio:</label>
@@ -113,8 +115,10 @@
               id="precio"
               aria-describedby="emailHelp"
               formControlName="PRECIO"
+              pattern="^\d*(\.\d{0,2})?$"
               required
             />
+          <label class="errorMessage" *ngIf="this.workforceForm.get('PRECIO')!.invalid">Precio inválido</label>
           </div>
         </form>
       </div>
@@ -123,6 +127,7 @@
           type="button"
           class="btn btn-outline-dark"
           (click)="handleSubmit()"
+          [disabled]="workforceForm.invalid"
         >
           {{ !workforceSelected ? "Guardar" : "Guardar Cambios" }}
         </button>
