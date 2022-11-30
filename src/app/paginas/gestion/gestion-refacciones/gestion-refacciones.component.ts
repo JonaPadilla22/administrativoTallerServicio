@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertsComponent } from 'src/app/components/alerts/alerts.component';
 import { lastValueFrom } from 'rxjs';
 import { RefaccionService } from 'src/app/servicios/refacciones/refaccion.service';
+import { regexComp } from 'src/app/utils/regexCompForms';
 
 @Component({
   selector: 'app-gestion-refacciones',
@@ -39,11 +40,24 @@ export class GestionRefaccionesComponent implements OnInit {
     });
 
     this.refactionForm = this.formBuilder.group({
-      DESCRIPCION: '',
-      ID_TIPO_REFACCION: null,
-      PRECIO: null,
-      STOCK: null,
+      DESCRIPCION: ['', [Validators.required]],
+      ID_TIPO_REFACCION: ['', [Validators.required]],
+      PRECIO: ['', [Validators.required]],
+      STOCK: ['', [Validators.required, Validators.min(1), regexComp(/^\d+$/)]],
     });
+  }
+
+  get descripcion() {
+    return this.refactionForm.get('DESCRIPCION');
+  }
+  get tipo_refaccion() {
+    return this.refactionForm.get('ID_TIPO_REFACCION');
+  }
+  get precio() {
+    return this.refactionForm.get('PRECIO');
+  }
+  get stock() {
+    return this.refactionForm.get('STOCK');
   }
 
   async ngOnInit() {
@@ -106,10 +120,13 @@ export class GestionRefaccionesComponent implements OnInit {
             this.actualizarTabla();
             this.refactionSelected = null;
             this.refactionForm = this.formBuilder.group({
-              DESCRIPCION: '',
-              ID_TIPO_REFACCION: null,
-              PRECIO: null,
-              STOCK: null,
+              DESCRIPCION: ['', [Validators.required]],
+              ID_TIPO_REFACCION: ['', [Validators.required]],
+              PRECIO: ['', [Validators.required]],
+              STOCK: [
+                '',
+                [Validators.required, Validators.min(1), regexComp(/^\d+$/)],
+              ],
             });
           }
         );
@@ -127,7 +144,7 @@ export class GestionRefaccionesComponent implements OnInit {
     let estatusTemp = {
       ESTATUS: refaction.ESTATUS == 'A' ? 'I' : 'A',
     };
-    this.refactionService.updateWorkforce(estatusTemp, refaction.ID).subscribe({
+    this.refactionService.updateRefaction(estatusTemp, refaction.ID).subscribe({
       next: (response: any) => {
         this.actualizarTabla();
       },
@@ -135,21 +152,24 @@ export class GestionRefaccionesComponent implements OnInit {
     });
   }
 
-  handleEditRefaction(ev:any, refaction:any){
+  handleEditRefaction(ev: any, refaction: any) {
     ev.preventDefault();
     this.refactionSelected = refaction;
 
     let temp = {
-      DESCRIPCION: refaction.DESCRIPCION,
-      ID_TIPO_REFACCION: refaction.TIPO_REFACCION.ID,
-      PRECIO: refaction.PRECIO,
-      STOCK: refaction.STOCK,
+      DESCRIPCION: [refaction.DESCRIPCION, [Validators.required]],
+      ID_TIPO_REFACCION: [refaction.TIPO_REFACCION.ID, [Validators.required]],
+      PRECIO: [refaction.PRECIO, [Validators.required]],
+      STOCK: [
+        refaction.STOCK,
+        [Validators.required, Validators.min(1), regexComp(/^\d+$/)],
+      ],
     };
 
     this.refactionForm = this.formBuilder.group(temp);
   }
 
-  handleSubmit(){
+  handleSubmit() {
     if (this.refactionSelected) {
       this.refactionService
         .updateRefaction(this.refactionForm.value, this.refactionSelected.ID)

@@ -18,7 +18,7 @@
             />
           </div>
           <button (click)="open(modalUsuarioRegistrar)">
-            <i class='bx bxs-plus-circle'></i>Registrar
+            <i class="bx bxs-plus-circle"></i>Registrar
           </button>
         </div>
       </div>
@@ -43,7 +43,7 @@
         >
           <td>
             <ngb-highlight
-              [result]="refaction.TIPO_REFACCION.DESCRIPCION|| 'No asignado'"
+              [result]="refaction.TIPO_REFACCION.DESCRIPCION || 'No asignado'"
             ></ngb-highlight>
           </td>
           <td>
@@ -53,7 +53,7 @@
           </td>
           <td>
             <ngb-highlight
-              [result]="refaction.PRECIO || 'No asignado'" 
+              [result]="refaction.PRECIO || 'No asignado'"
             ></ngb-highlight>
           </td>
           <td>
@@ -95,7 +95,7 @@
   <ng-template #modalUsuarioRegistrar let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">
-        {{ !refactionSelected ? "Registrar Usuario" : "Modificar Usuario" }}
+        {{ !refactionSelected ? "Registrar Refacción" : "Modificar Refacción" }}
       </h4>
       <button
         type="button"
@@ -116,33 +116,42 @@
             required
             value="{{ refactionSelected ? refactionSelected.DESCRIPCION : '' }}"
           />
+          <div *ngIf="descripcion.errors?.['required']" class="error">
+            Porfavor brinda una descripcion de la refacción .
+          </div>
         </div>
         <div class="mb-3">
-            <label for="tipo-refaccion" class="form-label">Tipo Refaccion:</label>
-            <select
-              id="tipo-refaccion"
-              class="form-select"
-              formControlName="ID_TIPO_REFACCION"
-              required
+          <label for="tipo-refaccion" class="form-label">Tipo Refaccion:</label>
+          <select
+            id="tipo-refaccion"
+            class="form-select"
+            formControlName="ID_TIPO_REFACCION"
+            required
+          >
+            <option
+              *ngFor="let refactionType of refationTypeList; index as i"
+              value="{{ refactionType.ID_TIPO_REFACCION }}"
             >
-              <option
-                *ngFor="let refactionType of refationTypeList; index as i"
-                value="{{ refactionType.ID_TIPO_REFACCION }}"
-              >
-                {{ refactionType.DESCRIPCION }}
-              </option>
-            </select>
+              {{ refactionType.DESCRIPCION }}
+            </option>
+          </select>
+          <div *ngIf="tipo_refaccion.errors?.['required']" class="error">
+            Porfavor selecciona el tipo de la refacción .
           </div>
+        </div>
         <div class="mb-3">
           <label for="precio" class="form-label">Precio:</label>
           <input
-            type="text"
+            type="number"
             class="form-control"
             id="precio"
             aria-describedby="emailHelp"
             formControlName="PRECIO"
             required
           />
+          <div *ngIf="precio.errors?.['required']" class="error">
+            Porfavor brinda el precio de la refacción.
+          </div>
         </div>
         <div class="mb-3">
           <label for="stock" class="form-label">Existencia:</label>
@@ -154,6 +163,12 @@
             required
           />
         </div>
+        <div *ngIf="stock.errors?.['required']" class="error">
+          Porfavor brinda la existencia de la refacción .
+        </div>
+        <div *ngIf="stock.errors?.['min']" class="error">
+          La existencia debe ser mayor a 0.
+        </div>
       </form>
     </div>
     <div class="modal-footer">
@@ -161,6 +176,7 @@
         type="button"
         class="btn btn-outline-dark"
         (click)="handleSubmit()"
+        [disabled]="refactionForm.invalid"
       >
         {{ !refactionSelected ? "Guardar" : "Guardar Cambios" }}
       </button>
