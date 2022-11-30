@@ -124,16 +124,23 @@ i {
   justify-content: center;
 }
 
-.groupDatos > input {
+.groupDatos > input, .contenedorInputs > * {
   width: 80%;
   padding: 10px 20px;
   border-radius: 20px;
   margin-top: 10px;
 }
 
-.groupDatos > input:first-child {
+.groupDatos > input:first-child, .contenedorInputs > *:first-child {
   margin-top: 0;
 }
+
+/* .mb-3 input {
+  width: 80%;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-top: 10px;
+} */
 
 .groupDatosFecha {
   display: flex;
@@ -249,3 +256,4 @@ option[value=""][disabled] {
   text-align: left;
   margin-top: 20px;
 }
+

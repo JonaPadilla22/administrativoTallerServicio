@@ -39,7 +39,7 @@
                                 <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
                             </div>
                             <div class="modal-body">
-                                    <div class="mb-3">                                       
+                                    <div class="mb-3 contenedorInputs">                                       
                                         <select class="cbxMarcaVeh" formControlName="ID_MARCA" name="" id="cbxMarcaVeh" (change)="cambiarMarca()">
                                             <option value="" disabled selected>Selecciona marca</option>
                                             <option *ngFor="let marca of marcas" [value]="marca.ID_MARCA">
@@ -116,7 +116,7 @@
                                     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="mb-3">  
+                                    <div class="mb-3 contenedorInputs">  
                                         <select class="cbxTipoPersonaCliente" formControlName="ID_TIPO_PERSONA" name="" id="cbxTipoPersonaCliente">
                                             <option value="" disabled selected>Selecciona tipo de persona</option>
                                             <option *ngFor="let type of tiposPers" [value]="type.ID_TIPO_PERSONA">

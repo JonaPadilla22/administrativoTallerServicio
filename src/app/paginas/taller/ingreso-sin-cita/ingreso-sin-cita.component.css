@@ -116,16 +116,16 @@ i {
     justify-content: center;
 }
 
-.groupDatos > input {
+.groupDatos > input, .contenedorInputs > * {
     width: 80%;
     padding: 10px 20px;
     border-radius: 20px;
     margin-top: 10px;
-}
-
-.groupDatos > input:first-child {
+  }
+  
+  .groupDatos > input:first-child, .contenedorInputs > *:first-child {
     margin-top: 0;
-}
+  }
 
 .groupDatosFecha{
     display: flex;
