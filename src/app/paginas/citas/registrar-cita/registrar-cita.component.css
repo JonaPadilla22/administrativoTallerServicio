@@ -1,216 +1,251 @@
 /*# sourceMappingURL=registrar-cita.component.css.map */
 .contenedor-registrarCita {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    overflow-x: scroll;
-    padding: 10px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overflow-x: scroll;
+  padding: 10px;
 }
 
 .contenedor-registrarCita form {
-    height: 100%;
+  height: 100%;
 }
 
 i {
-    font-size: 22px;
-    padding-left: 5px;
+  font-size: 22px;
+  padding-left: 5px;
 }
 
 .titulo {
-    color: #264653;
-    text-align: center;
-    font-weight: bold;
-    font-size: xx-large;
+  color: #264653;
+  text-align: center;
+  font-weight: bold;
+  font-size: xx-large;
 }
 
 .contenedorBuscarBoton {
-    display:flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
-.cbxTipoServ, .cbxMarcaVeh, .cbxModeloVeh, .cbxTipoPersonaCliente, .cbxColor {
-    padding: 8px;
-    margin: 5px;
-    border-radius: 15px;
-    background-color: white;
-    color: gray
+.cbxTipoServ,
+.cbxMarcaVeh,
+.cbxModeloVeh,
+.cbxTipoPersonaCliente,
+.cbxColor {
+  padding: 8px;
+  margin: 5px;
+  border-radius: 15px;
+  background-color: white;
+  color: gray;
 }
 
-.groupDatos, .groupDatosFecha {
-    background-color: #FCFCFC;
+.groupDatos,
+.groupDatosFecha {
+  background-color: #fcfcfc;
 }
 
 .groupDatosFecha {
-    display: grid;
+  display: grid;
 }
 
 .contenedorDatePicker {
-    grid-column: 1;
+  grid-column: 1;
 }
 
 .contenedorTimePicker {
-    grid-column: 2;
+  grid-column: 2;
 }
 
 .tituloGroup {
-    color: #264653;
-    font-weight: bold;
-    font-size: 22px;
+  color: #264653;
+  font-weight: bold;
+  font-size: 22px;
 }
 
 .wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(100px, auto);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: minmax(100px, auto);
 }
 
 .datosServ {
-    grid-column: 1;
-    grid-row: 1;
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+  align-items: center;
 }
 
 .datosVeh {
-    grid-column: 2;
-    grid-row: 1;
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+  align-items: center;
 }
 
 .datosCliente {
-    grid-column: 1;
-    grid-row: 2;
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+  align-items: center;
 }
 
 .datosFH {
-    grid-column: 2;
-    grid-row: 2;
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+  align-items: center;
 }
 
-.groupDatos p, .groupDatosFecha p {
-    color: #264653;
-    font-weight: bold;
-    font-size: 18px;
+.groupDatos p,
+.groupDatosFecha p {
+  color: #264653;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .groupDatos {
-    padding-left: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 20px;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 20px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.groupDatosFecha{
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+.groupDatos > input {
+  width: 80%;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-top: 10px;
 }
 
-.groupDatos input, .mb-3 input {
-    margin: 5px;
-    padding-left: 15px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    border-radius: 15px;
-    width: 50%;
+.groupDatos > input:first-child {
+  margin-top: 0;
+}
+
+.groupDatosFecha {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-direction: column;
 }
 
 .groupDatos textarea {
-    border-radius: 15px;
-    resize: none;
-    outline: none;
-    padding: 10px;
+  border-radius: 15px;
+  resize: none;
+  outline: none;
+  padding: 0 10px ;
+  width: 100%;
 }
+
 
 option[value=""][disabled] {
-    display: none;
+  display: none;
 }
 
-.btnCliente, .btnVeh {
-    background-color: #264653;
-    color: white;
-    padding: 7px 25px 7px 25px;
-    border-radius: 25px;
-    display: flex;
-    margin-left: 15px;
-    text-decoration: none;
+.btnCliente,
+.btnVeh {
+  background-color: #264653;
+  color: white;
+  padding: 7px 25px 7px 25px;
+  border-radius: 25px;
+  display: flex;
+  margin-left: 15px;
+  text-decoration: none;
 }
 
-.btnCliente:hover, .btnVeh:hover {
-    background-color: #2646539f;
+.btnCliente:hover,
+.btnVeh:hover {
+  background-color: #2646539f;
 }
 
 .input-icons i {
-    position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-    padding-left: 15px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-left: 15px;
 }
-  
+
 .input-icons {
-    position: relative;
+  position: relative;
 }
-  
+
 .input-field {
-    width: 100%;
-    padding-left: 20%;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-radius: 20px;
-    width: 260px;
+  width: 100%;
+  padding-left: 20%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-radius: 20px;
+  width: 260px;
 }
 
 .contenedorBoton {
-    text-align: center;
-    margin-bottom: 15px;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .btnRegistrar {
-    background-color: #264653;
-    margin: 15px;
-    width: 30%;
-    padding: 20px;
-    color: white;
-    border-radius: 30px;
-    border: none;
+  background-color: #264653;
+  margin: 15px;
+  width: 30%;
+  padding: 20px;
+  color: white;
+  border-radius: 30px;
+  border: none;
+  width: 100%;
 }
 
 .btnRegistrar:hover {
-    border: 1px solid #264653;
-    background-color: white;
-    color: #264653;
+  border: 1px solid #264653;
+  background-color: white;
+  color: #264653;
 }
 
 .errorMessage {
-    color: red;
-    font-style: italic;
+  color: red;
+  font-style: italic;
 }
 
 .contenedorDatePicker,
-.contenedorTimePicker{
-    display: flex;
-    align-items: center;
+.contenedorTimePicker {
+  display: flex;
+  align-items: center;
 }
 
 .contenedorDatePicker p,
-.contenedorTimePicker p{
-    margin-right: 15px;
-    margin-bottom: 0;
+.contenedorTimePicker p {
+  margin-right: 15px;
+  margin-bottom: 0;
 }
 
 .btn-outline-dark {
-    --bs-btn-bg: #264653;
-    --bs-btn-color: #fff;
-    --bs-btn-border-color: #264653;
-    --bs-btn-hover-color: #264653;
-    --bs-btn-hover-bg: #fff;
+  --bs-btn-bg: #264653;
+  --bs-btn-color: #fff;
+  --bs-btn-border-color: #264653;
+  --bs-btn-hover-color: #264653;
+  --bs-btn-hover-bg: #fff;
 }
 
 .htmlData {
-    text-align: center;
+  text-align: center;
 }
 
 .htmlData .qrcodeImage,
-.htmlData .contenedor-datos{
-    width: 50%;
-    margin: 0 auto;
-    text-align: left;
-    margin-top: 20px;
+.htmlData .contenedor-datos {
+  width: 50%;
+  margin: 0 auto;
+  text-align: left;
+  margin-top: 20px;
 }
