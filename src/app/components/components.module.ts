@@ -10,6 +10,7 @@ import { AsideIdentificadorUsuarioComponent } from './aside-identificador-usuari
 import { AppRoutingModule } from '../app-routing.module';
 import { BuscadorVehiculosComponent } from './buscador-vehiculos/buscador-vehiculos.component';
 import { BuscadorClientesComponent } from './buscador-clientes/buscador-clientes.component';
+import { FiltroComponent } from './filtro-component/filtro-component.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { BuscadorClientesComponent } from './buscador-clientes/buscador-clientes
     ListaNavegacionHijoComponent,
     AsideIdentificadorUsuarioComponent,
     BuscadorVehiculosComponent,
-    BuscadorClientesComponent
+    BuscadorClientesComponent,
+    FiltroComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +35,8 @@ import { BuscadorClientesComponent } from './buscador-clientes/buscador-clientes
     TimePickerComponent,
     AsideIdentificadorUsuarioComponent,
     BuscadorVehiculosComponent,
-    BuscadorClientesComponent
+    BuscadorClientesComponent,
+    FiltroComponent
   ]
 })
 export class ComponentsModule { }

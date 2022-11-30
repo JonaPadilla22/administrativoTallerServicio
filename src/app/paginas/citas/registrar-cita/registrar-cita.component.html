@@ -180,20 +180,28 @@
             <div #htmlData id="htmlData" class="htmlData" hidden>
                 <h3>HOJA DE CITA</h3>
 
-                <h5>DATOS DEL VEHÍCULO</h5>
-                <p>MATRÍCULA: {{matricula}}</p>
-                <p>MODELO: {{modeloVeh}}</p>
-                <p>AÑO: {{anhoVeh}}</p>
-                <p>COLOR: {{colorVeh}}</p>
-                <p>VIN: {{vinVeh}}</p>
-                <h5>DATOS DEL CLIENTE</h5>
-                <p>NOMBRE: {{nombreCliente}}</p>
-                <p>RFC: {{rfcCliente}}</p>
-                <p>CORREO: {{correoCliente}}</p>
-                <p>TELÉFONO: {{telefCliente}}</p>
-                <h5>DATOS DE LA CITA</h5>
-                <p>FECHA: {{formarFecha()}}</p>
+                <div class="contenedor-datos datos-vehiculo">
+                    <h5>DATOS DEL VEHÍCULO</h5>
+                    <p>MATRÍCULA: {{matricula}}</p>
+                    <p>MODELO: {{modeloVeh}}</p>
+                    <p>AÑO: {{anhoVeh}}</p>
+                    <p>COLOR: {{colorVeh}}</p>
+                    <p>VIN: {{vinVeh}}</p>
+                </div>
 
+                <div class="contenedor-datos datos-cliente">
+                    <h5>DATOS DEL CLIENTE</h5>
+                    <p>NOMBRE: {{nombreCliente}}</p>
+                    <p>RFC: {{rfcCliente}}</p>
+                    <p>CORREO: {{correoCliente}}</p>
+                    <p>TELÉFONO: {{telefCliente}}</p>
+                </div>
+
+                <div class="contenedor-datos datos-cita">
+                    <h5>DATOS DE LA CITA</h5>
+                    <p>FECHA: {{formarFecha()}}</p>
+                </div>
+                
                 <div class="qrcodeImage">
                     <qrcode id="qr"
                       [qrdata]="id_cita"

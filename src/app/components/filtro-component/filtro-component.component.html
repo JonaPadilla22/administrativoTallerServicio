@@ -1,0 +1,13 @@
+<select
+  class="form-select"
+  aria-label="Default select example"
+  (change)="handleChangeSelect($event)"
+>
+  <option value="0" selected>Elige para filtrar</option>
+  <option
+    value="{{ i + 1 }}"
+    *ngFor="let filtro of listaTiposfiltros; index as i"
+  >
+    {{ filtro.title }}
+  </option>
+</select>

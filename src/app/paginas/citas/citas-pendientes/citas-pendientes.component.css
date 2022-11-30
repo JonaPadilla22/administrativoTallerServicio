@@ -17,6 +17,23 @@
   margin-top: 40px;
   margin-bottom: 0;
 }
+.contenedor .contenedor-tabla .contendor-filtros-tabla {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.contenedor .contenedor-tabla .contendor-filtros-tabla filtro-component{
+  width: 30%;
+}
+.contenedor .contenedor-tabla .buscador {
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
 .contenedor .contenedor-tabla .table {
   min-width: 1000px;
 }
@@ -53,13 +70,10 @@
 }
 .cartas-tecnicos .card .imagen-tecnico {
   width: 25%;
-  text-align: center;
+  margin-right: 15px;
 }
 .cartas-tecnicos .card .imagen-tecnico img {
   width: 100%;
-  height: 70px;
-  width: 70px;
-  border-radius: 40px;
 }
 .cartas-tecnicos .card .datos-tecnico {
   width: 65%;

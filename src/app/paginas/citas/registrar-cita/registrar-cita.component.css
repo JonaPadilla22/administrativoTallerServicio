@@ -202,3 +202,15 @@ option[value=""][disabled] {
     --bs-btn-hover-color: #264653;
     --bs-btn-hover-bg: #fff;
 }
+
+.htmlData {
+    text-align: center;
+}
+
+.htmlData .qrcodeImage,
+.htmlData .contenedor-datos{
+    width: 50%;
+    margin: 0 auto;
+    text-align: left;
+    margin-top: 20px;
+}

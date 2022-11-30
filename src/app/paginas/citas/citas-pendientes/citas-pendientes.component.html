@@ -2,20 +2,23 @@
   <h2>CITAS PENDIENTES</h2>
   <div class="contenedor-tabla">
     <form>
-      <div class="mb-3 row">
-        <label
-          for="table-filtering-search"
-          class="col-xs-3 col-sm-auto col-form-label"
-          >Buscar:</label
-        >
-        <div class="col-xs-3 col-sm-auto">
-          <input
-            id="table-filtering-search"
-            class="form-control"
-            type="text"
-            [formControl]="filter"
-          />
+      <div class="mb-3 row contendor-filtros-tabla">
+        <div class="buscador">
+          <label
+            for="table-filtering-search"
+            class="col-xs-3 col-sm-auto col-form-label"
+            >Buscar:</label
+          >
+          <div class="col-xs-3 col-sm-auto">
+            <input
+              id="table-filtering-search"
+              class="form-control"
+              type="text"
+              [formControl]="filter"
+            />
+          </div>
         </div>
+        <filtro-component [listaTiposfiltros]="filtros" (itemSelected)="filtrarSelect($event)" ></filtro-component>
       </div>
     </form>
     <table class="table table-striped">

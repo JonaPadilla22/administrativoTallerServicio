@@ -41,6 +41,17 @@ export class CitasPendientesComponent implements OnInit {
   sig_estatus: any;
   estatus: any;
 
+  filtros = [
+    {
+      title: 'Por entrar',
+    },
+    {
+      title: 'Por asignar',
+    },
+  ];
+
+  tipoFiltro: any;
+
   constructor(
     private citaService: CitaService,
     private modalCitas: NgbModal,
@@ -61,8 +72,8 @@ export class CitasPendientesComponent implements OnInit {
 
   async ngOnInit() {
     this.arrayCitas = await this.obtenerCitasPendientes();
-    if(this.arrayCitas.length==0){
-      this.alertService.warning("NO HAY CITAS PENDIENTES");
+    if (this.arrayCitas.length == 0) {
+      this.alertService.warning('NO HAY CITAS PENDIENTES');
     }
     this.collectionSize = this.arrayCitas.length;
     this.estatus = await this.obtenerEstatus();
@@ -74,15 +85,15 @@ export class CitasPendientesComponent implements OnInit {
   }
 
   async obtenerCitasPendientes(): Promise<any> {
-    let citaTemp:any = await lastValueFrom(this.citaService.getCitasPendientes());
+    let citaTemp: any = await lastValueFrom(
+      this.citaService.getCitasPendientes()
+    );
     citaTemp = Object.values(citaTemp);
-    console.log(this.globals.usuario)
+    // console.log(this.globals.usuario)
     if (this.globals.usuario.TIPO_USUARIO.ID == 3) {
+      citaTemp = citaTemp.filter((cita: any) => cita.TECNICO_ENCARGADO != null);
       citaTemp = citaTemp.filter(
-        (cita :any) => cita.TECNICO_ENCARGADO != null
-      );
-      citaTemp = citaTemp.filter(
-        (cita :any) => cita.TECNICO_ENCARGADO.ID == this.globals.usuario.ID
+        (cita: any) => cita.TECNICO_ENCARGADO.ID == this.globals.usuario.ID
       );
     }
 
@@ -90,18 +101,42 @@ export class CitasPendientesComponent implements OnInit {
   }
 
   async obtenerTecnicos(): Promise<any> {
-    let usersTemp:any  = await lastValueFrom(this.userService.getUsuarios());
+    let usersTemp: any = await lastValueFrom(this.userService.getUsuarios());
     let users = Object.values(usersTemp);
 
-    return users.filter((user:any ) => user.TIPO_USUARIO.ID == 3);
+    return users.filter((user: any) => user.TIPO_USUARIO.ID == 3);
+  }
+
+  async filtrarSelect(selected: any) {
+    //FIXME: no hacer fetch a base de datos simplemente usar otro array
+    this.arrayCitas = await this.obtenerCitasPendientes();
+
+    if (selected == 0) {  
+      if (this.arrayCitas.length == 0) {
+        this.alertService.warning('NO HAY CITAS PENDIENTES');
+      }
+    } else if (selected == 1) {
+      this.arrayCitas = this.arrayCitas.filter((cita)=>cita.TECNICO_ENCARGADO);
+    } else {
+      this.arrayCitas = this.arrayCitas.filter((cita)=>!cita.TECNICO_ENCARGADO);
+    }
+
+    this.collectionSize = this.arrayCitas.length;
+    this.citasMostrar = this.arrayCitas;
+
   }
 
   filtrarServ(text: string) {
     return this.arrayCitas.filter((cita: any) => {
       const term = text.toLowerCase();
+
+      const fecha = new Date(cita.FECHA_CITA).toLocaleDateString('es-mx');
+
       return (
         cita.VEHICULO.MATRICULA.toLowerCase().includes(term) ||
-        cita.CLIENTE.NOMBRE.toLowerCase().includes(term)
+        cita.CLIENTE.NOMBRE.toLowerCase().includes(term) ||
+        fecha.toLowerCase().includes(term) ||
+        cita.TECNICO_ENCARGADO?.NOMBRE.toLowerCase().includes(term)
       );
     });
   }
@@ -116,7 +151,7 @@ export class CitasPendientesComponent implements OnInit {
   async handleAccionClick(ev: any, cita: any) {
     ev.preventDefault();
     this.citaSeleccionada = cita;
-    console.log(cita);
+    // console.log(cita);
   }
 
   delay(n: any) {
@@ -225,5 +260,7 @@ export class CitasPendientesComponent implements OnInit {
       },
       error: (e) => this.alertService.error(e.error),
     });
+
+    this.actualizarTabla();
   }
 }
