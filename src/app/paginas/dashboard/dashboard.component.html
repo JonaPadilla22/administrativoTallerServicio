@@ -8,14 +8,14 @@
             <i class="bx bxs-calendar-minus"></i>
             <h4>Citas pendientes</h4>
           </div>
-          <p>1</p>
+          <p>{{this.dashboard.CITAS_PENDIENTES}}</p>
         </article>
         <article>
           <div class="titulo">
             <i class="bx bxs-calendar-check"></i>
             <h4>Servicios terminados</h4>
           </div>
-          <p>2</p>
+          <p>{{this.dashboard.SERVICIOS_TERMINADOS}}</p>
         </article>
       </section>
       <section>
@@ -24,38 +24,48 @@
             <i class="bx bxs-user-pin"></i>
             <h4>Número de clientes</h4>
           </div>
-          <p>3</p>
+          <p>{{this.dashboard.NUM_CLIENTES}}</p>
         </article>
         <article>
           <div class="titulo">
             <i class="bx bxs-user-badge"></i>
             <h4>Número de técnicos</h4>
           </div>
-          <p>4</p>
+          <p>{{this.dashboard.NUM_TECNICOS}}</p>
         </article>
       </section>
     </div>
     <aside class="lado-derecho">
+      <article>
+        <i class='bx bxs-caret-up-square'></i>
+        <h4>Ingresados Hoy</h4>
+        <p>{{this.dashboard.INGRESADOS_HOY}}</p>
+      </article>
       <h2>Estatus Servicios</h2>
       <article>
         <i class='bx bxs-car' ></i>
-        <h4>Autos ingresados</h4>
-        <p>1</p>
+        <h4>Autos en ingreso</h4>
+        <p>{{this.dashboard.SERVICIOS_INGRESO}}</p>
       </article>
       <article>
         <i class='bx bxs-car-garage' ></i>
         <h4>Autos en espera</h4>
-        <p>2</p>
+        <p>{{this.dashboard.SERVICIOS_ESPERA}}</p>
       </article>
       <article>
         <i class='bx bxs-car-mechanic' ></i>
         <h4>Autos en revisión</h4>
-        <p>3</p>
+        <p>{{this.dashboard.SERVICIOS_REVISION}}</p>
       </article>
       <article>
         <i class='bx bxs-exit' ></i>
         <h4>Autos en salida</h4>
-        <p>4</p>
+        <p>{{this.dashboard.SERVICIOS_SALIDA}}</p>
+      </article>
+      <article>
+        <i class='bx bxs-car' ></i>
+        <h4>Total en taller</h4>
+        <p>{{this.dashboard.VEH_TALLER}}</p>
       </article>
     </aside>
   </div>

@@ -14,6 +14,14 @@ export class ServicioService {
     this.url = environment.baseUrlAPI; 
   }
 
+  getDashboard(){
+    return this
+            .http
+            .get(`${this.url}/dashboard`, {headers: this.headers}).pipe(
+              map(res=>res)
+            );
+  }
+
   getServiciosPendientes(){
     return this
             .http
