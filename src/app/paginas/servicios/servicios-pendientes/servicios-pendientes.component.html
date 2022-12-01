@@ -1,127 +1,306 @@
 <div class="contenedor-serviciosPendientes">
-    <h1 class="titulo">SERVICIOS PENDIENTES</h1>
+  <h1 class="titulo">SERVICIOS PENDIENTES</h1>
 
-    <div class="buscador">
-      <label
-          for="table-filtering-search"
-          class="col-xs-3 col-sm-auto col-form-label"
-          >Buscar:</label
-        >   
-      <input class="inputBuscar" id="table-filtering-search" class="form-control" type="text" (keyup)="search($event)"/>
-    </div>
-    
+  <div class="buscador">
+    <label
+      for="table-filtering-search"
+      class="col-xs-3 col-sm-auto col-form-label"
+      >Buscar:</label
+    >
+    <input
+      class="inputBuscar"
+      id="table-filtering-search"
+      class="form-control"
+      type="text"
+      (keyup)="search($event)"
+    />
+  </div>
 
-    <div class="contenedor-tarjetas">
-        <ng-template #modalServ let-modal>
-            <div class="modal-header">
-                <h4 class="modal-title" id="modal-basic-title">DETALLE DE SERVICIO</h4>
-                <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="mb-3">                                     
-                        <div class="detalleServicio" *ngFor="let det of servicio">
-
-                            <div class="datosServicio">
-                                <b><p>MANTENIMIENTO {{det.TIPO_SERVICIO.DESCRIPCION}}</p></b>
-                                <p>{{det.DESCRIPCION}}</p>   
-                            </div>
-                            <br>
-                            <div class="datosVehiculo">
-                                <h5><b>VEHICULO:</b> {{det.VEHICULO.MODELO.MARCA.DESCRIPCION}} {{det.VEHICULO.MODELO.DESCRIPCION}} {{det.VEHICULO.COLOR}} {{det.VEHICULO.ANIO}}</h5>
-                                <b>MATRÍCULA:</b> {{det.VEHICULO.MATRICULA}} <br>
-                                <b>VIN:</b> {{det.VIN}}
-                            </div>
-                            <br>
-                            <div class="datosCliente">
-                                <b>CLIENTE:</b> {{det.CLIENTE.NOMBRE}} <br>
-                                <b>RFC:</b> {{det.CLIENTE.RFC}} <br>
-                                <b>TELÉFONO:</b> {{det.CLIENTE.TELEFONO}}
-                            </div>
-                            <br>
-                            <div class="datosTecnico">
-                                <img class="rounded-circle" src="{{baseUrl}}/usuarios/{{det.TECNICO_ENCARGADO.IMG ?? 'default.png'}}" alt="">
-                                {{det.TECNICO_ENCARGADO.NOMBRE}}
-                            </div>
-
-                            
-                        </div>
-                        <br>
-                        <div class="tablaDetalle">
-                            <table class="table table-striped">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">TIPO</th>
-                                    <th scope="col">DESCRIPCIÓN</th>
-                                    <th scope="col">PRECIO</th>
-                                    <th scope="col">CANTIDAD</th>
-                                    <th scope="col">TOTAL</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr *ngFor="let prod of detalleServicio; index as i">
-                                    <td>
-                                      <ngb-highlight class="cell"
-                                        [result]="prod.TIPO_PROD"
-                                      ></ngb-highlight>
-                                    </td>
-                                    <td>
-                                      <ngb-highlight
-                                        [result]="prod.PRODUCTO.DESCRIPCION"
-                                      ></ngb-highlight>
-                                    </td>
-                                    <td>
-                                      <ngb-highlight
-                                        [result]="prod.PRECIO | currency" 
-                                      ></ngb-highlight>
-                                    </td>
-                                    <td>
-                                      <ngb-highlight
-                                        [result]="prod.CANTIDAD"
-                                      ></ngb-highlight>
-                                    </td>
-                                    <td>
-                                        <ngb-highlight
-                                          [result]="(prod.PRECIO * prod.CANTIDAD) | currency"
-                                        ></ngb-highlight>
-                                      </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                        </div>
-
-                        <div class="totalServicio">
-                          <p>Total: {{this.total | currency}}</p>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-dark" (click)="actualizarEstatus()">ACTUALIZAR ESTATUS</button>
-            </div>
-        </ng-template>
-        
-        <div class="card" *ngFor="let serv of servicios$ | slice: (page-1) * pageSize : page * pageSize">
-            <div class="contenido-card" (click)="abrirModal(serv.ID_SERVICIO); open(modalServ)" id="tarjeta">
-              <h4>{{serv.VEHICULO.MODELO.MARCA.DESCRIPCION}} {{serv.VEHICULO.MODELO.DESCRIPCION}} {{serv.VEHICULO.COLOR}} {{serv.VEHICULO.ANIO}}</h4>
-              {{serv.VEHICULO.MATRICULA}}
-              <p>MANTENIMIENTO {{serv.TIPO_SERVICIO.DESCRIPCION}}</p>
-              <p>CLIENTE: {{serv.CLIENTE.NOMBRE}}</p>
-              <div class="tecnico-encargado">
-                <img src="{{baseUrl}}/usuarios/{{serv.TECNICO_ENCARGADO.IMG ?? 'default.png'}}" alt="">
-                TÉCNICO: {{serv.TECNICO_ENCARGADO.NOMBRE}}     
+  <div class="contenedor-tarjetas">
+    <ng-template #modalServ let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">DETALLE DE SERVICIO</h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <div class="detalleServicio" *ngFor="let det of servicio">
+              <div class="datosServicio">
+                <b
+                  ><p>MANTENIMIENTO {{ det.TIPO_SERVICIO.DESCRIPCION }}</p></b
+                >
+                <p>{{ det.DESCRIPCION }}</p>
               </div>
-              <a href="javascript:void(0);">
-                <div>
-                  <img src="../../../assets/servicios/{{serv.ESTATUS.ID_ESTATUS}}.png" alt="">
-                  {{serv.ESTATUS.DESCRIPCION}}
-                </div>      
-              </a>
+              <br />
+              <div class="datosVehiculo">
+                <h5>
+                  <b>VEHICULO:</b> {{ det.VEHICULO.MODELO.MARCA.DESCRIPCION }}
+                  {{ det.VEHICULO.MODELO.DESCRIPCION }}
+                  {{ det.VEHICULO.COLOR }} {{ det.VEHICULO.ANIO }}
+                </h5>
+                <b>MATRÍCULA:</b> {{ det.VEHICULO.MATRICULA }} <br />
+                <b>VIN:</b> {{ det.VIN }}
+              </div>
+              <br />
+              <div class="datosCliente">
+                <b>CLIENTE:</b> {{ det.CLIENTE.NOMBRE }} <br />
+                <b>RFC:</b> {{ det.CLIENTE.RFC }} <br />
+                <b>TELÉFONO:</b> {{ det.CLIENTE.TELEFONO }}
+              </div>
+              <br />
+              <div class="datosTecnico">
+                <img
+                  class="rounded-circle"
+                  src="{{ baseUrl }}/usuarios/{{
+                    det.TECNICO_ENCARGADO.IMG ?? 'default.png'
+                  }}"
+                  alt=""
+                />
+                {{ det.TECNICO_ENCARGADO.NOMBRE }}
+              </div>
             </div>
-        </div>
+            <div
+              class="mt-3 d-flex justify-content-end"
+              *ngIf="servicio[0].ESTATUS.ID_ESTATUS == 'R'"
+            >
+              <button
+                class="btn primary bg-dark text-white"
+                (click)="agregar = !agregar"
+              >
+                Agregar Producto
+              </button>
+            </div>
+            <!-- AGREGAR REFACCIONES MANO DE OBRA  -->
+            <div
+              class="agregar-prd d-flex flex-wrap mt-3 justify-content-center align-items-center"
+              *ngIf="servicio[0].ESTATUS.ID_ESTATUS != 'I' && agregar"
+            >
+              <div
+                class="col-xs-3 col-sm-auto w-100 d-flex align-content-center align-items-center my-3"
+              >
+                <label for="table-filtering-search">Buscar</label>
+                <input
+                  id="table-filtering-search"
+                  class="form-control mx-auto"
+                  type="text"
+                  [formControl]="filterRef"
+                />
+              </div>
+              <div
+                class="card bg-dark text-white"
+                style="width: 18rem; height: 100%"
+                *ngFor="
+                  let refac of mostrarRefacciones
+                    | slice
+                      : (pageRef - 1) * pageSizeRef
+                      : pageRef * pageSizeRef
+                "
+              >
+                <div
+                  class="card-body d-flex align-items-center justify-content-center flex-column"
+                >
+                  <h5 class="card-title text-center">
+                    {{ refac.DESCRIPCION }}
+                  </h5>
+                  <p class="card-text">{{ refac.DESCRIPCION }}</p>
+                  <p class="card-text">PRECIO: {{ refac.PRECIO }}</p>
+                  <p class="card-text" *ngIf="refac.STOCK">
+                    EXISTENCIA: {{ refac.STOCK }}
+                  </p>
+                  <button
+                    class="btn btn-primary mx-auto"
+                    (click)="agregarProductos(refac)"
+                  >
+                    AGREGAR
+                  </button>
+                </div>
+              </div>
+              <ngb-pagination
+                class="pagination mt-3"
+                [collectionSize]="refacciones.length"
+                [(page)]="pageRef"
+                [pageSize]="pageSizeRef"
+                [boundaryLinks]="true"
+              ></ngb-pagination>
+            </div>
+            <div *ngIf="productosCargados.length > 0">
+              <h3>Productos Por Agregar</h3>
+              <div
+                class="tablaDetalle p-4 mt-3"
+                *ngIf="servicio[0].ESTATUS.ID_ESTATUS != 'I'"
+              >
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">TIPO</th>
+                      <th scope="col">DESCRIPCIÓN</th>
+                      <th scope="col">PRECIO</th>
+                      <th scope="col">CANTIDAD</th>
+                      <th scope="col">TOTAL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let prod of productosCargados; index as i">
+                      <td>
+                        <ngb-highlight
+                          class="cell"
+                          [result]="prod.STOCK ? 'Refacción' : 'Mano de obra'"
+                        ></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight
+                          [result]="prod.DESCRIPCION"
+                        ></ngb-highlight>
+                      </td>
+                      <td>
+                        <ngb-highlight
+                          [result]="prod.PRECIO | currency"
+                        ></ngb-highlight>
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          value="{{ prod.CANTIDAD }}"
+                          (change)="handleChangeInputCantidadProd($event, prod)"
+                          class="w-75 bg-dark text-white"
+                        />
+                      </td>
+                      <td>
+                        <ngb-highlight
+                          [result]="prod.PRECIO * prod.CANTIDAD | currency"
+                        ></ngb-highlight>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div
+                class="mt-3 d-flex justify-content-end"
+              >
+                <button
+                  (click)="handleSubmitCargarProductos()"
+                  class="btn btn-secondary my-4"
+                >
+                  Guardar
+                </button>
+              </div>
+            </div>
+            <!-- TABLA MOSTRANDO YA AGREGADAS -->
+            <h3>Productos Cargados</h3>
+            <div
+              class="tablaDetalle p-4 mt-3"
+              *ngIf="servicio[0].ESTATUS.ID_ESTATUS != 'I'"
+            >
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">TIPO</th>
+                    <th scope="col">DESCRIPCIÓN</th>
+                    <th scope="col">PRECIO</th>
+                    <th scope="col">CANTIDAD</th>
+                    <th scope="col">TOTAL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let prod of detalleServicio; index as i">
+                    <td>
+                      <ngb-highlight
+                        class="cell"
+                        [result]="prod.TIPO_PROD"
+                      ></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight
+                        [result]="prod.PRODUCTO.DESCRIPCION"
+                      ></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight
+                        [result]="prod.PRECIO | currency"
+                      ></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight [result]="prod.CANTIDAD"></ngb-highlight>
+                    </td>
+                    <td>
+                      <ngb-highlight
+                        [result]="prod.PRECIO * prod.CANTIDAD | currency"
+                      ></ngb-highlight>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-        
+            <div class="totalServicio">
+              <p>Total: {{ this.total | currency }}</p>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-outline-dark"
+          (click)="actualizarEstatus()"
+        >
+          ACTUALIZAR ESTATUS
+        </button>
+      </div>
+    </ng-template>
+
+    <div
+      class="card"
+      *ngFor="
+        let serv of servicios$ | slice : (page - 1) * pageSize : page * pageSize
+      "
+    >
+      <div
+        class="contenido-card"
+        (click)="abrirModal(serv.ID_SERVICIO); open(modalServ)"
+        id="tarjeta"
+      >
+        <h4>
+          {{ serv.VEHICULO.MODELO.MARCA.DESCRIPCION }}
+          {{ serv.VEHICULO.MODELO.DESCRIPCION }} {{ serv.VEHICULO.COLOR }}
+          {{ serv.VEHICULO.ANIO }}
+        </h4>
+        {{ serv.VEHICULO.MATRICULA }}
+        <p>MANTENIMIENTO {{ serv.TIPO_SERVICIO.DESCRIPCION }}</p>
+        <p>CLIENTE: {{ serv.CLIENTE.NOMBRE }}</p>
+        <div class="tecnico-encargado">
+          <img
+            src="{{ baseUrl }}/usuarios/{{
+              serv.TECNICO_ENCARGADO.IMG ?? 'default.png'
+            }}"
+            alt=""
+          />
+          TÉCNICO: {{ serv.TECNICO_ENCARGADO.NOMBRE }}
+        </div>
+        <a href="javascript:void(0);">
+          <div>
+            <img
+              src="../../../assets/servicios/{{ serv.ESTATUS.ID_ESTATUS }}.png"
+              alt=""
+            />
+            {{ serv.ESTATUS.DESCRIPCION }}
+          </div>
+        </a>
+      </div>
     </div>
-    <ngb-pagination class="pagination" [collectionSize]="servicios.length" [(page)]="page" [pageSize]="pageSize" [boundaryLinks]="true"></ngb-pagination>
+  </div>
+  <ngb-pagination
+    class="pagination"
+    [collectionSize]="servicios.length"
+    [(page)]="page"
+    [pageSize]="pageSize"
+    [boundaryLinks]="true"
+  ></ngb-pagination>
 </div>

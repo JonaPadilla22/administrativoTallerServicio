@@ -23,7 +23,8 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent,
+        canActivate: [AccesoTecnicoGuard],
       },
       {
         path: 'cita',

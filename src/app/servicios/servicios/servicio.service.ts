@@ -66,4 +66,7 @@ export class ServicioService {
     return this.http.post(`${this.url}/servicios/actualizacion`, formActServ, {headers: this.headers});
   }
 
+  insertarDetalleServ(formDet: FormData){
+    return this.http.post(`${this.url}/servicios/detalle`, formDet, {headers: this.headers});
+  }
 }
