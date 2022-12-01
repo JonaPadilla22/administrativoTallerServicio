@@ -249,7 +249,7 @@ export class RegistrarCitaComponent implements OnInit {
     if(tipo_serv!="" && descripcion!="" && this.matricula!="" && this.id_cliente!=""){
       
       this.citaService.registrarCita(this.formRegistrarCita.value).subscribe(
-        (response: any) => {   
+        (response: any) => { 
           const formAct = new FormData();
           formAct.append("ID_SERVICIO", response.data.ID_SERVICIO);
 

@@ -222,45 +222,104 @@ export class CitasPendientesComponent implements OnInit {
   }
 
   handleClickIngreso() {
-    const formIngreso = new FormData();
-    formIngreso.append('ID_SERVICIO', this.citaSeleccionada.ID_SERVICIO);
 
-    //this.sig_estatus = this.getSigEstatus(this.citaSeleccionada.ID_ESTATUS);
-    formIngreso.append('ID_ESTATUS', 'I');
-    formIngreso.append('ID_USUARIO', this.globals.usuario.ID);
+    if(this.validDate()){
+      const formIngreso = new FormData();
+      formIngreso.append('ID_SERVICIO', this.citaSeleccionada.ID_SERVICIO);
+      formIngreso.append('MATRICULA', this.citaSeleccionada.VEHICULO.MATRICULA);
+      formIngreso.append('ID_ESTATUS', 'I');
+      formIngreso.append('ID_USUARIO', this.globals.usuario.ID);
 
-    this.servService.actualizarEstatus(formIngreso).subscribe({
-      next: (response: any) => {
-        this.alertService.exito(response.message);
+      this.servService.actualizarEstatus(formIngreso).subscribe({
+        next: (response: any) => {
+          if(response.data){
+            this.alertService.exito(response.message);
 
-        var title = 'ACTUALIZACIÓN DE SERVICIO';
-        var body =
-          'HOLA ' +
-          this.citaSeleccionada.CLIENTE.NOMBRE +
-          ', SU VEHÍCULO ' +
-          this.citaSeleccionada.VEHICULO.MODELO.MARCA.DESCRIPCION +
-          ' ' +
-          this.citaSeleccionada.VEHICULO.MODELO.DESCRIPCION +
-          ' CON MATRÍCULA: ' +
-          this.citaSeleccionada.VEHICULO.MATRICULA +
-          ' ACABA DE INGRESAR A TALLER';
-        this.notifService
-          .sendNotificationUser(
-            this.citaSeleccionada.CLIENTE.ID,
-            title,
-            body,
-            this.citaSeleccionada.ID_SERVICIO
-          )
-          .subscribe();
+            var title = 'ACTUALIZACIÓN DE SERVICIO';
+            var body =
+              'HOLA ' +
+              this.citaSeleccionada.CLIENTE.NOMBRE +
+              ', SU VEHÍCULO ' +
+              this.citaSeleccionada.VEHICULO.MODELO.MARCA.DESCRIPCION +
+              ' ' +
+              this.citaSeleccionada.VEHICULO.MODELO.DESCRIPCION +
+              ' CON MATRÍCULA: ' +
+              this.citaSeleccionada.VEHICULO.MATRICULA +
+              ' ACABA DE INGRESAR A TALLER';
+            this.notifService
+              .sendNotificationUser(
+                this.citaSeleccionada.CLIENTE.ID,
+                title,
+                body,
+                this.citaSeleccionada.ID_SERVICIO
+              )
+              .subscribe();
+  
+            this.actualizarTabla();
+            setTimeout(() => {
+              this.modalCitas.dismissAll();
+            }, 1000);
+          }else{
+            this.alertService.warning(response.message)
+          }
+          
+        },
+        error: (e) => {
+          console.log(e)
+          this.alertService.error(e.error)
+        },
+      });
 
-        this.actualizarTabla();
-        setTimeout(() => {
-          this.modalCitas.dismissAll();
-        }, 1000);
-      },
-      error: (e) => this.alertService.error(e.error),
-    });
+      this.actualizarTabla();
+    }else{
+      this.alertService.warning("AÚN NO ES LA FECHA DE CITA DEL SERVICIO SELECCIONADO")
+    }
 
-    this.actualizarTabla();
+  
+    
+  }
+
+  validDate(): boolean{
+    var isValid = true;
+
+    var fecha_aux: any = this.citaSeleccionada.FECHA_CITA.split("T")[0].split("-");
+    // console.log(fecha_aux)
+    // var fecha = new Date(parseInt(fecha_aux[0]),parseInt(fecha_aux[1]),parseInt(fecha_aux[2]));
+    // console.log(fecha)
+
+    var Hoy = new Date();//Fecha actual del sistema
+    
+    var AnyoFecha = fecha_aux[0]
+    var MesFecha = fecha_aux[1]
+    var DiaFecha = fecha_aux[2]
+  
+    var AnyoHoy = Hoy.getFullYear();
+    var MesHoy = Hoy.getMonth()+1;
+    var DiaHoy = Hoy.getDate();
+
+    // console.log(AnyoHoy+"-"+MesHoy+"-"+DiaHoy)
+
+    if (AnyoFecha < AnyoHoy){
+      return isValid
+    }
+    else{
+      if (AnyoFecha == AnyoHoy && MesFecha < MesHoy){
+        return isValid
+      }
+      else{
+        if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha < DiaHoy){
+          return isValid
+        }
+        else{
+            if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+              return isValid
+            }
+            else{
+              isValid = false
+              return isValid
+            }
+        }
+      }
+    }
   }
 }
