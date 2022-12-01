@@ -93,8 +93,6 @@
                 />
               </div>
               <div
-                class="card bg-dark text-white"
-                style="width: 18rem; height: 100%"
                 *ngFor="
                   let refac of mostrarRefacciones
                     | slice
@@ -103,26 +101,35 @@
                 "
               >
                 <div
-                  class="card-body d-flex align-items-center justify-content-center flex-column"
+                  class="card bg-dark text-white"
+                  style="width: 18rem; height: 100%"
+                  *ngIf="
+                    (refac.STOCK && refac.STOCK > 0) ||
+                    (!refac.STOCK && refac.STOCK != 0)
+                  "
                 >
-                  <h5 class="card-title text-center">
-                    {{ refac.DESCRIPCION }}
-                  </h5>
-                  <p class="card-text">{{ refac.DESCRIPCION }}</p>
-                  <p class="card-text">PRECIO: {{ refac.PRECIO }}</p>
-                  <p class="card-text" *ngIf="refac.STOCK">
-                    EXISTENCIA: {{ refac.STOCK }}
-                  </p>
-                  <button
-                    class="btn btn-primary mx-auto"
-                    (click)="agregarProductos(refac)"
+                  <div
+                    class="card-body d-flex align-items-center justify-content-center flex-column"
                   >
-                    AGREGAR
-                  </button>
+                    <h5 class="card-title text-center">
+                      {{ refac.DESCRIPCION }}
+                    </h5>
+                    <p class="card-text">{{ refac.DESCRIPCION }}</p>
+                    <p class="card-text">PRECIO: {{ refac.PRECIO }}</p>
+                    <p class="card-text" *ngIf="refac.STOCK">
+                      EXISTENCIA: {{ refac.STOCK }}
+                    </p>
+                    <button
+                      class="btn btn-primary mx-auto"
+                      (click)="agregarProductos(refac)"
+                    >
+                      AGREGAR
+                    </button>
+                  </div>
                 </div>
               </div>
               <ngb-pagination
-                class="pagination mt-3"
+                class="pagination mt-3 w-100"
                 [collectionSize]="refacciones.length"
                 [(page)]="pageRef"
                 [pageSize]="pageSizeRef"
@@ -143,6 +150,7 @@
                       <th scope="col">PRECIO</th>
                       <th scope="col">CANTIDAD</th>
                       <th scope="col">TOTAL</th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -168,7 +176,7 @@
                           type="number"
                           value="{{ prod.CANTIDAD }}"
                           (change)="handleChangeInputCantidadProd($event, prod)"
-                          class="w-75 bg-dark text-white"
+                          class="w-75 bg-dark text-white p-1"
                         />
                       </td>
                       <td>
@@ -176,13 +184,14 @@
                           [result]="prod.PRECIO * prod.CANTIDAD | currency"
                         ></ngb-highlight>
                       </td>
+                      <td>
+                        <button (click)="handleEliminateProd(prod)" class="bg-danger text-white p-1" style="font-size: 15pt;">X</button>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div
-                class="mt-3 d-flex justify-content-end"
-              >
+              <div class="mt-3 d-flex justify-content-end">
                 <button
                   (click)="handleSubmitCargarProductos()"
                   class="btn btn-secondary my-4"

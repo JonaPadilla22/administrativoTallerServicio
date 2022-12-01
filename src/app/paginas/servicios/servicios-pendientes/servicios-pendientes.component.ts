@@ -293,7 +293,7 @@ export class ServiciosPendientesComponent implements OnInit {
   }
 
   handleChangeInputCantidadProd(ev: any, prod: any) {
-    if (!ev.target.value.match(/^\d+$/)) {
+    if (!ev.target.value.match(/^\d+$/) || ev.target.value == 0) {
       this.alertService.warning('Asegurate de introducir bien la cantidad');
       ev.target.value = prod.CANTIDAD;
     }
@@ -340,7 +340,7 @@ export class ServiciosPendientesComponent implements OnInit {
           this.refacciones = await this.getRefactions();
           this.mostrarRefacciones = this.refacciones;
           this.productosCargados = [];
-          this.agregar = !this.agregar
+          this.agregar = !this.agregar;
         },
         error: async (e: any) => {
           // console.log(e);
@@ -348,5 +348,19 @@ export class ServiciosPendientesComponent implements OnInit {
         },
       });
     });
+  }
+
+  async handleEliminateProd(prod: any) {
+    const resp = await this.alertService.confirmDialog(
+      '¿Esta seguro desea eliminar este producto de la lista?'
+    );
+
+    if (resp.value != true) {
+      return;
+    }
+
+    this.productosCargados = this.productosCargados.filter(
+      (item) => item.ID != prod.ID
+    );
   }
 }

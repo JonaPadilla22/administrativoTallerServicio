@@ -55,6 +55,12 @@ export class LoginComponent implements OnInit {
           this.globals.usuario = v.USUARIO;
 
           this.alerts.exito("BIENVENIDO "+v.USUARIO.NOMBRE);
+
+          if(v.USUARIO.TIPO_USUARIO.ID < 3){
+            this.router.navigate(['/dashboard']);
+            return
+          }
+
           this.router.navigate(['/cita']);
         }
       },
