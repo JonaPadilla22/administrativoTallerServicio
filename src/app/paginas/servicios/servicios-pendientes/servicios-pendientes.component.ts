@@ -55,7 +55,7 @@ export class ServiciosPendientesComponent implements OnInit {
     private notifService: NotificacionService,
     private modalService: NgbModal,
     public alertService: AlertsComponent,
-    private globals: Globals,
+    public globals: Globals,
     private refactionService: RefaccionService
   ) {
     this.servicios$ = this.filtrarServ('');

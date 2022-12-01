@@ -72,6 +72,7 @@
               <button
                 class="btn primary bg-dark text-white"
                 (click)="agregar = !agregar"
+                *ngIf="(servicio[0].TECNICO_ENCARGADO.ID==this.globals.usuario.ID) || this.globals.usuario.TIPO_USUARIO.ID < 3"
               >
                 Agregar Producto
               </button>
@@ -104,8 +105,8 @@
                   class="card bg-dark text-white"
                   style="width: 18rem; height: 100%"
                   *ngIf="
-                    (refac.STOCK && refac.STOCK > 0) ||
-                    (!refac.STOCK && refac.STOCK != 0)
+                    ((refac.STOCK && refac.STOCK > 0) ||
+                    (!refac.STOCK && refac.STOCK != 0)) && refac.ESTATUS=='A'
                   "
                 >
                   <div
@@ -130,7 +131,7 @@
               </div>
               <ngb-pagination
                 class="pagination mt-3 w-100"
-                [collectionSize]="refacciones.length"
+                [collectionSize]="mostrarRefacciones.length"
                 [(page)]="pageRef"
                 [pageSize]="pageSizeRef"
                 [boundaryLinks]="true"
@@ -307,7 +308,7 @@
   </div>
   <ngb-pagination
     class="pagination"
-    [collectionSize]="servicios.length"
+    [collectionSize]="servicios$.length"
     [(page)]="page"
     [pageSize]="pageSize"
     [boundaryLinks]="true"

@@ -281,13 +281,9 @@ export class CitasPendientesComponent implements OnInit {
 
   validDate(): boolean{
     var isValid = true;
-
     var fecha_aux: any = this.citaSeleccionada.FECHA_CITA.split("T")[0].split("-");
-    // console.log(fecha_aux)
-    // var fecha = new Date(parseInt(fecha_aux[0]),parseInt(fecha_aux[1]),parseInt(fecha_aux[2]));
-    // console.log(fecha)
 
-    var Hoy = new Date();//Fecha actual del sistema
+    var Hoy = new Date();
     
     var AnyoFecha = fecha_aux[0]
     var MesFecha = fecha_aux[1]
@@ -296,8 +292,6 @@ export class CitasPendientesComponent implements OnInit {
     var AnyoHoy = Hoy.getFullYear();
     var MesHoy = Hoy.getMonth()+1;
     var DiaHoy = Hoy.getDate();
-
-    // console.log(AnyoHoy+"-"+MesHoy+"-"+DiaHoy)
 
     if (AnyoFecha < AnyoHoy){
       return isValid
