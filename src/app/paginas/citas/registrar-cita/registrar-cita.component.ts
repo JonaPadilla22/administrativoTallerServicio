@@ -266,7 +266,7 @@ export class RegistrarCitaComponent implements OnInit {
   
                 var title = "ACTUALIZACIÓN DE SERVICIO";
                 var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE REGISTRAR UNA CITA DE SERVICIO";
-                this.notifService.sendNotificationUser(this.id_cliente, title, body, this.id_cita).subscribe();
+                this.notifService.sendNotificationUser(this.id_cliente, title, body).subscribe();
                 
                 this.downloadPDF(response.data.ID_SERVICIO);
 

@@ -250,8 +250,7 @@ export class CitasPendientesComponent implements OnInit {
               .sendNotificationUser(
                 this.citaSeleccionada.CLIENTE.ID,
                 title,
-                body,
-                this.citaSeleccionada.ID_SERVICIO
+                body
               )
               .subscribe();
   

@@ -280,7 +280,7 @@ export class IngresoSinCitaComponent implements OnInit {
                       var body = "HOLA " + this.nombreCliente + ", SU VEHÍCULO "+ this.modeloVeh + " CON MATRÍCULA: " + this.matricula + " ACABA DE INGRESAR A TALLER";
                     }
                     
-                    this.notifService.sendNotificationUser(this.id_cliente, title, body, id_cita).subscribe();
+                    this.notifService.sendNotificationUser(this.id_cliente, title, body).subscribe();
     
                     this.limpiar();
                     this.formIngresoTaller.reset({ID_TIPO_SERVICIO: [null]});

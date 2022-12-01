@@ -184,6 +184,7 @@ export class ServiciosPendientesComponent implements OnInit {
           if (result.isConfirmed) {
             const formActServ = new FormData();
             formActServ.append('ID_SERVICIO', this.servicio[0].ID_SERVICIO);
+            formActServ.append('MATRICULA', this.servicio[0].VEHICULO.MATRICULA);
             formActServ.append('ID_ESTATUS', this.sig_estatus.ID_ESTATUS);
             formActServ.append('ID_USUARIO', this.globals.usuario.ID);
 
@@ -216,18 +217,29 @@ export class ServiciosPendientesComponent implements OnInit {
                   body += ' ACABA DE SALIR DE TALLER';
                 }
 
+                console.log(this.servicio[0].CLIENTE.ID)
                 this.notifService
                   .sendNotificationUser(
                     this.servicio[0].CLIENTE.ID,
                     title,
-                    body,
-                    this.servicio[0].ID_SERVICIO
+                    body
                   )
                   .subscribe();
 
+                  // this.notifService
+                  // .sendNotificationUser(
+                  //   "3",
+                  //   "AA",
+                  //   "OOO"
+                  // )
+                  // .subscribe();
+
                 this.modalService.dismissAll();
               },
-              error: (e) => this.alertService.error(e.error),
+              error: (e) => {
+                console.log(e)
+                this.alertService.error(e.error)
+              },
             });
           }
         });

@@ -11,13 +11,12 @@ export class NotificacionService {
             .set("Authorization", "Bearer "+localStorage.getItem("TOKEN"));
   constructor(private http: HttpClient) { }
 
-  sendNotificationUser(id:string, title: string, body: string, id_serv: string){
+  sendNotificationUser(id:string, title: string, body: string){
     return this.http.post(`${this.url}/firebase/notification/${id}`, {
       "NOTIFICATION": 
       {
         "title": title, 
-        "body": body,
-        "data": id_serv
+        "body": body
       }
     }, {headers: this.headers});
   }
