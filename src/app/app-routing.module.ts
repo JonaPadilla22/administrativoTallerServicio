@@ -5,6 +5,7 @@ import { AccesoTecnicoGuard } from './guards/acceso-tecnico.guard';
 import { LoginComponent } from './login/login.component';
 import { CitasPendientesComponent } from './paginas/citas/citas-pendientes/citas-pendientes.component';
 import { RegistrarCitaComponent } from './paginas/citas/registrar-cita/registrar-cita.component';
+import { DashboardComponent } from './paginas/dashboard/dashboard.component';
 import { GestionManoDeObraComponent } from './paginas/gestion/gestion-mano-de-obra/gestion-mano-de-obra.component';
 import { GestionRefaccionesComponent } from './paginas/gestion/gestion-refacciones/gestion-refacciones.component';
 import { GestionUsuariosComponent } from './paginas/gestion/gestion-usuarios/gestion-usuarios.component';
@@ -20,6 +21,10 @@ const routes: Routes = [
     path: '',
     component: HomePageComponent,
     children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent
+      },
       {
         path: 'cita',
         children: [

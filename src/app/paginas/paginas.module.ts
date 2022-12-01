@@ -17,6 +17,8 @@ import { DecimalPipe } from '@angular/common';
 import { IngresoSinCitaComponent } from './taller/ingreso-sin-cita/ingreso-sin-cita.component';
 import { FormUsuarioComponent } from './gestion/gestion-usuarios/form-usuario/form-usuario.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CuadroInformacionComponent } from './dashboard/cuadro-informacion/cuadro-informacion.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { QRCodeModule } from 'angularx-qrcode';
     RegistrarCitaComponent,
     IngresoSinCitaComponent,
     FormUsuarioComponent,
-    GestionManoDeObraComponent
+    GestionManoDeObraComponent,
+    DashboardComponent,
+    CuadroInformacionComponent
   ],
   imports: [
     CommonModule,

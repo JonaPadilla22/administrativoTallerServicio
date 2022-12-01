@@ -29,6 +29,11 @@ export class HomePageComponent implements OnInit {
   
     this.listaDeNavegacion = [
       {
+        nombre: 'DashBoard',
+        icono: 'bx bxs-bar-chart-square',
+        link: 'dashboard',
+      },
+      {
         nombre: 'Cita',
         icono: 'bx bxs-food-menu',
         link: '',
